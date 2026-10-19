@@ -1,0 +1,127 @@
+spring:
+  application:
+    name: rpis-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/rpis}
+    username: ${SPRING_DATASOURCE_USERNAME:rpis}
+    password: ${SPRING_DATASOURCE_PASSWORD:change-me-in-production}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      pool-name: rpis-pool
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+        default_batch_fetch_size: 50
+        jdbc.batch_size: 50
+        order_inserts: true
+        order_updates: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=30s
+  mvc:
+    problemdetails:
+      enabled: true
+  threads:
+    virtual:
+      enabled: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+  compression:
+    enabled: true
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when_authorized
+  info:
+    env:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  default-produces-media-type: application/json
+
+logging:
+  level:
+    root: INFO
+    et.gov.tigray.rpis: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %5p [%X{correlationId:-}] %logger{36} : %m%n"
+
+rpis:
+  security:
+    jwt:
+      secret: ${RPIS_JWT_SECRET:ZGV2LW9ubHktc2VjcmV0LXJlcGxhY2UtbWUtd2l0aC1vcGVuc3NsLXJhbmQtYmFzZTY0LTY0LWJ5dGVzLW1pbmltdW0tbGVuZ3RoLXBsZWFzZQ==}
+      issuer: rpis.tigray.gov.et
+      access-ttl-minutes: ${RPIS_JWT_ACCESS_TTL_MINUTES:15}
+      refresh-ttl-hours: ${RPIS_JWT_REFRESH_TTL_HOURS:8}
+    login:
+      max-failed-attempts: 5
+      lock-minutes: 15
+    cors:
+      allowed-origins: ${RPIS_CORS_ALLOWED_ORIGINS:http://localhost:3000}
+  alerts:
+    schedule-variance-at-risk-pp: 5
+    schedule-variance-delayed-pp: 15
+    cost-performance-at-risk: 0.90
+    cost-overrun-pct: 10
+    stalled-reporting-days: 21
+    milestone-overdue-days: 30
+    disbursement-lag-days: 45
+    evaluation-cron: "0 */5 * * * *"
+  realtime:
+    enabled: true
+  media:
+    local-dir: ${RPIS_MEDIA_DIR:./data/media}
+    max-upload-bytes: ${RPIS_MEDIA_MAX_BYTES:62914560}
+    ticket-ttl-minutes: 30
+    evidence-stale-days: 30
+    site-distance-warning-m: 250
+  analytics:
+    weight-schedule: 30
+    weight-cost: 20
+    weight-reporting: 15
+    weight-milestones: 10
+    weight-issues: 10
+    weight-funding: 10
+    weight-verification: 5
+    construction-inflation-pct-annual: ${RPIS_CONSTRUCTION_INFLATION_PCT:18}
+    progress-jump-anomaly-pp: 15
+    evaluation-cron: "0 2/5 * * * *"
+  demo:
+    enabled: false
+    password: ${RPIS_DEMO_PASSWORD:Rpis@2026!}
+    live-simulator:
+      enabled: false
+      interval-seconds: 25

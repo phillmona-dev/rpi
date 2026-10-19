@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Demonstration placeholder: Canal lining">
+  <rect width="1600" height="1200" fill="#dde7e2"/>
+  <rect x="80" y="520" width="1440" height="420" fill="#8da37d"/><polygon points="80,560 1520,480 1520,620 80,760" fill="#b3b7ad"/><polygon points="80,620 1520,540 1520,580 80,700" fill="#5b8fb0"/><line x1="80" y1="560" x2="1520" y2="480" stroke="#6d7268" stroke-width="8"/><line x1="80" y1="760" x2="1520" y2="620" stroke="#6d7268" stroke-width="8"/>
+  <rect x="0" y="1040" width="1600" height="160" fill="#000" opacity="0.55"/>
+  <text x="60" y="1105" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="600" fill="#fff">Canal lining</text>
+  <text x="60" y="1160" font-family="Inter, Arial, sans-serif" font-size="30" fill="#e5e7eb">Demonstration placeholder · field photos arrive from the Flutter field app (Phase 2)</text>
+</svg>

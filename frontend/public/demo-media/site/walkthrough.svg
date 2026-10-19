@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Demonstration placeholder: Site walkthrough video">
+  <rect width="1600" height="1200" fill="#1f2a36"/>
+  <rect x="80" y="560" width="1440" height="380" fill="#2b3946"/><polygon points="300,560 900,560 900,330 300,330" fill="#3c4b59"/><polygon points="280,330 600,200 920,330" fill="#55657a"/><circle cx="800" cy="600" r="110" fill="#ffffff" opacity="0.9"/><polygon points="760,540 760,660 870,600" fill="#1f2a36"/>
+  <rect x="0" y="1040" width="1600" height="160" fill="#000" opacity="0.55"/>
+  <text x="60" y="1105" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="600" fill="#fff">Site walkthrough video</text>
+  <text x="60" y="1160" font-family="Inter, Arial, sans-serif" font-size="30" fill="#e5e7eb">Demonstration placeholder · field photos arrive from the Flutter field app (Phase 2)</text>
+</svg>

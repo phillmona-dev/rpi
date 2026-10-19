@@ -1,0 +1,32 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+
+# Java / Maven
+target/
+*.class
+*.log
+hs_err_pid*
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Docker volumes / data
+infra/db/data/
+
+# Evidence media stored by the backend in development
+backend/data/

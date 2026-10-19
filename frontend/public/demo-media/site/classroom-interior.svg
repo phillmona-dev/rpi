@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Demonstration placeholder: Interior finishing">
+  <rect width="1600" height="1200" fill="#efe9df"/>
+  <rect x="80" y="620" width="1440" height="320" fill="#b9a893"/><rect x="80" y="120" width="1440" height="500" fill="#e6dccb"/><rect x="200" y="220" width="420" height="260" fill="#2f4858"/><rect x="900" y="200" width="300" height="300" fill="#cfe4f2" stroke="#8aa3b5" stroke-width="8"/><rect x="260" y="660" width="160" height="60" fill="#8f7a5f"/><rect x="520" y="660" width="160" height="60" fill="#8f7a5f"/><rect x="780" y="660" width="160" height="60" fill="#8f7a5f"/><rect x="1040" y="660" width="160" height="60" fill="#8f7a5f"/><rect x="260" y="760" width="160" height="60" fill="#8f7a5f"/><rect x="520" y="760" width="160" height="60" fill="#8f7a5f"/><rect x="780" y="760" width="160" height="60" fill="#8f7a5f"/><rect x="1040" y="760" width="160" height="60" fill="#8f7a5f"/>
+  <rect x="0" y="1040" width="1600" height="160" fill="#000" opacity="0.55"/>
+  <text x="60" y="1105" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="600" fill="#fff">Interior finishing</text>
+  <text x="60" y="1160" font-family="Inter, Arial, sans-serif" font-size="30" fill="#e5e7eb">Demonstration placeholder · field photos arrive from the Flutter field app (Phase 2)</text>
+</svg>

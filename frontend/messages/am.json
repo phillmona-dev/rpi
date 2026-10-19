@@ -1,0 +1,366 @@
+{
+  "app": {
+    "name": "ሪኮንስትራክት ትግራይ RPIS",
+    "tagline": "የተቀናጀ መልሶ ግንባታ እና የፕሮጀክት ትዕዛዝ ስርዓት",
+    "office": "የኢኮኖሚ ጉዳዮች እና መልሶ ግንባታ ዋና ሥራ አስፈፃሚ ጽሕፈት ቤት"
+  },
+  "nav": {
+    "commandCenter": "የትዕዛዝ ማዕከል",
+    "sectors": "ዘርፎች",
+    "geography": "ጂኦግራፊ",
+    "projects": "ፕሮጀክቶች",
+    "facilities": "ተቋማት እና ጉዳት",
+    "damage": "የጉዳት ግምገማዎች",
+    "finance": "ፋይናንስ",
+    "alerts": "የውሳኔ ወረፋ",
+    "briefing": "ዕለታዊ ማጠቃለያ",
+    "administration": "አስተዳደር",
+    "users": "ተጠቃሚዎች",
+    "audit": "የኦዲት መዝገብ",
+    "collapse": "ዳሰሳን አሳንስ",
+    "expand": "ዳሰሳን አስፋ",
+    "main": "ዋና ዳሰሳ",
+    "skip": "ወደ ይዘት ዝለል",
+    "map": "የጂኦስፔሻል ትዕዛዝ",
+    "intelligence": "የውሳኔ ድጋፍ",
+    "evidence": "የመስክ ማስረጃ",
+    "reports": "ሪፖርቶች",
+    "command": "ትዕዛዝ",
+    "analysis": "ትንተና",
+    "records": "መዝገቦች"
+  },
+  "common": {
+    "loading": "በመጫን ላይ…",
+    "retry": "እንደገና ሞክር",
+    "refresh": "አድስ",
+    "viewAll": "ሁሉንም ተመልከት",
+    "open": "ክፈት",
+    "close": "ዝጋ",
+    "search": "ፈልግ",
+    "filter": "ማጣሪያ",
+    "filters": "ማጣሪያዎች",
+    "clearFilters": "ማጣሪያዎችን አጽዳ",
+    "noData": "የሚታይ መረጃ የለም",
+    "noResults": "ከማጣሪያዎቹ ጋር የሚዛመድ ውጤት የለም",
+    "error": "ስህተት ተከስቷል",
+    "back": "ተመለስ",
+    "save": "አስቀምጥ",
+    "cancel": "ሰርዝ",
+    "confirm": "አረጋግጥ",
+    "actions": "እርምጃዎች",
+    "details": "ዝርዝሮች",
+    "all": "ሁሉም",
+    "live": "ቀጥታ",
+    "connecting": "በመገናኘት ላይ",
+    "offline": "ከመስመር ውጭ",
+    "stale": "ያረጀ መረጃ",
+    "table": "ሰንጠረዥ",
+    "chart": "ገበታ",
+    "print": "አትም / እንደ PDF አስቀምጥ",
+    "language": "ቋንቋ",
+    "theme": "ገጽታ",
+    "light": "ብርሃን",
+    "dark": "ጨለማ",
+    "system": "ስርዓት",
+    "signOut": "ውጣ",
+    "profile": "መገለጫ",
+    "searchPlaceholder": "ወረዳዎች፣ ተቋማት፣ ፕሮጀክቶች ፈልግ…",
+    "beneficiaries": "ተጠቃሚዎች",
+    "population": "የህዝብ ብዛት",
+    "total": "ድምር",
+    "vsPlan": "ከዕቅድ ጋር",
+    "previous": "ቀዳሚ",
+    "next": "ቀጣይ",
+    "demoBanner": "የማሳያ መረጃ — በእውነተኛ ቦታ ስሞች ላይ ሰው ሰራሽ አሃዞች። ለኦፕሬሽናል ውሳኔዎች አይደለም።"
+  },
+  "auth": {
+    "title": "ግባ",
+    "subtitle": "የሥራ አስፈፃሚ የትዕዛዝ ዳሽቦርድ",
+    "username": "የተጠቃሚ ስም",
+    "password": "የይለፍ ቃል",
+    "signIn": "ግባ",
+    "signingIn": "በመግባት ላይ…",
+    "invalid": "ልክ ያልሆነ የተጠቃሚ ስም ወይም የይለፍ ቃል",
+    "secure": "ለተፈቀደላቸው ሰራተኞች ብቻ። ሁሉም መዳረሻ ይመዘገባል።",
+    "demoAccounts": "የማሳያ መለያዎች",
+    "demoPassword": "ለሁሉም የማሳያ መለያዎች የይለፍ ቃል"
+  },
+  "roles": {
+    "EXECUTIVE": "ሥራ አስፈፃሚ",
+    "SECTOR_HEAD": "የዘርፍ ኃላፊ",
+    "ANALYST": "ተንታኝ",
+    "PMO_FEDERAL": "የፌዴራል ታዛቢ",
+    "FIELD_OFFICER": "የመስክ ባለሙያ",
+    "SITE_MANAGER": "የሳይት ሥራ አስኪያጅ",
+    "ADMIN": "አስተዳዳሪ"
+  },
+  "scope": {
+    "region": "ትግራይ ክልል",
+    "allSectors": "ሁሉም ዘርፎች",
+    "allZones": "ሁሉም ዞኖች",
+    "zone": "ዞን",
+    "wereda": "ወረዳ",
+    "sector": "ዘርፍ",
+    "readOnly": "ለንባብ ብቻ"
+  },
+  "dashboard": {
+    "title": "የትዕዛዝ ማዕከል",
+    "subtitle": "በትግራይ ያለው የመልሶ ግንባታ በአንድ መስኮት ክትትል",
+    "kpi": {
+      "activeProjects": "ንቁ ፕሮጀክቶች",
+      "ofTotal": "ከጠቅላላ {total}",
+      "completed": "{count} ተጠናቀዋል",
+      "physicalProgress": "አካላዊ ዕድገት",
+      "planned": "የታቀደ {value}%",
+      "behind": "ከዕቅድ {value} ነጥብ ወደኋላ",
+      "ahead": "ከዕቅድ {value} ነጥብ ወደፊት",
+      "onPlan": "በዕቅድ መሠረት",
+      "disbursed": "የተለቀቀ በጀት",
+      "ofAllocated": "ከተመደበው {value}",
+      "expended": "የተረጋገጠ ወጪ",
+      "ofReleased": "ከተለቀቀው {value}%",
+      "facilities": "የተመለሱ ተቋማት",
+      "ofDamaged": "ከ{value} በጽኑ የተጎዱ",
+      "decisions": "በመጠባበቅ ላይ ያሉ ውሳኔዎች",
+      "critical": "{count} ወሳኝ",
+      "attention": "ትኩረት የሚፈልጉ ፕሮጀክቶች",
+      "delayed": "{count} የዘገዩ",
+      "stalled": "{count} የቆሙ",
+      "atRisk": "{count} በአደጋ ላይ",
+      "fieldData": "የመስክ መረጃ"
+    },
+    "decisionQueue": "የውሳኔ ወረፋ",
+    "sectorSummary": "የዘርፍ ማጠቃለያ",
+    "map": "ጂኦግራፊያዊ እይታ",
+    "heatTable": "የወረዳ ደረጃ",
+    "trend": "ዕድገት ከዕቅድ ጋር",
+    "planned": "የታቀደ",
+    "actual": "ትክክለኛ",
+    "budget": "የበጀት አጠቃቀም በዘርፍ",
+    "allocated": "የተመደበ",
+    "released": "የተለቀቀ",
+    "spent": "የወጣ",
+    "stream": "የክስተት እና ዕድገት ፍሰት",
+    "attentionTable": "የዘገዩ፣ የቆሙ እና በአደጋ ላይ ያሉ ፕሮጀክቶች",
+    "statusMix": "የፕሮጀክት ቧንቧ",
+    "fundingMix": "በጀት በገንዘብ ምንጭ",
+    "metric": {
+      "projectsDelayed": "የዘገዩ ፕሮጀክቶች",
+      "facilitiesSevere": "በጽኑ የተጎዱ ተቋማት",
+      "avgProgressPct": "አማካይ ዕድገት",
+      "openAlerts": "ክፍት ማንቂያዎች",
+      "budgetEtb": "በጀት",
+      "avgImpactScore": "የጉዳት ተጽዕኖ ነጥብ"
+    },
+    "attentionRow": "ትኩረት የሚፈልግ",
+    "signals": "ቅድመ ማስጠንቀቂያ አመላካቾች",
+    "actions": "የአስፈፃሚ የእርምጃ ካርዶች",
+    "openIntelligence": "የውሳኔ ድጋፍን ክፈት",
+    "openMap": "የጂኦስፔሻል ትዕዛዝን ክፈት"
+  },
+  "projects": {
+    "title": "ፕሮጀክቶች",
+    "subtitle": "የመልሶ ግንባታ ፕሮጀክት ፖርትፎሊዮ",
+    "columns": {
+      "code": "ኮድ",
+      "name": "ፕሮጀክት",
+      "sector": "ዘርፍ",
+      "wereda": "ወረዳ",
+      "status": "ሁኔታ",
+      "health": "ጤንነት",
+      "progress": "ዕድገት",
+      "planned": "የታቀደ",
+      "variance": "ልዩነት",
+      "budget": "በጀት",
+      "disbursed": "የተለቀቀ",
+      "spent": "የወጣ",
+      "forecastEnd": "የትንበያ ማጠናቀቂያ",
+      "plannedEnd": "የታቀደ ማጠናቀቂያ",
+      "contractor": "ተቋራጭ",
+      "lastReport": "የመጨረሻ ሪፖርት"
+    },
+    "tabs": {
+      "overview": "አጠቃላይ እይታ",
+      "milestones": "ምዕራፎች",
+      "progress": "የዕድገት መዝገብ",
+      "finance": "ፋይናንስ",
+      "risks": "ስጋቶች እና ችግሮች",
+      "documents": "ሰነዶች እና ሚዲያ",
+      "audit": "የኦዲት ዱካ",
+      "timeline": "የጊዜ መስመር",
+      "evidence": "ማስረጃ",
+      "intelligence": "ኢንተለጀንስ"
+    },
+    "lifecycle": {
+      "title": "የሕይወት ዑደት",
+      "stages": {
+        "PLANNING": "እቅድ",
+        "APPROVAL": "ፈቃድ",
+        "FUNDING": "ፈንድ",
+        "PROCUREMENT": "ግዥ",
+        "IMPLEMENTATION": "ትግበራ",
+        "MONITORING": "ክትትል",
+        "COMPLETION": "ማጠናቀቅ",
+        "CANCELLED": "ተሰርዟል"
+      }
+    }
+  },
+  "facilities": {
+    "title": "ተቋማት እና ጉዳት",
+    "subtitle": "በሁሉም ዘርፎች የጉዳት መዝገብ"
+  },
+  "alerts": {
+    "title": "የውሳኔ ወረፋ",
+    "subtitle": "እውቅና፣ ምደባ ወይም መፍትሄ የሚፈልጉ ማንቂያዎች",
+    "actions": {
+      "acknowledge": "እውቅና ስጥ",
+      "assign": "መድብ",
+      "resolve": "ፍታ",
+      "dismiss": "አሰናብት",
+      "comment": "አስተያየት",
+      "note": "ማስታወሻ",
+      "submit": "እርምጃ መዝግብ"
+    },
+    "decisionBadge": "ውሳኔ ያስፈልጋል"
+  },
+  "finance": {
+    "title": "ፋይናንስ",
+    "subtitle": "ምደባ፣ ልቀት እና የተረጋገጠ ወጪ"
+  },
+  "brief": {
+    "title": "የሥራ አስፈፃሚ ዕለታዊ ማጠቃለያ",
+    "subtitle": "ለዋና ሥራ አስፈፃሚው ባለአንድ ገጽ የሁኔታ ማጠቃለያ",
+    "print": "አትም / እንደ PDF አስቀምጥ"
+  },
+  "admin": {
+    "users": {
+      "title": "ተጠቃሚዎች"
+    },
+    "audit": {
+      "title": "የኦዲት መዝገብ"
+    }
+  },
+  "enums": {
+    "sector": {
+      "EDUCATION": "ትምህርት",
+      "HEALTH": "ጤና",
+      "MANUFACTURING": "ማኑፋክቸሪንግ",
+      "AGRICULTURE": "ግብርና"
+    },
+    "status": {
+      "PLANNED": "የታቀደ",
+      "PROCUREMENT": "ግዥ",
+      "ACTIVE": "ንቁ",
+      "SUSPENDED": "የታገደ",
+      "COMPLETED": "የተጠናቀቀ",
+      "CANCELLED": "የተሰረዘ"
+    },
+    "health": {
+      "ON_TRACK": "በትክክለኛ መስመር",
+      "AT_RISK": "በአደጋ ላይ",
+      "DELAYED": "የዘገየ",
+      "STALLED": "የቆመ",
+      "COMPLETED": "የተጠናቀቀ",
+      "NOT_STARTED": "ያልተጀመረ"
+    },
+    "severity": {
+      "NONE": "ጉዳት የለም",
+      "MINOR": "ቀላል",
+      "MODERATE": "መካከለኛ",
+      "SEVERE": "ከባድ",
+      "DESTROYED": "የወደመ"
+    },
+    "operational": {
+      "NON_FUNCTIONAL": "የማይሰራ",
+      "PARTIALLY_FUNCTIONAL": "በከፊል የሚሰራ",
+      "FUNCTIONAL": "የሚሰራ"
+    },
+    "alertSeverity": {
+      "CRITICAL": "ወሳኝ",
+      "HIGH": "ከፍተኛ",
+      "MEDIUM": "መካከለኛ",
+      "LOW": "ዝቅተኛ"
+    },
+    "alertStatus": {
+      "OPEN": "ክፍት",
+      "ACKNOWLEDGED": "እውቅና የተሰጠው",
+      "ASSIGNED": "የተመደበ",
+      "RESOLVED": "የተፈታ",
+      "DISMISSED": "የተሰናበተ"
+    },
+    "funding": {
+      "REGIONAL_TREASURY": "የክልል ግምጃ ቤት",
+      "FEDERAL_TRANSFER": "የፌዴራል ዝውውር",
+      "DONOR_GRANT": "የለጋሽ ድጋፍ",
+      "DEVELOPMENT_LOAN": "የልማት ብድር",
+      "DIASPORA_FUND": "የዲያስፖራ ፈንድ",
+      "PRIVATE_INVESTMENT": "የግል ኢንቨስትመንት"
+    }
+  },
+  "intelligence": {
+    "title": "የውሳኔ ድጋፍ",
+    "subtitle": "ቅድመ ማስጠንቀቂያዎች፣ የአስፈፃሚ እርምጃዎች፣ ንፅፅሮች እና ስጋት — እያንዳንዱ አኃዝ ከተመዘገበ መረጃ የሚመነጭ"
+  },
+  "evidence": {
+    "title": "የመስክ ማስረጃ",
+    "subtitle": "የቦታ ፍተሻዎች፣ በጂፒኤስ የተመለከቱ ፎቶዎችና ቪዲዮዎች እና የማረጋገጫ ሁኔታቸው"
+  },
+  "map": {
+    "title": "የጂኦስፔሻል ትዕዛዝ",
+    "subtitle": "ፕሮጀክቶች፣ ተቋማት፣ ጉዳት እና የመስክ ማስረጃ በአንድ ካርታ ላይ"
+  },
+  "reports": {
+    "title": "ሪፖርቶች",
+    "subtitle": "የአስፈፃሚ፣ የዘርፍ፣ የጂኦግራፊ፣ የእድገት፣ የፋይናንስ፣ የስጋት እና የማስረጃ ሪፖርቶች — ለመላክ ዝግጁ እና የተመዘገቡ"
+  },
+  "launcher": {
+    "desc": {
+      "commandCenter": "ቁልፍ አመልካቾች፣ የዘርፍ ሁኔታ፣ የቀጥታ የመስክ ዥረት እና የጂኦግራፊ ምስል በአንድ መስኮት።",
+      "intelligence": "የአደጋ መዝገብ፣ የመዘግየት እና የወጪ ግንዛቤዎች፣ ያልተለመዱ ሁኔታዎች እና የሥራ አስፈፃሚ የእርምጃ ካርዶች።",
+      "map": "የወረዳ ድንበሮች፣ የፕሮጀክት ምልክቶች፣ የተቋማት ጉዳት ንብርብሮች እና የመስክ ማስረጃ ሽፋኖች።",
+      "alerts": "በሕግ የተቀሰቀሱ፣ እውቅና፣ ምደባ ወይም መፍትሔ የሚጠብቁ ማንቂያዎች።",
+      "sectors": "ትምህርት፣ ጤና፣ ማኑፋክቸሪንግ እና ግብርና — ተቋማት፣ ፕሮጀክቶች እና ቁልፍ አመልካቾች በየዘርፉ።",
+      "geography": "የዞን እና የወረዳ ትንተና፣ በመዘግየት፣ በጉዳት እና በበጀት የተደረጀ።",
+      "projects": "የፕሮጀክት ስብስብ ከመርሐ ግብር፣ ፋይናንስ፣ አደጋዎች፣ ምዕራፎች፣ ማስረጃ እና የሕይወት ዑደት ፓስፖርት ጋር።",
+      "facilities": "የጉዳት መዝገብ — ክብደት፣ የአሠራር ሁኔታ፣ የመተኪያ ግምቶች፣ ግምገማዎች።",
+      "evidence": "የተረጋገጡ ምርመራዎች፣ በጂፒኤስ የተመዘገቡ የፎቶ ማዕከለ-ስዕላት እና የዕድገት ልዩነት ምልክቶች።",
+      "finance": "ድልድል፣ ክፍያ እና የተረጋገጠ ወጪ በዘርፍ፣ በዞን እና በገንዘብ ምንጭ።",
+      "briefing": "ለዋና ሥራ አስፈፃሚው በሚና የተወሰነ ባለ አንድ ገጽ ሊታተም የሚችል የሁኔታ ማጠቃለያ።",
+      "reports": "የተመደቡ የመንግሥት ሪፖርቶች ከአፈጻጸም ታሪክ፣ CSV/PDF ወደ ውጭ መላክ እና ከፌዴራል PMO ትስስር ጋር።",
+      "users": "መለያዎች፣ ሚናዎች እና የዘርፍ ወሰን ምደባዎች ለሁሉም የመድረክ ተጠቃሚዎች።",
+      "audit": "የማረጋገጫ ክስተቶች፣ ውሳኔዎች እና የመረጃ ለውጦች የማይሰረዝ መዝገብ።"
+    },
+    "stat": {
+      "activeProjects": "ንቁ ፕሮጀክቶች",
+      "progressDetail": "{physical} አካላዊ · {planned} የታቀደ",
+      "needAttention": "ትኩረት የሚፈልጉ ፕሮጀክቶች",
+      "attentionDetail": "{stalled} የቆሙ · {delayed} የዘገዩ",
+      "weredasWithProjects": "ፕሮጀክት ያላቸው ወረዳዎች",
+      "severeFacilities": "{count} በጽኑ የተጎዱ ተቋማት",
+      "decisionsPending": "በመጠባበቅ ላይ ያሉ ውሳኔዎች",
+      "decisionsDetail": "{critical} ወሳኝ · {open} ክፍት",
+      "sectors": "ዘርፎች",
+      "openAlerts": "{count} ክፍት ማንቂያዎች",
+      "weredas": "ወረዳዎች",
+      "delayedProjects": "{count} የዘገዩ ፕሮጀክቶች",
+      "projects": "ፕሮጀክቶች",
+      "completed": "{count} ተጠናቀዋል",
+      "facilities": "ተቋማት",
+      "facilitiesDetail": "{severe} ጽኑ · {restored} የተመለሱ",
+      "assessments7d": "ግምገማዎች፣ 7 ቀናት",
+      "progressReports": "{count} የዕድገት ሪፖርቶች",
+      "disbursed": "የተከፈለ",
+      "ofBudget": "ከ{budget} በጀት {pct}",
+      "latestProgress": "የቅርብ ጊዜ የዕድገት ሪፖርት"
+    },
+    "context": {
+      "scope": "ወሰን",
+      "region": "የትግራይ ክልል",
+      "sectorScope": "{sector} ዘርፍ",
+      "lastFieldData": "የመጨረሻ የመስክ መረጃ",
+      "openAlerts": "ክፍት ማንቂያዎች",
+      "access": "መዳረሻ",
+      "auditLogged": "በኦዲት የተመዘገበ"
+    }
+  }
+}

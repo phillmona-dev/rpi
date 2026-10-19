@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Demonstration placeholder: Roof structure">
+  <rect width="1600" height="1200" fill="#e7e2d8"/>
+  <rect x="80" y="620" width="1440" height="320" fill="#a09888"/><polygon points="200,620 800,230 1400,620" fill="none" stroke="#5a5247" stroke-width="18"/><line x1="800" y1="230" x2="800" y2="620" stroke="#5a5247" stroke-width="12"/><line x1="500" y1="425" x2="800" y2="620" stroke="#5a5247" stroke-width="10"/><line x1="1100" y1="425" x2="800" y2="620" stroke="#5a5247" stroke-width="10"/><line x1="350" y1="520" x2="1250" y2="520" stroke="#5a5247" stroke-width="10"/><polygon points="840,255 1400,620 1460,620 1460,600 880,230" fill="#b4504a" opacity="0.6"/>
+  <rect x="0" y="1040" width="1600" height="160" fill="#000" opacity="0.55"/>
+  <text x="60" y="1105" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="600" fill="#fff">Roof structure</text>
+  <text x="60" y="1160" font-family="Inter, Arial, sans-serif" font-size="30" fill="#e5e7eb">Demonstration placeholder · field photos arrive from the Flutter field app (Phase 2)</text>
+</svg>

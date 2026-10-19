@@ -1,0 +1,366 @@
+{
+  "app": {
+    "name": "ሪኮንስትራክት ትግራይ RPIS",
+    "tagline": "ዝተወሃሃደ ዳግመ-ህንጸትን ናይ ፕሮጀክት ትእዛዝን ስርዓት",
+    "office": "ቤት ጽሕፈት ዋና ፈጻሚ ስራሕ ጉዳያት ቁጠባን ዳግመ-ህንጸትን"
+  },
+  "nav": {
+    "commandCenter": "ማእከል ትእዛዝ",
+    "sectors": "ዘርፍታት",
+    "geography": "ጂኦግራፊ",
+    "projects": "ፕሮጀክትታት",
+    "facilities": "ትካላትን ጉድኣትን",
+    "damage": "ገምጋም ጉድኣት",
+    "finance": "ፋይናንስ",
+    "alerts": "መስርዕ ውሳነ",
+    "briefing": "መዓልታዊ ጽማቝ",
+    "administration": "ምምሕዳር",
+    "users": "ተጠቀምቲ",
+    "audit": "መዝገብ ኦዲት",
+    "collapse": "ዳህሳስ ኣንእስ",
+    "expand": "ዳህሳስ ኣስፍሕ",
+    "main": "ቀንዲ ዳህሳስ",
+    "skip": "ናብ ትሕዝቶ ዝለል",
+    "map": "ጂኦስፔሻል ትእዛዝ",
+    "intelligence": "ደገፍ ውሳነ",
+    "evidence": "መርትዖ ዓውዲ",
+    "reports": "ጸብጻባት",
+    "command": "ትእዛዝ",
+    "analysis": "ትንተና",
+    "records": "መዛግብቲ"
+  },
+  "common": {
+    "loading": "ይጽዓን ኣሎ…",
+    "retry": "ደጊምካ ፈትን",
+    "refresh": "ኣሐድስ",
+    "viewAll": "ኩሉ ርአ",
+    "open": "ክፈት",
+    "close": "ዕጸው",
+    "search": "ድለ",
+    "filter": "መጻረዪ",
+    "filters": "መጻረዪታት",
+    "clearFilters": "መጻረዪታት ኣጽሪ",
+    "noData": "ዝረአ ሓበሬታ የለን",
+    "noResults": "ምስ መጻረዪታት ዝሰማማዕ ውጽኢት የለን",
+    "error": "ጌጋ ተፈጢሩ",
+    "back": "ተመለስ",
+    "save": "ዓቅብ",
+    "cancel": "ሰርዝ",
+    "confirm": "ኣረጋግጽ",
+    "actions": "ስጉምትታት",
+    "details": "ዝርዝራት",
+    "all": "ኩሉ",
+    "live": "ቀጥታ",
+    "connecting": "ይራኸብ ኣሎ",
+    "offline": "ካብ መስመር ወጻኢ",
+    "stale": "ዝኣረገ ሓበሬታ",
+    "table": "ሰንጠረዥ",
+    "chart": "ገበታ",
+    "print": "ሕተም / ከም PDF ዓቅብ",
+    "language": "ቋንቋ",
+    "theme": "ትርኢት",
+    "light": "ብሩህ",
+    "dark": "ጸልማት",
+    "system": "ስርዓት",
+    "signOut": "ውጻእ",
+    "profile": "መግለጺ",
+    "searchPlaceholder": "ወረዳታት፣ ትካላት፣ ፕሮጀክትታት ድለ…",
+    "beneficiaries": "ተጠቀምቲ",
+    "population": "ብዝሒ ህዝቢ",
+    "total": "ድምር",
+    "vsPlan": "ምስ መደብ",
+    "previous": "ቅድሚኡ",
+    "next": "ቀጺሉ",
+    "demoBanner": "ናይ መርኣያ ሓበሬታ — ኣብ ሓቀኛ ስም ቦታታት ዝተመስረተ ሰብ-ሰርሖ ኣሃዛት። ንስራሕ ውሳነታት ኣይኮነን።"
+  },
+  "auth": {
+    "title": "እቶ",
+    "subtitle": "ዳሽቦርድ ትእዛዝ ፈጻሚ ስራሕ",
+    "username": "ስም ተጠቃሚ",
+    "password": "መሕለፊ ቃል",
+    "signIn": "እቶ",
+    "signingIn": "ይኣቱ ኣሎ…",
+    "invalid": "ዘይቅኑዕ ስም ተጠቃሚ ወይ መሕለፊ ቃል",
+    "secure": "ንዝተፈቕደሎም ሰራሕተኛታት ጥራይ። ኩሉ ምእታው ይምዝገብ።",
+    "demoAccounts": "ናይ መርኣያ ሕሳባት",
+    "demoPassword": "መሕለፊ ቃል ንኹሎም ናይ መርኣያ ሕሳባት"
+  },
+  "roles": {
+    "EXECUTIVE": "ፈጻሚ ስራሕ",
+    "SECTOR_HEAD": "ሓላፊ ዘርፊ",
+    "ANALYST": "ተንታኒ",
+    "PMO_FEDERAL": "ፌደራላዊ ተዓዛቢ",
+    "FIELD_OFFICER": "ናይ ዓውዲ በዓል ሞያ",
+    "SITE_MANAGER": "ኣካያዲ ስራሕ ቦታ",
+    "ADMIN": "ኣመሓዳሪ"
+  },
+  "scope": {
+    "region": "ክልል ትግራይ",
+    "allSectors": "ኩሎም ዘርፍታት",
+    "allZones": "ኩሎም ዞባታት",
+    "zone": "ዞባ",
+    "wereda": "ወረዳ",
+    "sector": "ዘርፊ",
+    "readOnly": "ንንባብ ጥራይ"
+  },
+  "dashboard": {
+    "title": "ማእከል ትእዛዝ",
+    "subtitle": "ብሓደ መስኮት ክትትል ዳግመ-ህንጸት ትግራይ",
+    "kpi": {
+      "activeProjects": "ንጡፋት ፕሮጀክትታት",
+      "ofTotal": "ካብ ጠቕላላ {total}",
+      "completed": "{count} ተዛዚሞም",
+      "physicalProgress": "ኣካላዊ ዕቤት",
+      "planned": "ዝተመደበ {value}%",
+      "behind": "ካብ መደብ {value} ነጥቢ ድሕሪት",
+      "ahead": "ካብ መደብ {value} ነጥቢ ቅድሚት",
+      "onPlan": "ከም መደብ",
+      "disbursed": "ዝተለቐቐ ባጀት",
+      "ofAllocated": "ካብ ዝተመደበ {value}",
+      "expended": "ዝተረጋገጸ ወጻኢ",
+      "ofReleased": "ካብ ዝተለቐቐ {value}%",
+      "facilities": "ዝተመለሱ ትካላት",
+      "ofDamaged": "ካብ {value} ብኸቢድ ዝተጎድኡ",
+      "decisions": "ዝጽበዩ ውሳነታት",
+      "critical": "{count} ወሳኒ",
+      "attention": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት",
+      "delayed": "{count} ዝደንጎዩ",
+      "stalled": "{count} ደው ዝበሉ",
+      "atRisk": "{count} ኣብ ሓደጋ",
+      "fieldData": "ናይ ዓውዲ ሓበሬታ"
+    },
+    "decisionQueue": "መስርዕ ውሳነ",
+    "sectorSummary": "ጽማቝ ዘርፊ",
+    "map": "ጂኦግራፊያዊ ትርኢት",
+    "heatTable": "ደረጃ ወረዳታት",
+    "trend": "ዕቤት ምስ መደብ",
+    "planned": "ዝተመደበ",
+    "actual": "ሓቀኛ",
+    "budget": "ኣጠቓቕማ ባጀት ብዘርፊ",
+    "allocated": "ዝተመደበ",
+    "released": "ዝተለቐቐ",
+    "spent": "ዝወጸ",
+    "stream": "ፍሰት ፍጻመታትን ዕቤትን",
+    "attentionTable": "ዝደንጎዩ፣ ደው ዝበሉን ኣብ ሓደጋ ዘለዉን ፕሮጀክትታት",
+    "statusMix": "መስመር ፕሮጀክት",
+    "fundingMix": "ባጀት ብምንጪ ገንዘብ",
+    "metric": {
+      "projectsDelayed": "ዝደንጎዩ ፕሮጀክትታት",
+      "facilitiesSevere": "ብኸቢድ ዝተጎድኡ ትካላት",
+      "avgProgressPct": "ማእከላይ ዕቤት",
+      "openAlerts": "ክፉታት መጠንቀቕታታት",
+      "budgetEtb": "ባጀት",
+      "avgImpactScore": "ነጥቢ ጽልዋ ጉድኣት"
+    },
+    "attentionRow": "ኣቓልቦ ዝሓትት",
+    "signals": "ኣመልካትታት ቅድመ-መጠንቀቕታ",
+    "actions": "ካርዳት ስጉምቲ ፈጻሚ",
+    "openIntelligence": "ደገፍ ውሳነ ክፈት",
+    "openMap": "ጂኦስፔሻል ትእዛዝ ክፈት"
+  },
+  "projects": {
+    "title": "ፕሮጀክትታት",
+    "subtitle": "ፖርትፎሊዮ ፕሮጀክትታት ዳግመ-ህንጸት",
+    "columns": {
+      "code": "ኮድ",
+      "name": "ፕሮጀክት",
+      "sector": "ዘርፊ",
+      "wereda": "ወረዳ",
+      "status": "ኩነታት",
+      "health": "ጥዕና",
+      "progress": "ዕቤት",
+      "planned": "ዝተመደበ",
+      "variance": "ፍልልይ",
+      "budget": "ባጀት",
+      "disbursed": "ዝተለቐቐ",
+      "spent": "ዝወጸ",
+      "forecastEnd": "ትንቢት መዛዘሚ",
+      "plannedEnd": "ዝተመደበ መዛዘሚ",
+      "contractor": "ተቛራጺ",
+      "lastReport": "ናይ መወዳእታ ጸብጻብ"
+    },
+    "tabs": {
+      "overview": "ሓፈሻዊ ትርኢት",
+      "milestones": "ምዕራፋት",
+      "progress": "መዝገብ ዕቤት",
+      "finance": "ፋይናንስ",
+      "risks": "ሓደጋታትን ጸገማትን",
+      "documents": "ሰነዳትን ሚድያን",
+      "audit": "ኣሰር ኦዲት",
+      "timeline": "መስመር ግዜ",
+      "evidence": "መርትዖ",
+      "intelligence": "ኢንተለጀንስ"
+    },
+    "lifecycle": {
+      "title": "ዑደት ህይወት",
+      "stages": {
+        "PLANNING": "ውጥን",
+        "APPROVAL": "ፍቓድ",
+        "FUNDING": "ፈንድ",
+        "PROCUREMENT": "ዕድጊ",
+        "IMPLEMENTATION": "ትግባረ",
+        "MONITORING": "ክትትል",
+        "COMPLETION": "ምዝዛም",
+        "CANCELLED": "ተሰሪዙ"
+      }
+    }
+  },
+  "facilities": {
+    "title": "ትካላትን ጉድኣትን",
+    "subtitle": "መዝገብ ጉድኣት ኣብ ኩሎም ዘርፍታት"
+  },
+  "alerts": {
+    "title": "መስርዕ ውሳነ",
+    "subtitle": "ተፈላጥነት፣ ምምዳብ ወይ ፍታሕ ዘድልዮም መጠንቀቕታታት",
+    "actions": {
+      "acknowledge": "ተፈላጥነት ሃብ",
+      "assign": "መድብ",
+      "resolve": "ፍታሕ",
+      "dismiss": "ኣሰናብት",
+      "comment": "ርእይቶ",
+      "note": "መዘኻኸሪ",
+      "submit": "ስጉምቲ መዝግብ"
+    },
+    "decisionBadge": "ውሳነ የድሊ"
+  },
+  "finance": {
+    "title": "ፋይናንስ",
+    "subtitle": "ምደባ፣ ምልቃቕን ዝተረጋገጸ ወጻኢን"
+  },
+  "brief": {
+    "title": "መዓልታዊ ጽማቝ ፈጻሚ ስራሕ",
+    "subtitle": "ናይ ሓደ ገጽ ጽማቝ ኩነታት ንዋና ፈጻሚ ስራሕ",
+    "print": "ሕተም / ከም PDF ዓቅብ"
+  },
+  "admin": {
+    "users": {
+      "title": "ተጠቀምቲ"
+    },
+    "audit": {
+      "title": "መዝገብ ኦዲት"
+    }
+  },
+  "enums": {
+    "sector": {
+      "EDUCATION": "ትምህርቲ",
+      "HEALTH": "ጥዕና",
+      "MANUFACTURING": "ማኑፋክቸሪንግ",
+      "AGRICULTURE": "ሕርሻ"
+    },
+    "status": {
+      "PLANNED": "ዝተመደበ",
+      "PROCUREMENT": "ዕድጊ",
+      "ACTIVE": "ንጡፍ",
+      "SUSPENDED": "ዝተኣገደ",
+      "COMPLETED": "ዝተዛዘመ",
+      "CANCELLED": "ዝተሰረዘ"
+    },
+    "health": {
+      "ON_TRACK": "ኣብ ቅኑዕ መስመር",
+      "AT_RISK": "ኣብ ሓደጋ",
+      "DELAYED": "ዝደንጎየ",
+      "STALLED": "ደው ዝበለ",
+      "COMPLETED": "ዝተዛዘመ",
+      "NOT_STARTED": "ዘይተጀመረ"
+    },
+    "severity": {
+      "NONE": "ጉድኣት የለን",
+      "MINOR": "ቀሊል",
+      "MODERATE": "ማእከላይ",
+      "SEVERE": "ከቢድ",
+      "DESTROYED": "ዝዓነወ"
+    },
+    "operational": {
+      "NON_FUNCTIONAL": "ዘይሰርሕ",
+      "PARTIALLY_FUNCTIONAL": "ብኸፊል ዝሰርሕ",
+      "FUNCTIONAL": "ዝሰርሕ"
+    },
+    "alertSeverity": {
+      "CRITICAL": "ወሳኒ",
+      "HIGH": "ልዑል",
+      "MEDIUM": "ማእከላይ",
+      "LOW": "ትሑት"
+    },
+    "alertStatus": {
+      "OPEN": "ክፉት",
+      "ACKNOWLEDGED": "ተፈላጥነት ዝተዋህቦ",
+      "ASSIGNED": "ዝተመደበ",
+      "RESOLVED": "ዝተፈትሐ",
+      "DISMISSED": "ዝተሰናበተ"
+    },
+    "funding": {
+      "REGIONAL_TREASURY": "ክልላዊ ግምጃ ቤት",
+      "FEDERAL_TRANSFER": "ፌደራላዊ ምትሕልላፍ",
+      "DONOR_GRANT": "ሓገዝ ለገስቲ",
+      "DEVELOPMENT_LOAN": "ልቓሕ ልምዓት",
+      "DIASPORA_FUND": "ፈንድ ዲያስፖራ",
+      "PRIVATE_INVESTMENT": "ብሕታዊ ወፍሪ"
+    }
+  },
+  "intelligence": {
+    "title": "ደገፍ ውሳነ",
+    "subtitle": "ቅድመ-መጠንቀቕታታት፣ ስጉምትታት ፈጻሚ፣ ንጽጽራትን ሓደጋን — ነፍሲ ወከፍ ቁጽሪ ካብ ዝተመዝገበ ዳታ ዝምንጩ"
+  },
+  "evidence": {
+    "title": "መርትዖ ዓውዲ",
+    "subtitle": "ምርመራታት ቦታ፣ ብጂፒኤስ ዝተመልከቱ ስእልታትን ቪድዮታትን፣ ከምኡውን ኩነታት መረጋገጺኦም"
+  },
+  "map": {
+    "title": "ጂኦስፔሻል ትእዛዝ",
+    "subtitle": "ፕሮጀክትታት፣ ትካላት፣ ጉድኣትን መርትዖ ዓውዲን ኣብ ሓደ ካርታ"
+  },
+  "reports": {
+    "title": "ጸብጻባት",
+    "subtitle": "ጸብጻባት ፈጻሚ፣ ዘርፍ፣ ጂኦግራፊ፣ ዕብየት፣ ፋይናንስ፣ ሓደጋን መርትዖን — ንምልኣኽ ድሉዋትን ዝተመዝገቡን"
+  },
+  "launcher": {
+    "desc": {
+      "commandCenter": "ቁልፊ መለክዒታት፣ ኩነታት ዘርፊ፣ ቀጥታ ዋሕዚ ዓውድን ጂኦግራፊያዊ ስእልን ኣብ ሓደ መስኮት።",
+      "intelligence": "መዝገብ ሓደጋ፣ ርድኢታት ምድንጓይን ወጻኢን፣ ዘይልሙዳት ኩነታትን ካርድታት ስጉምቲ ፈጻሚ ስራሕን።",
+      "map": "ዶባት ወረዳ፣ ምልክታት ፕሮጀክት፣ ንብርብራት ጉድኣት ትካላትን መሸፈኒታት መርትዖ ዓውድን።",
+      "alerts": "ብሕጊ ዝተላዕሉ፣ ተፈላጥነት፣ ምደባ ወይ ፍታሕ ዝጽበዩ መጠንቀቕታታት።",
+      "sectors": "ትምህርቲ፣ ጥዕና፣ ማኑፋክቸሪንግን ሕርሻን — ትካላት፣ ፕሮጀክትታትን ቁልፊ መለክዒታትን ብነፍሲ ወከፍ ዘርፊ።",
+      "geography": "ትንተና ዞባን ወረዳን፣ ብምድንጓይ፣ ጉድኣትን ባጀትን ዝተሰርዐ።",
+      "projects": "እኩብ ፕሮጀክትታት ምስ መደብ ግዜ፣ ፋይናንስ፣ ሓደጋታት፣ ምዕራፋት፣ መርትዖን ፓስፖርት ዑደት ህይወትን።",
+      "facilities": "መዝገብ ጉድኣት — ክብደት፣ ኩነታት ስራሕ፣ ግምታት መተካእታ፣ ገምጋማት።",
+      "evidence": "ዝተረጋገጹ መርመራታት፣ ብጂፒኤስ ዝተመዝገቡ ኣብያተ-ስእሊን ምልክታት ፍልልይ ዕቤትን።",
+      "finance": "ምድላው፣ ምልቃቕን ዝተረጋገጸ ወጻኢን ብዘርፊ፣ ዞባን ምንጪ ገንዘብን።",
+      "briefing": "ንዋና ፈጻሚ ስራሕ ብተራ ዝተወሰነ ናይ ሓደ ገጽ ክሕተም ዝኽእል ጽማቝ ኩነታት።",
+      "reports": "ዝተመደቡ ጸብጻባት መንግስቲ ምስ ታሪኽ ኣፈጻጽማ፣ CSV/PDF ምውጻእን ምትእስሳር ፌደራል PMOን።",
+      "users": "ሕሳባት፣ ተራታትን ምደባታት ወሰን ዘርፍን ንኹሎም ተጠቀምቲ መድረኽ።",
+      "audit": "ዘይስረዝ መዝገብ ፍጻመታት መረጋገጺ፣ ውሳነታትን ለውጥታት ሓበሬታን።"
+    },
+    "stat": {
+      "activeProjects": "ንጡፋት ፕሮጀክትታት",
+      "progressDetail": "{physical} ኣካላዊ · {planned} ዝተመደበ",
+      "needAttention": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት",
+      "attentionDetail": "{stalled} ደው ዝበሉ · {delayed} ዝደንጎዩ",
+      "weredasWithProjects": "ፕሮጀክት ዘለወን ወረዳታት",
+      "severeFacilities": "{count} ብኸቢድ ዝተጎድኡ ትካላት",
+      "decisionsPending": "ዝጽበዩ ውሳነታት",
+      "decisionsDetail": "{critical} ወሳኒ · {open} ክፉት",
+      "sectors": "ዘርፍታት",
+      "openAlerts": "{count} ክፉታት መጠንቀቕታታት",
+      "weredas": "ወረዳታት",
+      "delayedProjects": "{count} ዝደንጎዩ ፕሮጀክትታት",
+      "projects": "ፕሮጀክትታት",
+      "completed": "{count} ተዛዚሞም",
+      "facilities": "ትካላት",
+      "facilitiesDetail": "{severe} ከቢድ · {restored} ዝተመለሱ",
+      "assessments7d": "ገምጋማት፣ 7 መዓልታት",
+      "progressReports": "{count} ጸብጻባት ዕቤት",
+      "disbursed": "ዝተለቐቐ",
+      "ofBudget": "ካብ {budget} ባጀት {pct}",
+      "latestProgress": "ናይ ቀረባ እዋን ጸብጻብ ዕቤት"
+    },
+    "context": {
+      "scope": "ወሰን",
+      "region": "ክልል ትግራይ",
+      "sectorScope": "ዘርፊ {sector}",
+      "lastFieldData": "ናይ መወዳእታ ሓበሬታ ዓውዲ",
+      "openAlerts": "ክፉታት መጠንቀቕታታት",
+      "access": "መእተዊ",
+      "auditLogged": "ብኦዲት ዝተመዝገበ"
+    }
+  }
+}

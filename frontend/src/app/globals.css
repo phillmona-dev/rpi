@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ─────────────────────────────────────────────────────────
+   Palette inspired by DBeaver Community: warm dark-brown chrome, orange-red
+   primary accent (#CF4010), warm cream text. Light mode keeps a bright
+   content area while sidebar/topbar chrome is always DBeaver dark-brown.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+  --radius: 0.5rem;
+
+  /* Content area — warm cream in light mode */
+  --background: 35 40% 97%;
+  --foreground: 25 55% 10%;
+  --card: 35 25% 99%;
+  --card-foreground: 25 55% 10%;
+  --popover: 35 25% 99%;
+  --popover-foreground: 25 55% 10%;
+
+  /* Primary — DBeaver orange-red  #CF4010 ≈ hsl(18, 94%, 42%) */
+  --primary: 18 94% 42%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary / muted — warm beige tones */
+  --secondary: 35 30% 92%;
+  --secondary-foreground: 25 45% 18%;
+  --muted: 35 25% 93%;
+  --muted-foreground: 25 18% 46%;
+  --accent: 20 55% 93%;
+  --accent-foreground: 25 55% 14%;
+
+  --destructive: 0 72% 46%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders and inputs — warm light */
+  --border: 35 22% 85%;
+  --input: 35 22% 88%;
+  --ring: 18 94% 50%;
+
+  /* Sidebar chrome — DBeaver dark warm brown (same in light AND dark) */
+  --sidebar: 22 50% 11%;
+  --sidebar-foreground: 35 42% 84%;
+  --sidebar-accent: 22 44% 17%;
+  --sidebar-border: 22 42% 16%;
+
+  /* Status palette (always paired with icon/text for accessibility) */
+  --status-good: #16a34a;
+  --status-warning: #d97706;
+  --status-serious: #ea580c;
+  --status-critical: #dc2626;
+  --status-neutral: #78716c;
+
+  /* Categorical: sectors in fixed slot order 1–4 */
+  --sector-education: #2a78d6;
+  --sector-health: #eb6834;
+  --sector-manufacturing: #1baf7a;
+  --sector-agriculture: #eda100;
+
+  /* Sequential blue (money: allocated → disbursed → spent) */
+  --seq-250: #86b6ef;
+  --seq-450: #2a78d6;
+  --seq-650: #104281;
+  --series-planned: #9aa3ad;
+
+  --chart-grid: #e7e5e4;
+  --chart-text: #57534e;
+}
+
+.dark {
+  /* Full DBeaver dark warm-brown for the content area too */
+  --background: 22 35% 9%;
+  --foreground: 35 45% 86%;
+  --card: 22 30% 12%;
+  --card-foreground: 35 45% 86%;
+  --popover: 22 30% 12%;
+  --popover-foreground: 35 45% 86%;
+
+  /* Primary — slightly brighter orange for dark backgrounds */
+  --primary: 18 90% 56%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 22 26% 18%;
+  --secondary-foreground: 35 38% 80%;
+  --muted: 22 24% 16%;
+  --muted-foreground: 35 18% 58%;
+  --accent: 20 42% 20%;
+  --accent-foreground: 35 45% 86%;
+
+  --destructive: 0 72% 56%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 22 26% 20%;
+  --input: 22 26% 22%;
+  --ring: 18 90% 56%;
+
+  /* Sidebar — deepest brown in dark mode */
+  --sidebar: 22 42% 7%;
+  --sidebar-foreground: 35 40% 82%;
+  --sidebar-accent: 22 38% 13%;
+  --sidebar-border: 22 36% 13%;
+
+  --status-good: #22c55e;
+  --status-warning: #f59e0b;
+  --status-serious: #f97316;
+  --status-critical: #ef4444;
+  --status-neutral: #a8a29e;
+
+  --sector-education: #3987e5;
+  --sector-health: #d95926;
+  --sector-manufacturing: #199e70;
+  --sector-agriculture: #c98500;
+  --seq-250: #184f95;
+  --seq-450: #3987e5;
+  --seq-650: #9ec5f4;
+  --series-planned: #7d8794;
+  --chart-grid: #292524;
+  --chart-text: #d6d3d1;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-background text-foreground antialiased; font-feature-settings: 'tnum' 1, 'cv11' 1; }
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+  ::selection { background: hsl(var(--primary) / 0.18); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer utilities {
+  .tabular { font-variant-numeric: tabular-nums; }
+  .scrollbar-thin { scrollbar-width: thin; }
+  .skip-link { @apply sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground; }
+
+  /* Applied to topbar so ghost/outline buttons inherit sidebar hover colours */
+  .dark-chrome {
+    color-scheme: dark;
+    --background: var(--sidebar);
+    --foreground: var(--sidebar-foreground);
+    --card: var(--sidebar-accent);
+    --card-foreground: var(--sidebar-foreground);
+    --accent: var(--sidebar-accent);
+    --accent-foreground: var(--sidebar-foreground);
+    --border: var(--sidebar-border);
+    --input: var(--sidebar-accent);
+    --muted: var(--sidebar);
+    --muted-foreground: var(--sidebar-foreground);
+    --ring: 18 94% 50%;
+  }
+}
+
+/* Print: the daily brief */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .print-page { padding: 0 !important; max-width: none !important; }
+  .card, [data-card] { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+}
+
+/* MapLibre tweaks */
+.maplibregl-popup-content { @apply rounded-md border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-md; }
+.maplibregl-popup-close-button { @apply text-base text-muted-foreground; right: 4px; top: 2px; }
+.maplibregl-ctrl-attrib { font-size: 10px; }

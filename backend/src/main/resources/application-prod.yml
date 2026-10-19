@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    show-sql: false
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+management:
+  endpoint:
+    health:
+      show-details: never
+rpis:
+  demo:
+    enabled: false
+    live-simulator:
+      enabled: false

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Demonstration placeholder: Damaged equipment">
+  <rect width="1600" height="1200" fill="#e5e1dc"/>
+  <rect x="80" y="640" width="1440" height="300" fill="#9a9590"/><rect x="300" y="380" width="520" height="260" fill="#6f7a84" transform="rotate(-6 560 510)"/><circle cx="420" cy="690" r="70" fill="#3a3f45"/><circle cx="760" cy="700" r="70" fill="#3a3f45"/><rect x="980" y="420" width="360" height="220" fill="#7d6b5c"/><line x1="980" y1="420" x2="1340" y2="640" stroke="#4a3f38" stroke-width="10"/><line x1="1340" y1="420" x2="980" y2="640" stroke="#4a3f38" stroke-width="10"/>
+  <rect x="0" y="1040" width="1600" height="160" fill="#000" opacity="0.55"/>
+  <text x="60" y="1105" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="600" fill="#fff">Damaged equipment</text>
+  <text x="60" y="1160" font-family="Inter, Arial, sans-serif" font-size="30" fill="#e5e7eb">Demonstration placeholder · field photos arrive from the Flutter field app (Phase 2)</text>
+</svg>

@@ -1,0 +1,51 @@
+package et.gov.tigray.rpis.common;
+
+/** Stable API codes. Display text is resolved client-side per locale; the API never returns labels. */
+public final class Enums {
+    private Enums() {}
+
+    public enum FacilityType {
+        PRIMARY_SCHOOL(Sector.EDUCATION), SECONDARY_SCHOOL(Sector.EDUCATION), TVET_COLLEGE(Sector.EDUCATION), UNIVERSITY(Sector.EDUCATION),
+        HEALTH_POST(Sector.HEALTH), HEALTH_CENTER(Sector.HEALTH), PRIMARY_HOSPITAL(Sector.HEALTH), GENERAL_HOSPITAL(Sector.HEALTH), REFERRAL_HOSPITAL(Sector.HEALTH),
+        FACTORY(Sector.MANUFACTURING), INDUSTRIAL_PARK(Sector.MANUFACTURING), AGRO_PROCESSING_PLANT(Sector.MANUFACTURING), WAREHOUSE(Sector.MANUFACTURING),
+        IRRIGATION_SCHEME(Sector.AGRICULTURE), VETERINARY_CLINIC(Sector.AGRICULTURE), SEED_MULTIPLICATION_CENTER(Sector.AGRICULTURE),
+        FARMERS_TRAINING_CENTER(Sector.AGRICULTURE), AGRICULTURAL_RESEARCH_CENTER(Sector.AGRICULTURE);
+
+        public final Sector sector;
+        FacilityType(Sector sector) { this.sector = sector; }
+    }
+
+    public enum DamageSeverity { NONE, MINOR, MODERATE, SEVERE, DESTROYED }
+    public enum OperationalStatus { NON_FUNCTIONAL, PARTIALLY_FUNCTIONAL, FUNCTIONAL }
+    public enum ProjectStatus { PLANNED, PROCUREMENT, ACTIVE, SUSPENDED, COMPLETED, CANCELLED }
+    public enum ProjectHealth { ON_TRACK, AT_RISK, DELAYED, STALLED, COMPLETED, NOT_STARTED }
+    public enum MilestoneStatus { PENDING, IN_PROGRESS, ACHIEVED, OVERDUE }
+    public enum FundingSource { REGIONAL_TREASURY, FEDERAL_TRANSFER, DONOR_GRANT, DEVELOPMENT_LOAN, DIASPORA_FUND, PRIVATE_INVESTMENT }
+    public enum BudgetCategory { WORKS, GOODS, SERVICES, CONTINGENCY, SUPERVISION }
+    public enum DisbursementStatus { PLANNED, REQUESTED, APPROVED, RELEASED }
+    public enum Level { LOW, MEDIUM, HIGH }
+    public enum RiskStatus { OPEN, MITIGATING, CLOSED }
+    public enum IssueStatus { OPEN, IN_PROGRESS, RESOLVED }
+    public enum DocumentType { CONTRACT, DESIGN, PROGRESS_PHOTO, SITE_VIDEO, COMPLIANCE_CERTIFICATE, INSPECTION_REPORT, INVOICE, OTHER }
+    public enum AlertSeverity { CRITICAL, HIGH, MEDIUM, LOW }
+    public enum AlertStatus { OPEN, ACKNOWLEDGED, ASSIGNED, RESOLVED, DISMISSED }
+    public enum AlertRule { SCHEDULE_SLIPPAGE, COST_OVERRUN, STALLED_REPORTING, MILESTONE_OVERDUE, DISBURSEMENT_LAG, SEVERE_DAMAGE_UNADDRESSED, QUALITY_NONCONFORMANCE, FIELD_VERIFICATION_OVERDUE, PROGRESS_DISCREPANCY }
+    public enum AlertAction { ACKNOWLEDGE, ASSIGN, RESOLVE, DISMISS, COMMENT }
+    public enum EntityType { PROJECT, FACILITY, WEREDA }
+    public enum DataSource { WEB, FIELD_APP, SITE_APP, IMPORT, SIMULATED }
+
+    // ── V3 · command platform ───────────────────────────────────────────────
+    /** Governance lifecycle (DREAM-style passport). Operational state remains {@link ProjectStatus}. */
+    public enum LifecycleStage { PLANNING, APPROVAL, FUNDING, PROCUREMENT, IMPLEMENTATION, MONITORING, COMPLETION, CANCELLED }
+    public enum OrganizationType { GOVERNMENT_BUREAU, CONTRACTOR, CONSULTANT, DONOR, FEDERAL_AGENCY, NGO, COMMUNITY, PRIVATE }
+    public enum OrganizationRole { IMPLEMENTING_AGENCY, CONTRACTOR, SUPERVISING_CONSULTANT, FUNDER, BENEFICIARY_INSTITUTION, OVERSIGHT }
+    public enum InspectionType { SITE_VISIT, PROGRESS_VERIFICATION, QUALITY_INSPECTION, DAMAGE_VERIFICATION, HANDOVER_INSPECTION, SAFETY_AUDIT }
+    public enum VerificationStatus { UNVERIFIED, VERIFIED, DISPUTED, REJECTED }
+    public enum MediaKind { PHOTO, VIDEO, AUDIO, DOCUMENT }
+    public enum InsightKind { DELAY_PREDICTION, COMPLETION_FORECAST, COST_RISK, SUPPLY_RISK, RISK_SCORE, DAMAGE_PRIORITY, FUNDING_PRIORITY, ANOMALY, RECOMMENDATION }
+    public enum InsightStatus { ACTIVE, SUPERSEDED, DISMISSED, ACTIONED }
+    public enum InsightBasis { RULE, MODEL }
+    public enum ReportType { EXECUTIVE_SUMMARY, SECTOR, GEOGRAPHIC, PROJECT_PROGRESS, FINANCIAL, RISK, DECISION_LOG, FIELD_EVIDENCE }
+    public enum ReportPeriod { DAILY, WEEKLY, MONTHLY, QUARTERLY, CUSTOM }
+    public enum ReportFormat { JSON, CSV }
+}
