@@ -361,6 +361,19 @@
       "openAlerts": "ክፍት ማንቂያዎች",
       "access": "መዳረሻ",
       "auditLogged": "በኦዲት የተመዘገበ"
+    },
+    "search": {
+      "placeholder": "ሞጁሎችን ፈልግ…",
+      "label": "ሞጁሎችን ፈልግ",
+      "hint": "ለመፈለግ / ይጫኑ · Enter የመጀመሪያውን ይከፍታል · Esc ያጸዳል",
+      "results": "{count, plural, one {# ሞጁል} other {# ሞጁሎች}}",
+      "noResults": "“{query}” የሚመስል ሞጁል የለም",
+      "clear": "ፍለጋን አጽዳ",
+      "frequent": "በተደጋጋሚ የተከፈቱ",
+      "frequentHint": "በብዛት የተከፈቱት መጀመሪያ",
+      "clearHistory": "ታሪክ አጽዳ",
+      "opened": "{count} ጊዜ ተከፍቷል",
+      "remove": "{module}ን ከተደጋጋሚ የተከፈቱ አስወግድ"
     }
   }
 }

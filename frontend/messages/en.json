@@ -1246,6 +1246,19 @@
       "openAlerts": "Open alerts",
       "access": "Access",
       "auditLogged": "audit-logged"
+    },
+    "search": {
+      "placeholder": "Search modules…",
+      "label": "Search modules",
+      "hint": "Press / to search · Enter opens the first result · Esc clears",
+      "results": "{count, plural, one {# module} other {# modules}}",
+      "noResults": "No modules match “{query}”",
+      "clear": "Clear search",
+      "frequent": "Frequently opened",
+      "frequentHint": "Most opened first",
+      "clearHistory": "Clear history",
+      "opened": "Opened {count, plural, one {# time} other {# times}}",
+      "remove": "Remove {module} from frequently opened"
     }
   }
 }

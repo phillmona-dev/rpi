@@ -361,6 +361,19 @@
       "openAlerts": "ክፉታት መጠንቀቕታታት",
       "access": "መእተዊ",
       "auditLogged": "ብኦዲት ዝተመዝገበ"
+    },
+    "search": {
+      "placeholder": "ሞጁላት ድለ…",
+      "label": "ሞጁላት ድለ",
+      "hint": "ንምድላይ / ጠውቑ · Enter ነቲ ቀዳማይ ይኸፍት · Esc የጽሪ",
+      "results": "{count, plural, one {# ሞጁል} other {# ሞጁላት}}",
+      "noResults": "“{query}” ዝመስል ሞጁል የለን",
+      "clear": "ምድላይ ኣጽሪ",
+      "frequent": "ብተደጋጋሚ ዝተኸፍቱ",
+      "frequentHint": "ብብዝሒ ዝተኸፍቱ ቀዳሞት",
+      "clearHistory": "ታሪኽ ኣጽሪ",
+      "opened": "{count} ግዜ ተኸፊቱ",
+      "remove": "{module} ካብ ብተደጋጋሚ ዝተኸፍቱ ኣውጽእ"
     }
   }
 }

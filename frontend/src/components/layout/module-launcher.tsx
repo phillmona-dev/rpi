@@ -5,10 +5,10 @@ import {
   LayoutDashboard, BrainCircuit, Globe2, Bell,
   Layers, Map, FolderKanban, Building2, Camera,
   Wallet, FileText, FileBarChart2, Users, ScrollText,
-  ChevronRight, Radio, ShieldCheck, Target,
+  ChevronRight, Radio, ShieldCheck, Target, Search, X, History,
   type LucideIcon,
 } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
 import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports } from '@/lib/domain';
 import { useOverview } from '@/lib/api/hooks';
@@ -131,6 +131,56 @@ function useModules(roles: string[], ov: Overview | undefined, locale: string): 
   ];
 }
 
+/* ─── Per-user open history (browser-local convenience, never authoritative) ─ */
+type Usage = Record<string, { n: number; t: number }>;
+
+function useModuleUsage(userId: number) {
+  const storageKey = `rpis.launcher.usage.${userId}`;
+  const [usage, setUsage] = React.useState<Usage>({});
+
+  // Read after mount so server and first client render agree.
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) setUsage(JSON.parse(raw) as Usage);
+    } catch { /* storage blocked or corrupt — start empty */ }
+  }, [storageKey]);
+
+  const persist = React.useCallback((next: Usage) => {
+    try { localStorage.setItem(storageKey, JSON.stringify(next)); } catch { /* ignore */ }
+  }, [storageKey]);
+
+  const record = React.useCallback((key: string) => {
+    setUsage((prev) => {
+      const next = { ...prev, [key]: { n: (prev[key]?.n ?? 0) + 1, t: Date.now() } };
+      persist(next);
+      return next;
+    });
+  }, [persist]);
+
+  /** Drop one module's history; it simply stays in its category section. */
+  const forget = React.useCallback((key: string) => {
+    setUsage((prev) => {
+      const { [key]: _removed, ...next } = prev;
+      persist(next);
+      return next;
+    });
+  }, [persist]);
+
+  const clear = React.useCallback(() => {
+    setUsage({});
+    try { localStorage.removeItem(storageKey); } catch { /* ignore */ }
+  }, [storageKey]);
+
+  return { usage, record, forget, clear };
+}
+
+/** Most-opened first; ties broken by most recent. */
+const byUsage = (usage: Usage) => (a: ModuleCard, b: ModuleCard) =>
+  (usage[b.key]?.n ?? 0) - (usage[a.key]?.n ?? 0) || (usage[b.key]?.t ?? 0) - (usage[a.key]?.t ?? 0);
+
+const FREQUENT_LIMIT = 4;
+
 /* ─── Main page ────────────────────────────────────────────────────── */
 export function ModuleLauncher() {
   const user = useUser();
@@ -141,8 +191,55 @@ export function ModuleLauncher() {
   const tc = useTranslations('launcher.context');
   const te = useTranslations('enums.sector');
   const tAuth = useTranslations('auth');
+  const tdesc = useTranslations('launcher.desc');
+  const ts = useTranslations('launcher.search');
+  const router = useRouter();
   const { data: ov } = useOverview({ sector: user.sectorScope });
   const modules = useModules(user.roles, ov, locale);
+  const { usage, record, forget, clear } = useModuleUsage(user.id);
+
+  /* ── Search ── */
+  const [query, setQuery] = React.useState('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const q = query.trim().toLocaleLowerCase(locale);
+
+  // "/" focuses the search box unless the user is already typing somewhere.
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = e.target as HTMLElement | null;
+      if (el && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))) return;
+      e.preventDefault();
+      inputRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const results = React.useMemo(() => {
+    if (!q) return [];
+    const scored = modules.flatMap((m) => {
+      const title = tn(m.key).toLocaleLowerCase(locale);
+      const haystack = [title, tdesc(m.key), tn(m.category), m.stat?.label ?? ''].join(' ').toLocaleLowerCase(locale);
+      const score = title.startsWith(q) ? 3 : title.includes(q) ? 2 : haystack.includes(q) ? 1 : 0;
+      return score ? [{ m, score }] : [];
+    });
+    const usageOrder = byUsage(usage);
+    return scored.sort((a, b) => b.score - a.score || usageOrder(a.m, b.m)).map((r) => r.m);
+  }, [q, modules, usage, locale, tn, tdesc]);
+
+  const frequent = React.useMemo(
+    () => modules.filter((m) => usage[m.key]?.n).sort(byUsage(usage)).slice(0, FREQUENT_LIMIT),
+    [modules, usage],
+  );
+
+  const onSearchKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') { setQuery(''); return; }
+    if (e.key === 'Enter' && results[0]) {
+      record(results[0].key);
+      router.push(results[0].href as '/');
+    }
+  };
 
   const byCategory = CATEGORIES
     .map((cat) => ({ cat, cards: modules.filter((m) => m.category === cat) }))
@@ -189,7 +286,85 @@ export function ModuleLauncher() {
             </div>
           ))}
         </dl>
+
+        {/* Search */}
+        <div>
+          <div className="relative max-w-xl">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+            <input
+              ref={inputRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={onSearchKey}
+              placeholder={ts('placeholder')}
+              aria-label={ts('label')}
+              aria-describedby="launcher-search-hint"
+              autoComplete="off"
+              className={cn(
+                'h-11 w-full rounded-lg border-2 border-border bg-card pl-10 pr-20 text-sm text-foreground',
+                'shadow-[0_3px_0_0_hsl(var(--border))] placeholder:text-muted-foreground',
+                'focus-visible:border-primary/70 focus-visible:ring-0 focus-visible:ring-offset-0',
+                '[&::-webkit-search-cancel-button]:hidden',
+              )}
+            />
+            {query ? (
+              <button
+                type="button"
+                onClick={() => { setQuery(''); inputRef.current?.focus(); }}
+                aria-label={ts('clear')}
+                className="absolute right-2.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+              >
+                <X className="h-4 w-4" aria-hidden />
+              </button>
+            ) : (
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-2xs text-muted-foreground">/</kbd>
+            )}
+          </div>
+          <p id="launcher-search-hint" className="mt-2 hidden text-2xs text-muted-foreground tablet:block">{ts('hint')}</p>
+        </div>
       </div>
+
+      {q ? (
+        /* ── Search results ─────────────────────────────────────────────── */
+        <section aria-labelledby="launcher-results" className="space-y-4">
+          <div className="flex items-center gap-3">
+            <h2 id="launcher-results" className="text-xs font-bold uppercase tracking-widest text-muted-foreground" aria-live="polite">
+              {ts('results', { count: results.length })}
+            </h2>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+          {results.length ? (
+            <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 wide:grid-cols-3">
+              {results.map((card) => <RowCard key={card.href} card={card} onOpen={record} usage={usage[card.key]} />)}
+            </div>
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-border px-6 py-10 text-center text-sm text-muted-foreground">
+              {ts('noResults', { query: query.trim() })}
+            </div>
+          )}
+        </section>
+      ) : (<>
+
+      {/* ── Frequently opened ─────────────────────────────────────────── */}
+      {frequent.length > 0 && (
+        <section aria-labelledby="launcher-frequent" className="space-y-4">
+          <div className="flex items-center gap-3">
+            <History className="h-3.5 w-3.5 text-primary" aria-hidden />
+            <h2 id="launcher-frequent" className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              {ts('frequent')}
+            </h2>
+            <span className="hidden text-2xs text-muted-foreground tablet:inline">· {ts('frequentHint')}</span>
+            <div className="h-px flex-1 bg-border" />
+            <button type="button" onClick={clear} className="text-2xs font-medium text-muted-foreground underline-offset-2 hover:text-foreground hover:underline">
+              {ts('clearHistory')}
+            </button>
+          </div>
+          <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:grid-cols-4">
+            {frequent.map((card) => <RowCard key={card.href} card={card} onOpen={record} usage={usage[card.key]} onRemove={forget} compact />)}
+          </div>
+        </section>
+      )}
 
       {/* ── Module groups ─────────────────────────────────────────────── */}
       {byCategory.map(({ cat, cards }) => (
@@ -203,15 +378,16 @@ export function ModuleLauncher() {
 
           {cat === 'command' ? (
             <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-4">
-              {cards.map((card) => <HeroCard key={card.href} card={card} />)}
+              {cards.map((card) => <HeroCard key={card.href} card={card} onOpen={record} />)}
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 wide:grid-cols-3">
-              {cards.map((card) => <RowCard key={card.href} card={card} />)}
+              {cards.map((card) => <RowCard key={card.href} card={card} onOpen={record} />)}
             </div>
           )}
         </section>
       ))}
+      </>)}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <footer className="border-t border-border pt-6 text-center text-2xs text-muted-foreground">
@@ -256,12 +432,12 @@ function StatValue({ stat, className }: { stat: Stat | undefined; className?: st
 }
 
 /* ─── Command tile: icon, title, live figure, one-line purpose ─────── */
-function HeroCard({ card }: { card: ModuleCard }) {
+function HeroCard({ card, onOpen }: { card: ModuleCard; onOpen: (key: string) => void }) {
   const tn = useTranslations('nav');
   const td = useTranslations('launcher.desc');
   const tCommon = useTranslations('common');
   return (
-    <Link href={card.href} className={cn(cardBase, 'flex-col p-5 pl-6')}>
+    <Link href={card.href} onClick={() => onOpen(card.key)} className={cn(cardBase, 'flex-col p-5 pl-6')}>
       {/* thick side rail */}
       <span aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-primary/80 transition-colors group-hover:bg-primary" />
 
@@ -288,19 +464,34 @@ function HeroCard({ card }: { card: ModuleCard }) {
 }
 
 /* ─── Compact row: icon, title + purpose, figure at the right ──────── */
-function RowCard({ card }: { card: ModuleCard }) {
+function RowCard({ card, onOpen, onRemove, usage, compact }: {
+  card: ModuleCard;
+  onOpen: (key: string) => void;
+  /** When given, shows an × that removes the module from the history */
+  onRemove?: (key: string) => void;
+  /** When given, shows how often / how recently this user opened the module */
+  usage?: { n: number; t: number };
+  /** Narrow tile: hides the live figure so title and history fit */
+  compact?: boolean;
+}) {
   const tn = useTranslations('nav');
   const td = useTranslations('launcher.desc');
-  return (
-    <Link href={card.href} className={cn(cardBase, 'items-center gap-4 px-4 py-3.5 pl-5')}>
+  const ts = useTranslations('launcher.search');
+  const link = (
+    <Link href={card.href} onClick={() => onOpen(card.key)} className={cn(cardBase, 'items-center gap-4 px-4 py-3.5 pl-5', onRemove && 'h-full pr-12')}>
       {/* side rail — neutral until hovered */}
       <span aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-border transition-colors group-hover:bg-primary" />
       <IconChip icon={card.icon} />
       <div className="min-w-0 flex-1">
         <h3 className="text-sm font-semibold leading-tight text-foreground">{tn(card.key)}</h3>
-        <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{td(card.key)}</p>
+        {!compact && <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">{td(card.key)}</p>}
+        {usage && (
+          <p className="mt-1 text-2xs font-medium text-primary/90 tabular">
+            {ts('opened', { count: usage.n })} · {relTime(new Date(usage.t).toISOString())}
+          </p>
+        )}
       </div>
-      {card.stat !== null && (
+      {!compact && card.stat !== null && (
         <div className="hidden shrink-0 flex-col items-end text-right tablet:flex">
           <StatValue stat={card.stat} className="text-lg" />
           {card.stat ? (
@@ -311,7 +502,23 @@ function RowCard({ card }: { card: ModuleCard }) {
           ) : <Skeleton className="mt-1 h-2.5 w-14" />}
         </div>
       )}
-      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden />
+      {!onRemove && <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden />}
     </Link>
+  );
+  if (!onRemove) return link;
+  // The × is a sibling of the link, not inside it: a button nested in an <a> is invalid and would also navigate.
+  return (
+    <div className="relative">
+      {link}
+      <button
+        type="button"
+        onClick={() => onRemove(card.key)}
+        aria-label={ts('remove', { module: tn(card.key) })}
+        title={ts('remove', { module: tn(card.key) })}
+        className="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <X className="h-4 w-4" aria-hidden />
+      </button>
+    </div>
   );
 }
