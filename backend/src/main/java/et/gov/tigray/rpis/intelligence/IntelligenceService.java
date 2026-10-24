@@ -44,7 +44,8 @@ public class IntelligenceService {
     public IntelligenceDtos.Briefing briefing(Sector sector, Short zoneId) {
         var p = SqlParams.scope(sector, zoneId, null).addValue("staleDays", props.getMedia().getEvidenceStaleDays(), Types.INTEGER);
         return new IntelligenceDtos.Briefing(Instant.now(), sector, zoneId, signals(p), actions(sector, zoneId, p), sectorComparison(p), zoneComparison(p),
-            contractors(p), fundingPriorities(p), riskRegister(p, 12), AnalyticsController.DISCLAIMER);
+            contractors(p), projectFundingPriorities(p), fundingPriorities(p),
+            riskRegister(p, 50).stream().filter(r -> r.riskScore() >= 25).toList(), AnalyticsController.DISCLAIMER);
     }
 
     // ── signals ───────────────────────────────────────────────────────────
@@ -242,7 +243,77 @@ public class IntelligenceService {
             ORDER BY p.risk_score DESC, p.schedule_variance_pp ASC LIMIT :limit
             """.formatted(SCOPE_P), q, (rs, i) -> new IntelligenceDtos.RiskEntry(rs.getLong("id"), rs.getString("code"), rs.getString("name"), Sector.valueOf(rs.getString("sector")), rs.getString("wereda"),
                 rs.getString("status"), rs.getString("health"), rs.getShort("risk_score"), et.gov.tigray.rpis.analytics.RiskScoringService.band(rs.getShort("risk_score")),
-                rs.getBigDecimal("schedule_variance_pp"), rs.getBigDecimal("cpi"), (Integer) rs.getObject("since_report"), (Integer) rs.getObject("since_verified"), rs.getBigDecimal("total_budget_etb"), json(rs.getString("comps"))));
+                rs.getBigDecimal("schedule_variance_pp"), rs.getBigDecimal("cpi"), (Integer) rs.getObject("since_report"), (Integer) rs.getObject("since_verified"), rs.getBigDecimal("total_budget_etb"), json(rs.getString("comps")), null, null, null))
+            .stream().map(IntelligenceService::classify).toList();
+    }
+
+    /** Adds risk type (dominant weighted component), severity and the matching recommended action. */
+    private static IntelligenceDtos.RiskEntry classify(IntelligenceDtos.RiskEntry r) {
+        String type = "schedule";
+        double best = -1;
+        if (r.components().get("components") instanceof List<?> cs) for (Object o : cs) {
+            if (!(o instanceof Map<?, ?> c) || !(c.get("score") instanceof Number s) || !(c.get("weight") instanceof Number w)) continue;
+            double contribution = s.doubleValue() * w.doubleValue();
+            if (contribution > best) { best = contribution; type = String.valueOf(c.get("key")); }
+        }
+        AlertSeverity sev = switch (r.band()) { case "CRITICAL" -> AlertSeverity.CRITICAL; case "HIGH" -> AlertSeverity.HIGH; case "MODERATE" -> AlertSeverity.MEDIUM; default -> AlertSeverity.LOW; };
+        return new IntelligenceDtos.RiskEntry(r.projectId(), r.code(), r.name(), r.sector(), r.weredaName(), r.status(), r.health(), r.riskScore(), r.band(), r.variancePp(), r.cpi(),
+            r.daysSinceReport(), r.daysSinceVerified(), r.budgetEtb(), r.components(), type.toUpperCase(), sev, RISK_ACTIONS.getOrDefault(type, "Review the project's risk drivers and record a decision."));
+    }
+    private static final Map<String, String> RISK_ACTIONS = Map.of(
+        "schedule", "Request a time-bound recovery plan from the contractor; consider re-baselining or contractual remedies.",
+        "cost", "Commission a cost / variation audit before certifying further payments.",
+        "reporting", "Require the site to resume weekly reporting and commission a field visit.",
+        "milestones", "Escalate overdue milestones to the supervising engineer and set revised dates.",
+        "issues", "Convene the project board to resolve open high-severity issues and risks.",
+        "funding", "Instruct the funder / treasury to release overdue tranches or approve bridge financing.",
+        "verification", "Schedule an independent verification inspection of reported progress.");
+
+    /**
+     * Projects with a tranche overdue or due within 60 days, ranked for release (0–100):
+     * urgency (40: lateness or closeness of the due date) + delivery health (35) + verification recency (15) + absorption (10: progress keeps pace with money released).
+     * Stalled or never-verified projects are recommended for HOLD; delayed ones for CONDITIONAL release.
+     */
+    List<IntelligenceDtos.ProjectFundingPriority> projectFundingPriorities(MapSqlParameterSource p) {
+        List<IntelligenceDtos.ProjectFundingPriority> rows = jdbc.query("""
+            SELECT p.id, p.code, p.name, p.sector, w.name_en wereda, p.health, p.physical_progress_pct phys, p.total_budget_etb budget, p.disbursed_etb disbursed, p.risk_score,
+                   EXTRACT(DAY FROM now() - p.last_verified_at)::int since_verified,
+                   sum(d.amount_etb) pending, min(d.planned_date) next_due, GREATEST(0, current_date - min(d.planned_date)) lag
+            FROM project p JOIN wereda w ON w.id = p.wereda_id
+            JOIN disbursement d ON d.project_id = p.id AND d.released_date IS NULL AND d.planned_date < current_date + 60
+            WHERE p.status = 'ACTIVE' %s
+            GROUP BY p.id, w.name_en
+            """.formatted(SCOPE_P), p, (rs, i) -> {
+                int lag = rs.getInt("lag");
+                long untilDue = java.time.temporal.ChronoUnit.DAYS.between(java.time.LocalDate.now(), rs.getDate("next_due").toLocalDate());
+                String health = rs.getString("health");
+                Integer sinceVerified = (Integer) rs.getObject("since_verified");
+                int stale = props.getMedia().getEvidenceStaleDays();
+                BigDecimal budget = rs.getBigDecimal("budget"), disbursed = rs.getBigDecimal("disbursed"), phys = rs.getBigDecimal("phys");
+                double urgency = lag > 0 ? 25 + Math.min(15, lag / 4.0) : 25 * Math.max(0, 1 - untilDue / 60.0);
+                double delivery = switch (health) { case "ON_TRACK" -> 35; case "AT_RISK" -> 25; case "NOT_STARTED" -> 20; case "DELAYED" -> 12; default -> 0; };
+                double verification = sinceVerified == null ? 0 : sinceVerified <= stale ? 15 : sinceVerified <= stale * 2 ? 7 : 0;
+                double releasedPct = budget == null || budget.signum() == 0 ? 0 : disbursed.doubleValue() * 100 / budget.doubleValue();
+                double absorption = releasedPct <= 0 ? 10 : Math.min(10, 10 * phys.doubleValue() / releasedPct);
+                String rec, why;
+                if ("STALLED".equals(health) || sinceVerified == null) {
+                    rec = "HOLD";
+                    why = "STALLED".equals(health) ? "Site reporting has stopped; hold until a verified inspection confirms activity." : "No verified inspection on record; verify progress before releasing funds.";
+                } else if ("DELAYED".equals(health)) {
+                    rec = "CONDITIONAL";
+                    why = "Delivery is behind schedule; release against a time-bound recovery plan.";
+                } else {
+                    rec = "RELEASE";
+                    why = lag > 0 ? "Delivering as planned and the tranche is " + lag + " days late; release now to avoid stalling the site." : "Delivering as planned; release on the due date.";
+                }
+                return new IntelligenceDtos.ProjectFundingPriority(rs.getLong("id"), rs.getString("code"), rs.getString("name"), Sector.valueOf(rs.getString("sector")), rs.getString("wereda"),
+                    health, phys, budget, disbursed, rs.getBigDecimal("pending"), rs.getDate("next_due").toLocalDate(), lag, (Short) rs.getObject("risk_score", Short.class), sinceVerified,
+                    bd(urgency + delivery + verification + absorption, 0), rec, why);
+            });
+        List<IntelligenceDtos.ProjectFundingPriority> ranked = new ArrayList<>(rows);
+        List<String> order = List.of("RELEASE", "CONDITIONAL", "HOLD");
+        ranked.sort(Comparator.comparing((IntelligenceDtos.ProjectFundingPriority f) -> order.indexOf(f.recommendation())).thenComparing(IntelligenceDtos.ProjectFundingPriority::priorityScore, Comparator.reverseOrder()));
+        return ranked.stream().limit(50).toList();
     }
 
     // ── helpers ───────────────────────────────────────────────────────────

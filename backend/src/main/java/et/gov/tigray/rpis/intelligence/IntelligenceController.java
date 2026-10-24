@@ -5,6 +5,7 @@ import et.gov.tigray.rpis.security.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/intelligence")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('EXECUTIVE','ANALYST','PMO_FEDERAL','ADMIN','SECTOR_HEAD')")
 @Tag(name = "Executive Intelligence")
 public class IntelligenceController {
     private final IntelligenceService service;

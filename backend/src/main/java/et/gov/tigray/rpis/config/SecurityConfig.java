@@ -85,6 +85,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/admin/**").hasRole(RoleCode.ADMIN)
                 .requestMatchers("/api/v1/sync/**").hasAnyRole(RoleCode.FIELD_OFFICER, RoleCode.SITE_MANAGER, RoleCode.ADMIN)
                 .requestMatchers("/api/v1/federal/**").hasAnyRole(RoleCode.PMO_FEDERAL, RoleCode.EXECUTIVE, RoleCode.ADMIN)
+                .requestMatchers("/api/v1/intelligence/**", "/api/v1/analytics/**")
+                    .hasAnyRole(RoleCode.EXECUTIVE, RoleCode.SECTOR_HEAD, RoleCode.ANALYST, RoleCode.PMO_FEDERAL, RoleCode.ADMIN)
                 .requestMatchers("/api/v1/**").authenticated()
                 .anyRequest().denyAll())
             .oauth2ResourceServer(o -> o.jwt(j -> j.jwtAuthenticationConverter(converter)));

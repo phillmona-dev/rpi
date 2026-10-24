@@ -1,12 +1,12 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import type { ContractorPerformance, FundingPriority, RiskEntry, UnitComparison } from '@/lib/api/types';
+import type { ContractorPerformance, FundingPriority, FundingRecommendation, ProjectFundingPriority, RiskEntry, UnitComparison } from '@/lib/api/types';
 import { DataTable, type Column } from '@/components/common/data-table';
-import { HealthBadge, SectorDot, SeverityBadge, ToneBadge } from '@/components/common/badges';
+import { AlertSeverityBadge, HealthBadge, SectorDot, SectorLabel, SeverityBadge, ToneBadge } from '@/components/common/badges';
 import { RiskChip } from '@/components/projects/risk-score';
 import { useRouter } from '@/i18n/navigation';
-import { money, num, pct, ratio, signedPp } from '@/lib/format';
-import { riskBandTone, toneVar } from '@/lib/domain';
+import { fmtDate, money, num, pct, ratio, signedPp } from '@/lib/format';
+import { toneVar } from '@/lib/domain';
 
 function Bar({ v, max = 100, color }: { v: number | null; max?: number; color?: string }) {
   if (v === null || v === undefined) return <span className="text-muted-foreground">—</span>;
@@ -70,19 +70,37 @@ export function PriorityTable({ rows }: { rows: FundingPriority[] }) {
 export function RiskRegisterTable({ rows }: { rows: RiskEntry[] }) {
   const t = useTranslations('intelligence');
   const tp = useTranslations('projects.columns');
-  const tc = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const cols: Column<RiskEntry>[] = [
+    { key: 'name', header: tp('name'), cell: (r) => <div className="min-w-[220px]"><div className="truncate max-w-[320px] font-medium">{r.name}</div><div className="text-2xs text-muted-foreground">{r.code} · {r.weredaName}</div></div> },
+    { key: 'sector', header: t('sector'), cell: (r) => <SectorLabel sector={r.sector} className="whitespace-nowrap text-xs" /> },
     { key: 'risk', header: tp('risk'), align: 'right', cell: (r) => <RiskChip score={r.riskScore} /> },
-    { key: 'name', header: tp('name'), cell: (r) => <div className="min-w-[220px]"><div className="flex items-center gap-1.5 font-medium"><SectorDot sector={r.sector} /><span className="truncate max-w-[320px]">{r.name}</span></div><div className="text-2xs text-muted-foreground">{r.code} · {r.weredaName}</div></div> },
+    { key: 'type', header: t('riskType'), cell: (r) => <span className="whitespace-nowrap text-xs font-medium">{t(`riskTypes.${r.riskType}`)}</span> },
+    { key: 'severity', header: t('severity'), cell: (r) => <AlertSeverityBadge value={r.severity} /> },
+    { key: 'action', header: t('recommendedAction'), cell: (r) => <p className="min-w-[260px] max-w-[420px] text-xs text-muted-foreground">{r.recommendedAction}</p> },
     { key: 'health', header: tp('health'), cell: (r) => <HealthBadge value={r.health} /> },
-    { key: 'variance', header: tp('variance'), align: 'right', cell: (r) => <span style={{ color: r.variancePp <= -5 ? toneVar.serious : undefined }}>{signedPp(r.variancePp)}</span> },
-    { key: 'cpi', header: tp('cpi'), align: 'right', cell: (r) => <span style={{ color: (r.cpi ?? 1) < 0.9 ? toneVar.serious : undefined }}>{ratio(r.cpi)}</span> },
-    { key: 'report', header: tp('lastReport'), align: 'right', cell: (r) => <span style={{ color: (r.daysSinceReport ?? 0) > 21 ? toneVar.critical : undefined }}>{r.daysSinceReport === null ? tc('never') : tc('daysAgo', { count: r.daysSinceReport })}</span> },
-    { key: 'verified', header: tp('verified'), align: 'right', cell: (r) => <span style={{ color: r.daysSinceVerified === null || r.daysSinceVerified > 60 ? toneVar.serious : undefined }}>{r.daysSinceVerified === null ? tc('never') : tc('daysAgo', { count: r.daysSinceVerified })}</span> },
-    { key: 'drivers', header: t('riskComponents'), cell: (r) => <div className="flex flex-wrap gap-1">{(r.components?.components ?? []).filter((c) => c.score >= 50).sort((a, b) => b.score - a.score).slice(0, 3).map((c) => <span key={c.key} className="rounded border px-1 text-2xs" style={{ borderColor: `color-mix(in srgb, ${toneVar[riskBandTone[c.score >= 75 ? 'CRITICAL' : 'HIGH']]} 60%, transparent)` }}>{t(`component.${c.key}` as 'component.schedule')} {Math.round(c.score)}</span>)}</div> },
     { key: 'budget', header: tp('budget'), align: 'right', cell: (r) => money(r.budgetEtb, locale) },
   ];
   return <DataTable columns={cols} rows={rows} rowKey={(r) => r.projectId} onRowClick={(r) => router.push(`/projects/${r.projectId}`)} dense />;
+}
+
+const recTone: Record<FundingRecommendation, 'good' | 'warning' | 'serious'> = { RELEASE: 'good', CONDITIONAL: 'warning', HOLD: 'serious' };
+
+export function ProjectFundingTable({ rows }: { rows: ProjectFundingPriority[] }) {
+  const t = useTranslations('intelligence');
+  const locale = useLocale();
+  const router = useRouter();
+  const col = (k: string) => t(`projectFundingColumns.${k}` as 'projectFundingColumns.score');
+  const cols: Column<ProjectFundingPriority>[] = [
+    { key: 'score', header: col('score'), align: 'right', cell: (f) => <span className="text-base font-semibold tabular" style={{ color: f.recommendation === 'HOLD' ? 'hsl(var(--muted-foreground))' : f.priorityScore >= 70 ? toneVar.good : undefined }}>{Math.round(f.priorityScore)}</span> },
+    { key: 'project', header: col('project'), cell: (f) => <div className="min-w-[220px]"><div className="flex items-center gap-1.5 font-medium"><SectorDot sector={f.sector} /><span className="truncate max-w-[300px]">{f.name}</span></div><div className="text-2xs text-muted-foreground">{f.code} · {f.weredaName}</div></div> },
+    { key: 'health', header: col('health'), cell: (f) => <HealthBadge value={f.health} /> },
+    { key: 'progress', header: col('progress'), align: 'right', cell: (f) => pct(f.physicalPct) },
+    { key: 'pending', header: col('pending'), align: 'right', cell: (f) => money(f.pendingEtb, locale) },
+    { key: 'due', header: col('due'), cell: (f) => <span className="whitespace-nowrap text-xs">{fmtDate(f.nextDueDate, locale)}{f.lagDays > 0 && <span className="block text-2xs font-medium" style={{ color: toneVar.serious }}>{t('daysLate', { count: f.lagDays })}</span>}</span> },
+    { key: 'recommendation', header: col('recommendation'), cell: (f) => <ToneBadge tone={recTone[f.recommendation]} label={t(`recommendation.${f.recommendation}`)} /> },
+    { key: 'rationale', header: col('rationale'), cell: (f) => <p className="min-w-[240px] max-w-[380px] text-xs text-muted-foreground">{f.rationale}</p> },
+  ];
+  return <DataTable columns={cols} rows={rows} rowKey={(f) => f.projectId} onRowClick={(f) => router.push(`/projects/${f.projectId}`)} dense />;
 }

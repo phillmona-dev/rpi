@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
-import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports } from '@/lib/domain';
+import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, canSeeIntelligence } from '@/lib/domain';
 import { useOverview } from '@/lib/api/hooks';
 import type { Overview } from '@/lib/api/types';
 import { money, num, pct, relTime } from '@/lib/format';
@@ -65,14 +65,14 @@ function useModules(roles: string[], ov: Overview | undefined, locale: string): 
         detail: t('progressDetail', { physical: pct(k?.avgPhysicalProgressPct), planned: pct(k?.avgPlannedProgressPct) }),
       }),
     },
-    {
+    ...(canSeeIntelligence(roles) ? [{
       href: '/intelligence', key: 'intelligence', icon: BrainCircuit, category: 'command',
       stat: s({
         value: n(attention), label: t('needAttention'),
         detail: t('attentionDetail', { stalled: n(k?.projectsStalled), delayed: n(k?.projectsDelayed) }),
         accent: attention > 0 ? 'var(--status-serious)' : undefined,
       }),
-    },
+    } as ModuleCard] : []),
     {
       href: '/map', key: 'map', icon: Globe2, category: 'command',
       stat: s({

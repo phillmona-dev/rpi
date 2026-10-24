@@ -23,6 +23,7 @@ import java.util.List;
 @Tag(name = "Projects")
 public class ProjectController {
     private final ProjectService service;
+    private final ProjectCreationService creation;
     private final ProjectLifecycleService lifecycle;
     private final ProjectTimelineService timeline;
 
@@ -37,6 +38,31 @@ public class ProjectController {
         Sector scoped = CurrentUser.get().map(u -> u.effectiveSectorFilter(sector)).orElse(sector);
         return PageResponse.of(service.search(new ProjectService.Filter(scoped, zoneId, weredaId, status, health, fundingSource, q, stage, minRiskScore, contractor), pageable));
     }
+
+    // ── Registration (analysts and administrators) ──────────────────────
+    @PostMapping
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('ANALYST','ADMIN')")
+    @Operation(summary = "Register a new project with schedule, budget, funding, organisations, facilities and initial risks (audited)")
+    public ProjectDtos.ProjectSummary create(@Valid @RequestBody ProjectDtos.CreateProjectRequest req) { return creation.create(req); }
+
+    @PostMapping("/validate")
+    @PreAuthorize("hasAnyRole('ANALYST','ADMIN')")
+    @Operation(summary = "Dry-run the registration rules without saving: blocking errors and advisory warnings")
+    public ProjectDtos.ValidationResult validate(@Valid @RequestBody ProjectDtos.CreateProjectRequest req) { return creation.validate(req); }
+
+    @GetMapping("/code-suggestion")
+    @PreAuthorize("hasAnyRole('ANALYST','ADMIN')")
+    public ProjectDtos.CodeSuggestion codeSuggestion(@RequestParam Sector sector) { return new ProjectDtos.CodeSuggestion(creation.suggestCode(sector)); }
+
+    @GetMapping("/similar")
+    @PreAuthorize("hasAnyRole('ANALYST','ADMIN')")
+    @Operation(summary = "Existing projects with a similar name (duplicate check while registering)")
+    public List<ProjectDtos.SimilarProject> similar(@RequestParam String name, @RequestParam(required = false) Integer weredaId) { return creation.similar(name, weredaId); }
+
+    @GetMapping("/organizations")
+    @Operation(summary = "Organisation directory for assigning implementing agencies, contractors, consultants and funders")
+    public List<ProjectDtos.OrganizationOption> organizations(@RequestParam(required = false) String q, @RequestParam(required = false) OrganizationType type) { return creation.organizationOptions(q, type); }
 
     @GetMapping("/{id}/timeline")
     @Operation(summary = "Unified project passport timeline: stages, milestones, reports, disbursements, alerts, decisions, inspections, documents")

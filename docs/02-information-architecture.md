@@ -12,7 +12,7 @@
 | Group | Item | Route | Audience |
 |---|---|---|---|
 | Command | Command Center | `/` | all |
-| Command | Decision Support (signals, action cards, risk register, comparisons, funding priorities, predictive insights) | `/intelligence` | all |
+| Command | Decision Support (signals, action cards, risk register, comparisons, funding priorities, predictive insights) | `/intelligence` | EXECUTIVE, SECTOR_HEAD (scoped), ANALYST, PMO_FEDERAL, ADMIN |
 | Command | Geospatial Command (layered map: boundaries, weredas, projects, facilities, evidence) | `/map` | all |
 | Command | Decision Queue (Alerts) | `/alerts` | all (actions: EXECUTIVE, SECTOR_HEAD, ANALYST, ADMIN) |
 | Analysis | Field Evidence (inspections, verification, gallery) | `/evidence` | all (verify: EXECUTIVE, SECTOR_HEAD, ANALYST, ADMIN) |
@@ -58,7 +58,7 @@ Tabs: Overview (progress curve, milestones, scope, facilities, composite risk co
 Left panel: layer toggles, colour mode for projects (health / risk / progress / sector) and facilities (severity / operational / sector), filters (sector, zone, health, status, minimum risk, severity, unaddressed-only), legend. Map: clustered project symbols sized by budget, facility points, boundary polygons when loaded, evidence points for the selected entity. Selection card: key figures and a path to the detail page.
 
 ### Decision Support (`/intelligence`)
-Signal strip → tabs: Briefing (ranked action cards) · Risk register (composite score with component drivers) · Comparisons (sector, zone, contractor performance with rank) · Funding priorities (unaddressed severe damage ranked by reach per ETB and severity) · Predictive insights (rule-based today, AI-labelled later; human review recorded).
+Title "Reconstruction Intelligence". Signal strip → tabs: Brief (ranked action cards; clicking a card opens its full detail) · Risk Register (project, sector, composite score, risk type = dominant weighted component, severity, recommended action) · Compare (sector, zone, contractor performance with rank) · Priorities (projects recommended for tranche release — RELEASE / CONDITIONAL / HOLD — then unaddressed severe damage ranked by reach per ETB and severity) · Predictive insights (rule-based today, AI-labelled later; human review recorded).
 
 ### Field Evidence (`/evidence`)
 Inspections table (type, inspector, observed vs reported, gap, ratings, distance from site, media, verification) with drawer (findings, media, verify / dispute / reject) · Gallery (all media newest first with geotag / timestamp / verification badges, lightbox with metadata).

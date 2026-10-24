@@ -11,17 +11,33 @@ import { useQueryParams } from '@/lib/use-query-params';
 import { useUser } from '@/providers/session';
 import { SignalStrip } from '@/components/intelligence/signal-strip';
 import { ActionCards } from '@/components/intelligence/action-cards';
-import { ContractorTable, PriorityTable, RiskRegisterTable, UnitComparisonTable } from '@/components/intelligence/comparisons';
+import { ContractorTable, PriorityTable, ProjectFundingTable, RiskRegisterTable, UnitComparisonTable } from '@/components/intelligence/comparisons';
 import { InsightCard } from '@/components/intelligence/insight-card';
 import { DataState, TableSkeleton } from '@/components/common/data-state';
 import { Pagination } from '@/components/common/data-table';
 import { SECTORS, type InsightKind, type Sector } from '@/lib/api/types';
 import { localizedName, fmtDateTime } from '@/lib/format';
 import { useRouter } from '@/i18n/navigation';
+import { canSeeIntelligence } from '@/lib/domain';
 
 const KINDS: InsightKind[] = ['DELAY_PREDICTION', 'COMPLETION_FORECAST', 'COST_RISK', 'SUPPLY_RISK', 'ANOMALY', 'FUNDING_PRIORITY', 'RISK_SCORE'];
 
 export default function IntelligencePage() {
+  const t = useTranslations('intelligence');
+  const user = useUser();
+  useBreadcrumbs([{ label: t('title') }]);
+  if (!canSeeIntelligence(user.roles)) {
+    return (
+      <>
+        <PageHeader title={t('title')} subtitle={t('subtitle')} />
+        <DataState isLoading={false} isEmpty emptyTitle={t('noAccess')} emptyHint={t('noAccessHint')}>{null}</DataState>
+      </>
+    );
+  }
+  return <IntelligenceWorkspace />;
+}
+
+function IntelligenceWorkspace() {
   const t = useTranslations('intelligence');
   const tc = useTranslations('common');
   const ts = useTranslations('scope');
@@ -30,7 +46,6 @@ export default function IntelligencePage() {
   const user = useUser();
   const router = useRouter();
   const { get, set } = useQueryParams();
-  useBreadcrumbs([{ label: t('title') }]);
   const sector = (user.sectorScope ?? get('sector')) as Sector | null;
   const zoneId = get('zoneId') ? Number(get('zoneId')) : null;
   const tab = get('tab') ?? 'brief';
@@ -54,7 +69,7 @@ export default function IntelligencePage() {
         </TabsContent>
         <TabsContent value="risk">
           <Section id="risk" title={t('riskRegister')} hint={t('riskHint')}>
-            <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.riskRegister.length} emptyTitle={t('noRisk')} skeleton={<TableSkeleton cols={9} rows={10} />}><RiskRegisterTable rows={data?.riskRegister ?? []} /></DataState>
+            <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.riskRegister.length} emptyTitle={t('noRisk')} skeleton={<TableSkeleton cols={8} rows={10} />}><RiskRegisterTable rows={data?.riskRegister ?? []} /></DataState>
           </Section>
         </TabsContent>
         <TabsContent value="compare">
@@ -65,7 +80,10 @@ export default function IntelligencePage() {
           </div>
         </TabsContent>
         <TabsContent value="priorities">
+          <div className="space-y-5">
+          <Section id="project-funding" title={t('projectFunding')} hint={t('projectFundingHint')}><DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.projectFundingPriorities.length} emptyTitle={t('noProjectFunding')} skeleton={<TableSkeleton cols={8} rows={8} />}><ProjectFundingTable rows={data?.projectFundingPriorities ?? []} /></DataState></Section>
           <Section id="priorities" title={t('fundingPriorities')} hint={t('fundingHint')}><DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.fundingPriorities.length} skeleton={<TableSkeleton cols={7} rows={8} />}><PriorityTable rows={data?.fundingPriorities ?? []} /></DataState></Section>
+          </div>
         </TabsContent>
         <TabsContent value="insights">
           <Section id="insights" title={t('insights')} hint={t('insightsHint')} actions={

@@ -5,7 +5,7 @@ import { BarChart3, Bell, BrainCircuit, Building2, Camera, ChevronLeft, ChevronR
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/session';
-import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, sectorSlug } from '@/lib/domain';
+import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeIntelligence, canSeeReports, sectorSlug } from '@/lib/domain';
 import { SECTORS } from '@/lib/api/types';
 import { SectorDot } from '@/components/common/badges';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -23,7 +23,7 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
 
   const command: Item[] = [
     { href: '/', label: t('commandCenter'), icon: LayoutDashboard },
-    { href: '/intelligence', label: t('intelligence'), icon: BrainCircuit },
+    ...(canSeeIntelligence(roles) ? [{ href: '/intelligence', label: t('intelligence'), icon: BrainCircuit }] : []),
     { href: '/map', label: t('map'), icon: Globe2 },
     { href: '/alerts', label: t('alerts'), icon: Bell, badge: counts?.decisionRequired },
   ];

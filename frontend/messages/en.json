@@ -13,7 +13,7 @@
     "facilities": "Facilities & Damage",
     "damage": "Damage Assessments",
     "finance": "Finance",
-    "alerts": "Decision Queue",
+    "alerts": "Alerts",
     "briefing": "Daily Brief",
     "administration": "Administration",
     "users": "Users",
@@ -23,7 +23,7 @@
     "main": "Main navigation",
     "skip": "Skip to content",
     "map": "Geospatial Command",
-    "intelligence": "Decision Support",
+    "intelligence": "Intelligence",
     "evidence": "Field Evidence",
     "reports": "Reports",
     "command": "Command",
@@ -248,7 +248,7 @@
     "actions": "Executive action cards",
     "actionsHint": "What requires your decision, with the evidence behind it",
     "noActions": "No executive actions are pending. The portfolio is within thresholds.",
-    "openIntelligence": "Open decision support",
+    "openIntelligence": "Open Intelligence",
     "openMap": "Open geospatial command",
     "question": {
       "what": "What is happening?",
@@ -494,7 +494,8 @@
       "noScore": "Not scored (completed or cancelled)",
       "verifiedAgo": "Verified {time}",
       "neverVerified": "Never independently verified"
-    }
+    },
+    "register": "Register project"
   },
   "facilities": {
     "title": "Facilities & Damage",
@@ -555,8 +556,8 @@
     }
   },
   "alerts": {
-    "title": "Decision Queue",
-    "subtitle": "Rule-based alerts requiring acknowledgement, assignment or resolution",
+    "title": "Alerts",
+    "subtitle": "Decision queue of rule-based alerts requiring acknowledgement, assignment or resolution. Unresolved critical alerts older than 72 hours are highlighted in red.",
     "count": "{count, plural, one {# alert} other {# alerts}}",
     "columns": {
       "severity": "Severity",
@@ -608,7 +609,8 @@
       "done": "Action recorded"
     },
     "empty": "No alerts match these filters",
-    "decisionBadge": "Decision required"
+    "decisionBadge": "Decision required",
+    "overdue": "Critical > 72 h"
   },
   "finance": {
     "title": "Finance",
@@ -894,18 +896,18 @@
     }
   },
   "intelligence": {
-    "title": "Decision Support",
+    "title": "Reconstruction Intelligence",
     "subtitle": "Early warnings, executive actions, comparisons and risk — every figure traceable to recorded data",
     "tabs": {
-      "brief": "Briefing",
-      "risk": "Risk register",
-      "compare": "Comparisons",
-      "priorities": "Funding priorities",
-      "insights": "Predictive insights"
+      "brief": "Brief",
+      "risk": "Risk Register",
+      "compare": "Compare",
+      "priorities": "Priorities",
+      "insights": "Insights"
     },
     "signals": "Early-warning indicators",
     "actions": "Executive action cards",
-    "actionsHint": "Ranked by severity and age. Each card links to the alert or insight it is based on.",
+    "actionsHint": "Ranked by severity and age. Click a card for the full detail and the alert or record it is based on.",
     "kind": {
       "DECISION": "Decision",
       "FUNDING": "Funding",
@@ -916,7 +918,7 @@
     },
     "suggested": "Suggested action",
     "evidence": "Evidence",
-    "openAlert": "Open in Decision Queue",
+    "openAlert": "Open alert",
     "openInsight": "Open insight",
     "riskRegister": "Composite risk register",
     "riskHint": "0–100 weighted score across schedule, cost, reporting, milestones, issues, funding and field verification. Weights are configured, not learned.",
@@ -958,7 +960,7 @@
       "onTime": "On time",
       "budget": "Portfolio budget"
     },
-    "fundingPriorities": "Funding priority ranking",
+    "fundingPriorities": "Damaged facilities awaiting a reconstruction project",
     "fundingHint": "Severely damaged or destroyed facilities with no project, ranked by beneficiaries reached per ETB of replacement cost and severity. A transparent heuristic for the executive office to review.",
     "priorityColumns": {
       "score": "Priority",
@@ -1007,7 +1009,45 @@
       "DATA_ANOMALIES": "Data anomalies",
       "PORTFOLIO_RISK": "High-risk share",
       "FIELD_DATA_FRESHNESS": "Field data age"
-    }
+    },
+    "noAccess": "Intelligence & risk analytics is restricted",
+    "noAccessHint": "Available to Executive, Sector Head, Analyst, Federal PMO and Administrator roles. Ask an administrator if you need access.",
+    "projectFunding": "Projects recommended for funding release",
+    "projectFundingHint": "Active projects with a tranche overdue or due within 60 days, scored 0–100 on urgency (40), delivery health (35), verification recency (15) and whether progress keeps pace with money already released (10). Stalled or never-verified projects are flagged for hold. Rule-based; for executive review.",
+    "projectFundingColumns": {
+      "score": "Priority",
+      "project": "Project",
+      "health": "Health",
+      "progress": "Physical",
+      "pending": "Pending tranche",
+      "due": "Due",
+      "recommendation": "Recommendation",
+      "rationale": "Why"
+    },
+    "recommendation": {
+      "RELEASE": "Release",
+      "CONDITIONAL": "Release with conditions",
+      "HOLD": "Hold"
+    },
+    "daysLate": "{count} d late",
+    "noProjectFunding": "No tranches pending in this scope",
+    "riskType": "Risk type",
+    "riskTypes": {
+      "SCHEDULE": "Schedule",
+      "COST": "Cost overrun",
+      "REPORTING": "Reporting gap",
+      "MILESTONES": "Overdue milestones",
+      "ISSUES": "Open issues",
+      "FUNDING": "Funding delay",
+      "VERIFICATION": "Unverified progress"
+    },
+    "severity": "Severity",
+    "sector": "Sector",
+    "recommendedAction": "Recommended action",
+    "viewDetail": "View details",
+    "rationale": "Why this needs attention",
+    "subject": "Subject",
+    "age": "Open for"
   },
   "evidence": {
     "title": "Field Evidence",
@@ -1259,6 +1299,339 @@
       "clearHistory": "Clear history",
       "opened": "Opened {count, plural, one {# time} other {# times}}",
       "remove": "Remove {module} from frequently opened"
+    }
+  },
+  "register": {
+    "title": "Register a project",
+    "subtitle": "Record a new reconstruction project with its schedule, budget, funding, responsible parties and initial risks. Every registration is validated and audited.",
+    "noAccess": "Project registration is restricted",
+    "noAccessHint": "Analysts and administrators can register projects. Ask an administrator if you need access.",
+    "stepsLabel": "Registration steps",
+    "stepOf": "Step {step} of {total}",
+    "back": "Back",
+    "next": "Continue",
+    "cancel": "Cancel",
+    "submit": "Register project",
+    "remove": "Remove",
+    "today": "Today",
+    "issues": "{count, plural, one {# issue} other {# issues}}",
+    "duration": "{months} months ({days} days)",
+    "steps": {
+      "basics": {
+        "short": "Basics",
+        "title": "Project identity",
+        "description": "What the project is, which sector it serves and where it stands in the governance lifecycle today."
+      },
+      "location": {
+        "short": "Location",
+        "title": "Location & scope",
+        "description": "Where the works take place and which damaged facilities from the register the project restores."
+      },
+      "schedule": {
+        "short": "Schedule",
+        "title": "Schedule & milestones",
+        "description": "The baseline schedule. Milestone weights drive planned progress, schedule variance and the health rating."
+      },
+      "budget": {
+        "short": "Budget",
+        "title": "Budget & funding",
+        "description": "Approved budget, its breakdown by category, and when funds are expected to be released."
+      },
+      "parties": {
+        "short": "Parties",
+        "title": "Responsible parties & governance",
+        "description": "Who implements, builds, supervises and funds the project, and the decisions already taken."
+      },
+      "risks": {
+        "short": "Risks",
+        "title": "Initial risk register",
+        "description": "Known risks at registration. They feed the issues & risks component of the composite risk score."
+      },
+      "review": {
+        "short": "Review",
+        "title": "Review & register",
+        "description": "The server checks every rule before anything is saved. Fix blocking problems; warnings are advisory."
+      }
+    },
+    "f": {
+      "sector": "Sector",
+      "name": "Project name",
+      "code": "Project code",
+      "codeAuto": "Auto",
+      "stage": "Current lifecycle stage",
+      "description": "Scope & objectives",
+      "beneficiaries": "Direct beneficiaries",
+      "wereda": "Wereda",
+      "latitude": "Latitude (°N)",
+      "longitude": "Longitude (°E)",
+      "plannedStart": "Planned start",
+      "plannedEnd": "Planned completion",
+      "actualStart": "Actual start on site",
+      "totalBudget": "Total approved budget",
+      "fundingSource": "Primary funding source",
+      "approvedOn": "Approved on",
+      "approvalReference": "Approval reference",
+      "fundingSecuredOn": "Funding secured on",
+      "procurementMethod": "Procurement method",
+      "contractSignedOn": "Contract signed on",
+      "contractValue": "Contract value",
+      "registrationNote": "Registration note"
+    },
+    "h": {
+      "name": "Start with the intervention and the facility, e.g. “Reconstruction of Adigrat General Hospital — surgical block”.",
+      "codeAuto": "Assigned automatically in sequence for the sector.",
+      "codeManual": "3–32 capital letters, digits or hyphens; must be unique.",
+      "stage": "Register the project at the stage it has actually reached; later stages are reached through audited transitions.",
+      "description": "Scope, main components and expected outcome.",
+      "beneficiaries": "People served once complete.",
+      "zone": "Narrows the wereda list.",
+      "wereda": "Determines dashboards, maps and sector-head scoping.",
+      "coordinates": "Optional. Without coordinates the site is placed at the wereda centre.",
+      "facilities": "Linking a facility marks its damage as addressed and connects its assessments to this project.",
+      "milestones": "Weights must add up to 100%. Dates must fall within the schedule.",
+      "totalBudget": "Including contingency and supervision.",
+      "fundingSource": "Tranches use this source unless set otherwise.",
+      "budgetLines": "Optional but recommended: the lines must add up to the total budget.",
+      "tranches": "Planned releases. Late tranches raise disbursement-lag alerts and appear in Intelligence › Priorities.",
+      "organizations": "An implementing agency is required. New organisations are added to the shared directory.",
+      "governance": "Decisions already taken before the {stage} stage.",
+      "approvalReference": "Decision minute or letter number.",
+      "contractShare": "{pct}% of the total budget",
+      "registrationNote": "Recorded on the first entry of the project’s lifecycle history.",
+      "actualStart": "Health and risk are computed from this date."
+    },
+    "ph": {
+      "name": "Reconstruction of …",
+      "codeNeedsSector": "Choose a sector first",
+      "description": "Describe the works, key components and expected results…",
+      "zone": "All zones",
+      "wereda": "Select a wereda",
+      "milestone": "Milestone name",
+      "select": "Select…",
+      "registrationNote": "Context for the record, e.g. the decision that authorised registration…"
+    },
+    "stageHelp": {
+      "PLANNING": "Concept and scoping; nothing approved yet.",
+      "APPROVAL": "Submitted for approval.",
+      "FUNDING": "Approved; mobilising funds.",
+      "PROCUREMENT": "Funded; tendering under way.",
+      "IMPLEMENTATION": "Contract signed; works on site."
+    },
+    "stageRequires": "Registering at the {stage} stage requires the governance details of the earlier stages (step 5).",
+    "similar": {
+      "title": "Possible duplicates",
+      "hint": "Check these before continuing — duplicate projects distort portfolio figures."
+    },
+    "loc": {
+      "population": "Population",
+      "projects": "Projects",
+      "severe": "Severe damage",
+      "useCentre": "Use wereda centre",
+      "clear": "Clear",
+      "mapHint": "Click the map to place the site; drag the marker to adjust. If no wereda is selected, the nearest one is chosen."
+    },
+    "fac": {
+      "title": "Facilities restored",
+      "wholeZone": "Whole zone",
+      "needScope": "Choose a sector and a wereda to list damaged facilities.",
+      "none": "No facilities match.",
+      "search": "Search facilities…",
+      "linked": "{count, plural, one {# project} other {# projects}}",
+      "reach": "{people} beneficiaries · replacement {cost}",
+      "useBenef": "The selected facilities serve {count} people.",
+      "apply": "Use as beneficiaries"
+    },
+    "ms": {
+      "title": "Milestones",
+      "template": "{sector} template",
+      "templateNoSector": "Sector template",
+      "distribute": "Date by weight",
+      "sort": "Sort by date",
+      "needDates": "Set the planned start and completion to use templates and automatic dating.",
+      "name": "Milestone",
+      "date": "Planned date",
+      "weight": "Weight",
+      "add": "Add milestone",
+      "weightTotal": "Weights"
+    },
+    "bl": {
+      "title": "Budget breakdown",
+      "standard": "Standard split",
+      "category": "Category",
+      "amount": "Allocated",
+      "share": "Share",
+      "add": "Add line",
+      "allocated": "Allocated",
+      "allocatedDetail": "{allocated} of {total} · remaining {diff}"
+    },
+    "tr": {
+      "title": "Disbursement schedule",
+      "template": "Templates",
+      "templates": {
+        "advance": "Advance 30 / 40 / 30",
+        "quarterly": "Quarterly instalments",
+        "single": "Single release"
+      },
+      "templatesHint": {
+        "advance": "30% on start, 40% at mid-point, 30% near completion",
+        "quarterly": "Equal tranches every quarter of the schedule",
+        "single": "The whole budget on the start date"
+      },
+      "needBudget": "Enter the total budget and the schedule to use templates.",
+      "date": "Planned release",
+      "amount": "Amount",
+      "source": "Source",
+      "cumulative": "Cumulative",
+      "sameAsProject": "Same as project",
+      "add": "Add tranche",
+      "scheduled": "Scheduled",
+      "scheduledDetail": "{scheduled} scheduled · {unscheduled} unscheduled"
+    },
+    "org": {
+      "title": "Organisations",
+      "add": "Add organisation",
+      "role": "Role",
+      "mode": "Existing or new",
+      "existing": "Directory",
+      "new": "New",
+      "search": "Search the organisation directory…",
+      "newName": "Organisation name",
+      "type": "Type",
+      "contact": "Contact (optional)",
+      "projects": "{count, plural, =0 {no projects} one {# project} other {# projects}}",
+      "createNamed": "Add “{name}” as a new organisation",
+      "empty": "No organisations yet — type a name to add one."
+    },
+    "gov": {
+      "title": "Governance record",
+      "none": "Nothing to record yet for a project at the {stage} stage.",
+      "later": "Captured later, at the stage shown:",
+      "contractVsBudget": "Contract {contract} against a budget of {budget}.",
+      "fields": {
+        "approvedOn": "Approval date",
+        "approvalReference": "Approval reference",
+        "fundingSecuredOn": "Funding date",
+        "procurementMethod": "Procurement method",
+        "contractSignedOn": "Contract date",
+        "contractValueEtb": "Contract value"
+      }
+    },
+    "procurement": {
+      "ICB": "International competitive bidding",
+      "NCB": "National competitive bidding",
+      "RESTRICTED": "Restricted tender",
+      "RFQ": "Request for quotations",
+      "DIRECT": "Direct procurement",
+      "FRAMEWORK": "Framework agreement",
+      "FORCE_ACCOUNT": "Force account",
+      "COMMUNITY": "Community participation"
+    },
+    "rk": {
+      "suggestions": "Common risks — click to add",
+      "empty": "No risks yet. Add the ones already known, or pick from the suggestions.",
+      "title": "Risk",
+      "category": "Category",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "score": "Likelihood × impact",
+      "scoreValue": "Score {score}",
+      "mitigation": "Mitigation",
+      "owner": "Owner",
+      "add": "Add risk",
+      "matrix": "Risk matrix"
+    },
+    "riskCategory": {
+      "SCOPE": "Scope",
+      "FINANCIAL": "Financial",
+      "SUPPLY": "Supply chain",
+      "MARKET": "Market",
+      "RESOURCE": "Resources",
+      "SAFETY": "Safety",
+      "SECURITY": "Security",
+      "ENVIRONMENT": "Environment",
+      "TECHNICAL": "Technical",
+      "PROCUREMENT": "Procurement",
+      "SOCIAL": "Social"
+    },
+    "review": {
+      "recheck": "Check again",
+      "ready": "All rules pass — the project is ready to be registered.",
+      "errors": "{count, plural, one {# problem blocks registration} other {# problems block registration}}",
+      "warnings": "{count, plural, one {# warning to consider} other {# warnings to consider}}",
+      "fix": "Go to field",
+      "edit": "Edit",
+      "site": "Site",
+      "weredaCentre": "Wereda centre",
+      "count": "{count} selected",
+      "window": "Window",
+      "duration": "Duration",
+      "months": "{months} months",
+      "milestonesValue": "{count} · weights {weight}%",
+      "linesValue": "{count} lines · {amount}",
+      "tranchesValue": "{count} tranches · {amount}",
+      "newOrg": "new",
+      "noRisks": "No risks registered",
+      "checkFailed": "The server check could not run. Try again.",
+      "submitFailed": "The project could not be registered. Try again."
+    },
+    "draft": {
+      "found": "Unfinished registration “{name}”, saved {time}.",
+      "untitled": "Untitled project",
+      "restore": "Restore",
+      "discard": "Discard",
+      "saved": "Draft saved {time}",
+      "autosave": "Drafts save automatically on this device"
+    },
+    "sum": {
+      "title": "Registration summary",
+      "identity": "Name and sector",
+      "location": "Wereda",
+      "schedule": "Schedule",
+      "milestones": "Milestones total 100%",
+      "budget": "Budget and funding source",
+      "agency": "Implementing agency",
+      "risks": "At least one risk",
+      "budgetValue": "Budget",
+      "completeness": "Completeness"
+    },
+    "success": {
+      "title": "Project registered",
+      "body": "{code} · {name} is now in the portfolio, dashboards and maps.",
+      "stage": "Stage",
+      "health": "Health",
+      "risk": "Risk score",
+      "budget": "Approved budget {budget}. The registration is recorded in the audit trail and the project’s lifecycle history.",
+      "open": "Open project",
+      "another": "Register another",
+      "list": "Back to projects"
+    },
+    "v": {
+      "required": "Required",
+      "nameShort": "Use at least 5 characters",
+      "codeFormat": "3–32 capital letters, digits or hyphens",
+      "number": "Enter a valid number",
+      "bothCoords": "Enter both latitude and longitude, or neither",
+      "latRange": "Must be between {min} and {max}",
+      "lngRange": "Must be between {min} and {max}",
+      "endAfterStart": "Must be after the planned start",
+      "tooLong": "Cannot exceed 10 years",
+      "requiredForStage": "Required at this stage",
+      "notFuture": "Cannot be in the future",
+      "oneMilestone": "Add at least one milestone",
+      "unique": "Must be unique",
+      "withinSchedule": "Must fall within the schedule",
+      "weight": "Between 0 and 100",
+      "weightsSum": "Weights must add up to 100% (now {value}%)",
+      "budgetMin": "Enter the approved budget (at least ETB 1,000)",
+      "linesSum": "Budget lines must add up to the total budget",
+      "tranchesExceed": "Tranches exceed the total budget",
+      "chooseOrg": "Choose an organisation",
+      "singleRole": "Implementing agency, contractor and supervising consultant can each be named once",
+      "needAgency": "Name the implementing agency",
+      "needContractor": "Name the contractor for a project already in implementation",
+      "afterApproval": "Must be on or after the approval date",
+      "afterFunding": "Must be on or after the funding date",
+      "contractExceeds": "Cannot exceed the total budget"
     }
   }
 }

@@ -4,7 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,7 +29,7 @@ import java.util.Map;
 /** RFC 7807 Problem Details for every error, always carrying the correlation id for support. */
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ProblemDetail base(HttpStatus status, String title, String detail, HttpServletRequest req) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, detail);
@@ -44,20 +50,31 @@ public class GlobalExceptionHandler {
     public ProblemDetail business(BusinessException ex, HttpServletRequest req) {
         ProblemDetail pd = base(ex.getStatus(), "Business Rule Violation", ex.getMessage(), req);
         pd.setProperty("code", ex.getCode());
+        if (!ex.getErrors().isEmpty()) pd.setProperty("errors", ex.getErrors());
         return pd;
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ProblemDetail validation(MethodArgumentNotValidException ex, HttpServletRequest req) {
-        ProblemDetail pd = base(HttpStatus.BAD_REQUEST, "Validation Failed", "One or more fields are invalid", req);
+    /*
+     * Extending ResponseEntityExceptionHandler keeps Spring's handling of framework exceptions (405, missing parameters, …)
+     * and stops Boot registering its own ProblemDetails handler, which would otherwise answer validation errors first and
+     * drop the per-field list the forms rely on.
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ProblemDetail pd = base(HttpStatus.BAD_REQUEST, "Validation Failed", "One or more fields are invalid", ((ServletWebRequest) request).getRequest());
         List<Map<String, String>> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(fe -> Map.of("field", fe.getField(), "message", String.valueOf(fe.getDefaultMessage())))
                 .toList();
         pd.setProperty("errors", errors);
-        return pd;
+        return ResponseEntity.badRequest().body(pd);
     }
 
-    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return ResponseEntity.badRequest().body(base(HttpStatus.BAD_REQUEST, "Bad Request", "The request body could not be read: " + ex.getMostSpecificCause().getMessage(), ((ServletWebRequest) request).getRequest()));
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentTypeMismatchException.class})
     public ProblemDetail badRequest(Exception ex, HttpServletRequest req) {
         return base(HttpStatus.BAD_REQUEST, "Bad Request", "The request could not be processed: " + ex.getMessage(), req);
     }

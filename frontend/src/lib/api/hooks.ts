@@ -75,9 +75,9 @@ export const useInspections = (p: Record<string, unknown>) => useQuery({ queryKe
 export const useInspection = (id: number | null) => useQuery({ queryKey: qk.inspection(id ?? 0), queryFn: () => api<T.InspectionDetail>(`evidence/inspections/${id}`), enabled: id !== null, staleTime: 10_000 });
 export const useMedia = (p: Record<string, unknown>, enabled = true) => useQuery({ queryKey: qk.media(p), queryFn: () => api<T.PageResponse<T.MediaDto>>('evidence/media', { query: p }), staleTime: STALE, placeholderData: keepPreviousData, enabled });
 export const useEvidenceSummary = (p: { projectId?: number | null; facilityId?: number | null }) => useQuery({ queryKey: qk.evidenceSummary(p), queryFn: () => api<T.EvidenceSummary>('evidence/summary', { query: p }), staleTime: STALE, enabled: Boolean(p.projectId || p.facilityId) });
-export const useProjectIntelligence = (id: number) => useQuery({ queryKey: qk.intelligence(id), queryFn: () => api<T.ProjectIntelligence>(`analytics/projects/${id}`), staleTime: STALE, enabled: Number.isFinite(id) });
+export const useProjectIntelligence = (id: number, enabled = true) => useQuery({ queryKey: qk.intelligence(id), queryFn: () => api<T.ProjectIntelligence>(`analytics/projects/${id}`), staleTime: STALE, enabled: enabled && Number.isFinite(id) });
 export const useInsights = (p: Record<string, unknown>) => useQuery({ queryKey: qk.insights(p), queryFn: () => api<T.PageResponse<T.InsightDto>>('analytics/insights', { query: p }), staleTime: STALE, placeholderData: keepPreviousData });
-export const useBriefing = (s?: Scope) => useQuery({ queryKey: qk.briefing(s), queryFn: () => api<T.Briefing>('intelligence/briefing', { query: { sector: s?.sector ?? undefined, zoneId: s?.zoneId ?? undefined } }), staleTime: STALE, placeholderData: keepPreviousData });
+export const useBriefing = (s?: Scope, enabled = true) => useQuery({ queryKey: qk.briefing(s), queryFn: () => api<T.Briefing>('intelligence/briefing', { query: { sector: s?.sector ?? undefined, zoneId: s?.zoneId ?? undefined } }), staleTime: STALE, placeholderData: keepPreviousData, enabled });
 export const useReportCatalog = () => useQuery({ queryKey: qk.reportCatalog, queryFn: () => api<T.ReportCatalogEntry[]>('reports/catalog'), staleTime: 10 * 60_000 });
 export const useReport = (type: T.ReportType | null, p: Record<string, unknown>) => useQuery({ queryKey: qk.report({ type, ...p }), queryFn: () => api<T.Report>(`reports/${type}`, { query: p }), staleTime: STALE, enabled: Boolean(type), placeholderData: keepPreviousData });
 export const useReportRuns = () => useQuery({ queryKey: qk.reportRuns, queryFn: () => api<T.ReportRun[]>('reports/runs', { query: { size: 50 } }), staleTime: 10_000 });
@@ -134,4 +134,17 @@ export function useRecordProgress(projectId: number) {
 export function useLogout() {
   const qc = useQueryClient();
   return useMutation({ mutationFn: () => fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }), onSuccess: () => qc.clear() });
+}
+
+// ── Project registration ───────────────────────────────────────────────────
+export const useCodeSuggestion = (sector: T.Sector | null) => useQuery({ queryKey: ['codeSuggestion', sector], queryFn: () => api<{ code: string }>('projects/code-suggestion', { query: { sector } }), enabled: Boolean(sector), staleTime: 30_000 });
+export const useSimilarProjects = (name: string, weredaId: number | null) => useQuery({ queryKey: ['similarProjects', name, weredaId], queryFn: () => api<T.SimilarProject[]>('projects/similar', { query: { name, weredaId } }), enabled: name.trim().length >= 6, staleTime: 30_000 });
+export const useOrganizations = () => useQuery({ queryKey: ['organizations'], queryFn: () => api<T.OrganizationOption[]>('projects/organizations'), staleTime: 5 * 60_000 });
+export const useValidateProject = () => useMutation({ mutationFn: (body: T.CreateProjectRequest) => api<T.RegistrationValidation>('projects/validate', { method: 'POST', body: JSON.stringify(body) }) });
+export function useCreateProject() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: T.CreateProjectRequest) => api<T.ProjectSummary>('projects', { method: 'POST', body: JSON.stringify(body) }),
+    onSuccess: () => { ['projects', 'overview', 'briefing', 'weredaMetrics', 'organizations', 'facilities', 'stream', 'codeSuggestion'].forEach((k) => qc.invalidateQueries({ queryKey: [k] })); },
+  });
 }

@@ -4,6 +4,7 @@ import et.gov.tigray.rpis.common.Enums.*;
 import et.gov.tigray.rpis.common.GeoPoint;
 import et.gov.tigray.rpis.common.Sector;
 import et.gov.tigray.rpis.geo.GeoDtos;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -58,6 +59,53 @@ public final class ProjectDtos {
     public record ProgressEntryRequest(@NotNull @PastOrPresent LocalDate logDate,
                                        @NotNull @DecimalMin("0") @DecimalMax("100") BigDecimal physicalProgressPct,
                                        @Min(0) Integer workforceCount, @Size(max = 2000) String notes) {}
+
+    // ── Registration ──────────────────────────────────────────────────────
+    /** Initial stages a project may be registered in; later stages are reached through audited transitions. */
+    public static final List<LifecycleStage> REGISTRABLE_STAGES = List.of(LifecycleStage.PLANNING, LifecycleStage.APPROVAL, LifecycleStage.FUNDING, LifecycleStage.PROCUREMENT, LifecycleStage.IMPLEMENTATION);
+
+    public record CreateProjectRequest(
+        @Size(max = 32) String code,
+        @NotBlank @Size(min = 5, max = 220) String name,
+        @NotNull Sector sector,
+        @NotNull Integer weredaId,
+        @Size(max = 5000) String description,
+        @Min(0) @Max(10_000_000) Integer beneficiaries,
+        @DecimalMin("-90") @DecimalMax("90") Double latitude,
+        @DecimalMin("-180") @DecimalMax("180") Double longitude,
+        @NotNull LifecycleStage initialStage,
+        @NotNull LocalDate plannedStart,
+        @NotNull LocalDate plannedEnd,
+        LocalDate actualStart,
+        @NotNull @DecimalMin(value = "1000") @DecimalMax("100000000000") BigDecimal totalBudgetEtb,
+        @NotNull FundingSource fundingSource,
+        @Size(max = 32) String procurementMethod,
+        @DecimalMin("0") BigDecimal contractValueEtb,
+        LocalDate approvedOn,
+        @Size(max = 120) String approvalReference,
+        LocalDate fundingSecuredOn,
+        LocalDate contractSignedOn,
+        @Size(max = 2000) String registrationNote,
+        @Valid @Size(max = 12) List<OrganizationAssignment> organizations,
+        @Valid @Size(max = 40) List<MilestoneInput> milestones,
+        @Valid @Size(max = 10) List<BudgetLineInput> budgetLines,
+        @Valid @Size(max = 24) List<TrancheInput> tranches,
+        @Size(max = 30) List<Long> facilityIds,
+        @Valid @Size(max = 30) List<RiskInput> risks) {}
+
+    /** Either an existing organisation (organizationId) or a new one (newName + newType). */
+    public record OrganizationAssignment(@NotNull OrganizationRole role, Long organizationId, @Size(max = 200) String newName, OrganizationType newType, @Size(max = 200) String newContact) {}
+    public record MilestoneInput(@NotBlank @Size(max = 200) String name, @NotNull LocalDate plannedDate, @NotNull @DecimalMin("0") @DecimalMax("100") BigDecimal weightPct) {}
+    public record BudgetLineInput(@NotNull BudgetCategory category, @NotNull @DecimalMin("0") BigDecimal allocatedEtb) {}
+    public record TrancheInput(@NotNull LocalDate plannedDate, @NotNull @DecimalMin("0.01") BigDecimal amountEtb, FundingSource fundingSource) {}
+    public record RiskInput(@NotBlank @Size(max = 200) String title, @NotBlank @Size(max = 32) String category, @NotNull Level likelihood, @NotNull Level impact,
+                            @Size(max = 2000) String mitigation, @Size(max = 160) String owner) {}
+
+    public record FieldIssue(String field, String message) {}
+    public record ValidationResult(boolean valid, String suggestedCode, List<FieldIssue> errors, List<FieldIssue> warnings) {}
+    public record CodeSuggestion(String code) {}
+    public record SimilarProject(Long id, String code, String name, String weredaName, ProjectStatus status) {}
+    public record OrganizationOption(Long id, String code, String name, OrganizationType orgType, String contact, long projects) {}
 
     public record StatusCounts(long planned, long procurement, long active, long suspended, long completed, long cancelled) {}
 }

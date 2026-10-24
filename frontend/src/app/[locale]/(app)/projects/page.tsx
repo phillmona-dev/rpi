@@ -9,6 +9,10 @@ import { ProjectTable } from '@/components/projects/project-table';
 import { DataState, TableSkeleton } from '@/components/common/data-state';
 import { Pagination } from '@/components/common/data-table';
 import { useUser } from '@/providers/session';
+import { FolderPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
+import { canCreateProject } from '@/lib/domain';
 
 export default function ProjectsPage() {
   const t = useTranslations('projects');
@@ -22,7 +26,7 @@ export default function ProjectsPage() {
   const { data, isLoading, error, refetch, isPlaceholderData } = useProjects(query);
   return (
     <>
-      <PageHeader title={t('title')} subtitle={data ? t('count', { count: data.totalElements }) : t('subtitle')} />
+      <PageHeader title={t('title')} subtitle={data ? t('count', { count: data.totalElements }) : t('subtitle')} actions={canCreateProject(user.roles) && <Button asChild><Link href="/projects/new"><FolderPlus />{t('register')}</Link></Button>} />
       <ProjectFilters get={get} getAll={getAll} set={set} hideSector={Boolean(user.sectorScope)} />
       <div className="rounded-lg border bg-card shadow-card" aria-busy={isPlaceholderData}>
         <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.content.length} emptyTitle={tc('noResults')} skeleton={<div className="p-4"><TableSkeleton cols={8} rows={10} /></div>} className="p-4">

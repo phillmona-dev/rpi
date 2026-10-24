@@ -9,6 +9,7 @@ import { SignalStrip } from '@/components/intelligence/signal-strip';
 import { ActionCards } from '@/components/intelligence/action-cards';
 import { Globe2, BrainCircuit } from 'lucide-react';
 import { useUser } from '@/providers/session';
+import { canSeeIntelligence } from '@/lib/domain';
 import { SECTORS, type Sector } from '@/lib/api/types';
 import { PageHeader, Section } from '@/components/common/page-header';
 import { KpiStrip } from '@/components/dashboard/kpi-strip';
@@ -49,8 +50,9 @@ export default function CommandCenterPage() {
   const zoneId = params.get('zoneId') ? Number(params.get('zoneId')) : null;
   const [metric, setMetric] = React.useState<MapMetric>('projectsDelayed');
   const scope = { sector, zoneId };
+  const intel = canSeeIntelligence(user.roles);
   const { data, isLoading, error, refetch, isFetching, dataUpdatedAt } = useOverview(scope);
-  const { data: brief, isLoading: bl, error: be, refetch: br } = useBriefing(scope);
+  const { data: brief, isLoading: bl, error: be, refetch: br } = useBriefing(scope, intel);
   const { data: zones } = useZones();
 
   const setParam = (k: string, v: string | null) => { const p = new URLSearchParams(params.toString()); if (v) p.set(k, v); else p.delete(k); router.replace(`${pathname}?${p.toString()}` as '/'); };
@@ -85,13 +87,13 @@ export default function CommandCenterPage() {
 
       <KpiStrip kpis={data?.kpis} alerts={data?.alertCounts} isLoading={isLoading} scopeQuery={scopeQuery} />
 
-      <Section id="attention" title={t('attentionRow')} hint={t('attentionRowHint')} actions={<Button asChild variant="ghost" size="sm"><Link href={`/intelligence?${scopeQuery.replace(/^&/, '')}`}><BrainCircuit />{t('openIntelligence')}<ArrowRight /></Link></Button>}>
+      {intel && <Section id="attention" title={t('attentionRow')} hint={t('attentionRowHint')} actions={<Button asChild variant="ghost" size="sm"><Link href={`/intelligence?${scopeQuery.replace(/^&/, '')}`}><BrainCircuit />{t('openIntelligence')}<ArrowRight /></Link></Button>}>
         <div className="space-y-4">
           <SignalStrip signals={brief?.signals} isLoading={bl} />
           <div className="flex items-center gap-2 text-xs text-muted-foreground"><span className="font-medium text-foreground">{t('question.decision')}</span><span>· {t('actionsHint')}</span></div>
           <ActionCards actions={brief?.actions} isLoading={bl} error={be} refetch={br} limit={4} columns={2} />
         </div>
-      </Section>
+      </Section>}
 
       <div className="grid gap-5 desktop:grid-cols-12">
         <div className="desktop:col-span-5"><DecisionQueue alerts={data?.decisionQueue} isLoading={isLoading} error={error} refetch={refetch} /></div>

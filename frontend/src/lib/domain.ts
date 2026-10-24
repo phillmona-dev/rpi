@@ -27,8 +27,12 @@ export const ROLE = { EXECUTIVE: 'EXECUTIVE', SECTOR_HEAD: 'SECTOR_HEAD', ANALYS
 export const canActOnAlerts = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));
 export const canSeeFinance = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'ANALYST', 'PMO_FEDERAL', 'ADMIN', 'SECTOR_HEAD'].includes(r));
 export const canSeeBrief = canSeeFinance;
+/** Intelligence & risk analytics: oversight and decision roles; field/site roles use the sync API only. */
+export const canSeeIntelligence = canSeeFinance;
 export const canSeeAudit = (roles: string[]) => roles.some((r) => ['ADMIN', 'EXECUTIVE'].includes(r));
 export const canAdmin = (roles: string[]) => roles.includes('ADMIN');
+/** Registering projects is a data-entry duty: analysts and administrators. */
+export const canCreateProject = (roles: string[]) => roles.some((r) => ['ANALYST', 'ADMIN'].includes(r));
 export const canRecordProgress = (roles: string[]) => roles.some((r) => ['ANALYST', 'SITE_MANAGER', 'ADMIN'].includes(r));
 export const canVerifyEvidence = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));
 export const canTransitionStage = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));

@@ -16,8 +16,8 @@ export interface SortState { field: string; dir: 'asc' | 'desc' }
  * Lightweight, accessible data table with server-side sort/pagination hooks.
  * Rows are keyboard-activatable when `onRowClick` is provided.
  */
-export function DataTable<T>({ columns, rows, rowKey, onRowClick, sort, onSort, dense, caption, rowHref }: {
-  columns: Column<T>[]; rows: T[]; rowKey: (r: T) => string | number; onRowClick?: (r: T) => void; sort?: SortState; onSort?: (s: SortState) => void; dense?: boolean; caption?: string; rowHref?: (r: T) => string;
+export function DataTable<T>({ columns, rows, rowKey, onRowClick, sort, onSort, dense, caption, rowHref, rowClassName }: {
+  columns: Column<T>[]; rows: T[]; rowKey: (r: T) => string | number; onRowClick?: (r: T) => void; sort?: SortState; onSort?: (s: SortState) => void; dense?: boolean; caption?: string; rowHref?: (r: T) => string; rowClassName?: (r: T) => string | undefined;
 }) {
   const toggle = (c: Column<T>) => {
     if (!c.sortable || !onSort) return;
@@ -44,7 +44,7 @@ export function DataTable<T>({ columns, rows, rowKey, onRowClick, sort, onSort, 
         {rows.map((r) => (
           <TableRow key={rowKey(r)} data-clickable={Boolean(onRowClick)} tabIndex={onRowClick ? 0 : undefined} onClick={onRowClick ? () => onRowClick(r) : undefined}
             onKeyDown={onRowClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(r); } } : undefined}
-            aria-label={rowHref ? undefined : undefined} className={cn(dense && '[&>td]:py-1.5')}>
+            aria-label={rowHref ? undefined : undefined} className={cn(dense && '[&>td]:py-1.5', rowClassName?.(r))}>
             {columns.map((c) => <TableCell key={c.key} className={cn(c.className, c.align === 'right' && 'text-right tabular whitespace-nowrap', c.align === 'center' && 'text-center')}>{c.cell(r)}</TableCell>)}
           </TableRow>
         ))}

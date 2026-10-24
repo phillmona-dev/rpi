@@ -29,7 +29,7 @@ import { ProgressCurve } from '@/components/charts/progress-curve';
 import { ChartCard } from '@/components/charts/chart-card';
 import { MilestoneTimeline, ProgressLogTab, FinanceTab, RisksTab, DocumentsTab, AuditTab } from '@/components/projects/project-tabs';
 import { fmtDate, localizedName, money, num, pct, ratio, signedPp } from '@/lib/format';
-import { healthTone, sectorSlug, toneVar, canRecordProgress } from '@/lib/domain';
+import { healthTone, sectorSlug, toneVar, canRecordProgress, canSeeIntelligence } from '@/lib/domain';
 import { useUser } from '@/providers/session';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ApiError } from '@/lib/api/client';
@@ -50,7 +50,7 @@ export default function ProjectDetailPage() {
   const { data: siteEvidence } = useEvidenceGeo({ projectId: pid }, Boolean(d));
   const { data: media, isLoading: ml, error: me, refetch: mr } = useMedia({ projectId: pid, size: 24 }, tab === 'evidence' || tab === 'overview');
   const { data: inspections, isLoading: il, error: ie, refetch: ir } = useInspections({ projectId: pid, size: 50, sort: 'visitedOn,desc' });
-  const { data: intel, isLoading: xl, error: xe, refetch: xr } = useProjectIntelligence(pid);
+  const { data: intel, isLoading: xl, error: xe, refetch: xr } = useProjectIntelligence(pid, canSeeIntelligence(user.roles));
   const ti = useTranslations('intelligence');
   const tev = useTranslations('evidence');
   useBreadcrumbs(d ? [
@@ -100,7 +100,7 @@ export default function ProjectDetailPage() {
 
             <Tabs value={tab} onValueChange={setTab}>
               <TabsList aria-label={t('title')}>
-                {(['overview', 'timeline', 'evidence', 'intelligence', 'milestones', 'progress', 'finance', 'risks', 'documents', 'audit'] as const).map((k) => <TabsTrigger key={k} value={k}>{t(`tabs.${k}`)}</TabsTrigger>)}
+                {(['overview', 'timeline', 'evidence', 'intelligence', 'milestones', 'progress', 'finance', 'risks', 'documents', 'audit'] as const).filter((k) => k !== 'intelligence' || canSeeIntelligence(user.roles)).map((k) => <TabsTrigger key={k} value={k}>{t(`tabs.${k}`)}</TabsTrigger>)}
               </TabsList>
               <TabsContent value="overview">
                 <div className="grid gap-4 desktop:grid-cols-12">

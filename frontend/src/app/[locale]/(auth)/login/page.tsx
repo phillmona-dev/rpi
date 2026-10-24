@@ -21,27 +21,27 @@ const C = {
 
   windowBg:
     'linear-gradient(155deg,' +
-    ' #5C4A34 0%,' +
-    ' #4A3828 52%,' +
-    ' #3A2C1E 100%)',
+    ' #846A4C 0%,' +
+    ' #6E5840 52%,' +
+    ' #5C4832 100%)',
   orange:       '#C84010',
   orangeGlow:   'rgba(200,64,16,0.38)',
   logoText:     '#FFFFFF',
   cream:        '#F0EAE0',
-  subtitle:     '#ABA898',
-  mutedText:    '#7A6A56',
-  headerBg:     'rgba(0,0,0,0.22)',
+  subtitle:     '#D6CFBE',
+  mutedText:    '#C2B094',
+  headerBg:     'rgba(0,0,0,0.12)',
   headerBorder: 'rgba(80,62,38,0.35)',
 
   /* ── Right column (login form area) ────────────────────────────────────── */
-  rightColBg:   'rgba(0,0,0,0.15)',
+  rightColBg:   'rgba(0,0,0,0.08)',
   colDivider:   'rgba(80,62,38,0.28)',
 
   /* ── Window border ──────────────────────────────────────────────────────── */
   winBorder:    'rgba(105,82,48,0.45)',
 
   /* ── Input fields ───────────────────────────────────────────────────────── */
-  inputBg:      'rgba(0,0,0,0.18)',
+  inputBg:      'rgba(0,0,0,0.14)',
   inputBorder:  'rgba(148,118,65,0.32)',
   inputFocus:   'rgba(200,64,16,0.75)',
   inputRing:    'rgba(200,64,16,0.28)',
@@ -53,11 +53,11 @@ const C = {
   btnShadow:    '0 3px 18px rgba(200,64,16,0.38)',
 
   /* ── Demo accounts panel ────────────────────────────────────────────────── */
-  demoPanelBg:  'rgba(0,0,0,0.12)',
+  demoPanelBg:  'rgba(0,0,0,0.08)',
   demoBorder:   'rgba(80,62,38,0.22)',
   demoTitle:    '#C8A050',
   demoUser:     '#D87038',
-  demoDim:      '#604E38',
+  demoDim:      '#BCA684',
 
   /* ── Error ───────────────────────────────────────────────────────────────── */
   errorBg:      'rgba(200,64,16,0.14)',
@@ -65,9 +65,9 @@ const C = {
   errorText:    '#F08060',
 
   /* ── Footer ─────────────────────────────────────────────────────────────── */
-  footerBg:     'rgba(0,0,0,0.16)',
+  footerBg:     'rgba(0,0,0,0.10)',
   footerBorder: 'rgba(80,62,38,0.20)',
-  footerText:   '#5A4A38',
+  footerText:   '#B4A080',
 };
 
 /* ─── Demo accounts ──────────────────────────────────────────────────────── */
@@ -158,9 +158,9 @@ function TigrayConstellation() {
         style={{
           position: 'absolute', inset: 0, zIndex: 0,
           background:
-            'radial-gradient(ellipse 70% 60% at 78% 18%, rgba(138,96,52,0.42) 0%, rgba(138,96,52,0) 70%),' +
+            'radial-gradient(ellipse 70% 60% at 78% 18%, rgba(150,106,58,0.46) 0%, rgba(150,106,58,0) 70%),' +
             'radial-gradient(ellipse 60% 55% at 12% 88%, rgba(200,64,16,0.16) 0%, rgba(200,64,16,0) 70%),' +
-            'radial-gradient(ellipse 120% 90% at 50% 50%, #2E2216 0%, #1E150D 60%, #150E08 100%)',
+            'radial-gradient(ellipse 120% 90% at 50% 50%, #3C2C1D 0%, #2A1E13 60%, #1F160D 100%)',
         }}
       />
 
@@ -650,7 +650,7 @@ function LoginForm() {
   return (
     <main
       className="flex min-h-screen items-center justify-center p-4"
-      style={{ position: 'relative', background: '#1A120B', overflow: 'hidden' }}
+      style={{ position: 'relative', background: '#241A10', overflow: 'hidden' }}
     >
       {/* ── Procedural Tigray constellation (behind the window) ── */}
       <TigrayConstellation />
@@ -670,7 +670,7 @@ function LoginForm() {
           borderRadius: '5px',
           overflow: 'hidden',
           boxShadow:
-            '0 24px 70px rgba(0,0,0,0.70),' +
+            '0 24px 70px rgba(0,0,0,0.45),' +
             '0  0   0 1px rgba(180,140,60,0.14),' +
             'inset 0 1px 0 rgba(220,195,120,0.08)',
         }}
@@ -952,7 +952,7 @@ function LoginForm() {
                 </div>
                 <div
                   style={{
-                    color: '#4E3E2C',
+                    color: '#B4A080',
                     fontSize: '10px',
                     marginTop: '6px',
                     fontFamily: 'sans-serif',

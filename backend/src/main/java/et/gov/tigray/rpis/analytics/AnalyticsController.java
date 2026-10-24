@@ -24,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/analytics")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('EXECUTIVE','ANALYST','PMO_FEDERAL','ADMIN','SECTOR_HEAD')")
 @Tag(name = "Analytics · Decision support (advisory)")
 public class AnalyticsController {
     private final InsightService insights;

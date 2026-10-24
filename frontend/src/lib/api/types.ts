@@ -174,8 +174,11 @@ export interface ActionCard {
 export interface UnitComparison { key: string; label: string; projectsActive: number; projectsDelayed: number; avgVariancePp: number | null; avgCpi: number | null; reportingCoveragePct: number | null; verifiedCoveragePct: number | null; disbursementPct: number | null; avgRiskScore: number | null; criticalAlerts: number; rank: number }
 export interface ContractorPerformance { contractor: string; projects: number; active: number; delayed: number; completed: number; avgVariancePp: number | null; avgCpi: number | null; budgetEtb: number; onTimeRatePct: number | null; rank: number }
 export interface FundingPriority { facilityId: number; code: string; name: string; sector: Sector; facilityType: string; weredaName: string; severity: DamageSeverity; impactScore: number | null; beneficiaries: number | null; replacementEstimateEtb: number | null; priorityScore: number; insightId: number | null; explanation: { features?: InsightFeature[] } }
-export interface RiskEntry { projectId: number; code: string; name: string; sector: Sector; weredaName: string; status: ProjectStatus; health: ProjectHealth; riskScore: number; band: RiskBand; variancePp: number; cpi: number | null; daysSinceReport: number | null; daysSinceVerified: number | null; budgetEtb: number; components: RiskComponents }
-export interface Briefing { generatedAt: string; sector: Sector | null; zoneId: number | null; signals: Signal[]; actions: ActionCard[]; sectors: UnitComparison[]; zones: UnitComparison[]; contractors: ContractorPerformance[]; fundingPriorities: FundingPriority[]; riskRegister: RiskEntry[]; disclaimer: string }
+export interface RiskEntry { projectId: number; code: string; name: string; sector: Sector; weredaName: string; status: ProjectStatus; health: ProjectHealth; riskScore: number; band: RiskBand; variancePp: number; cpi: number | null; daysSinceReport: number | null; daysSinceVerified: number | null; budgetEtb: number; components: RiskComponents; riskType: RiskType; severity: AlertSeverity; recommendedAction: string }
+export type RiskType = 'SCHEDULE' | 'COST' | 'REPORTING' | 'MILESTONES' | 'ISSUES' | 'FUNDING' | 'VERIFICATION';
+export type FundingRecommendation = 'RELEASE' | 'CONDITIONAL' | 'HOLD';
+export interface ProjectFundingPriority { projectId: number; code: string; name: string; sector: Sector; weredaName: string; health: ProjectHealth; physicalPct: number; budgetEtb: number; disbursedEtb: number; pendingEtb: number; nextDueDate: string; lagDays: number; riskScore: number | null; daysSinceVerified: number | null; priorityScore: number; recommendation: FundingRecommendation; rationale: string }
+export interface Briefing { generatedAt: string; sector: Sector | null; zoneId: number | null; signals: Signal[]; actions: ActionCard[]; sectors: UnitComparison[]; zones: UnitComparison[]; contractors: ContractorPerformance[]; projectFundingPriorities: ProjectFundingPriority[]; fundingPriorities: FundingPriority[]; riskRegister: RiskEntry[]; disclaimer: string }
 
 export interface ReportKpi { label: string; value: string; hint: string | null; tone: string | null }
 export interface ReportColumn { key: string; label: string; align: 'left' | 'right'; format: 'text' | 'int' | 'num' | 'money' | 'date' | 'datetime' }
@@ -189,3 +192,19 @@ export interface GeoCollection<P = Record<string, unknown>> { type: 'FeatureColl
 export interface ProjectFeatureProps { kind: 'PROJECT'; code: string; name: string; sector: Sector; status: ProjectStatus; health: ProjectHealth; stage: LifecycleStage; physicalPct: number; plannedPct: number; variancePp: number; budgetEtb: number; disbursedEtb: number; riskScore: number | null; contractor: string | null; plannedEnd: string | null; forecastEnd: string | null; lastReportAt: string | null; lastVerifiedAt: string | null; weredaId: number; wereda: string; zone: string; openAlerts: number; severity: DamageSeverity | null }
 export interface FacilityFeatureProps { kind: 'FACILITY'; code: string; name: string; sector: Sector; facilityType: string; operationalStatus: OperationalStatus; severity: DamageSeverity | null; impactScore: number | null; assessedOn: string | null; replacementEstimateEtb: number | null; beneficiaries: number | null; weredaId: number; wereda: string; zone: string; projects: number; media: number; unaddressed: boolean }
 export interface EvidenceFeatureProps { kind: 'INSPECTION' | 'MEDIA'; type: string; at: string | null; who: string | null; verificationStatus: VerificationStatus; distanceOrAccuracyM: number | null; url: string | null; subject: string | null; projectId: number | null; facilityId: number | null; ref: number | null }
+
+// ── Project registration ─────────────────────────────────────────────────
+export type BudgetCategory = 'WORKS' | 'GOODS' | 'SERVICES' | 'CONTINGENCY' | 'SUPERVISION';
+export interface OrganizationAssignment { role: OrganizationRole; organizationId?: number | null; newName?: string | null; newType?: OrganizationType | null; newContact?: string | null }
+export interface CreateProjectRequest {
+  code?: string | null; name: string; sector: Sector; weredaId: number; description?: string | null; beneficiaries?: number | null; latitude?: number | null; longitude?: number | null;
+  initialStage: LifecycleStage; plannedStart: string; plannedEnd: string; actualStart?: string | null; totalBudgetEtb: number; fundingSource: FundingSource;
+  procurementMethod?: string | null; contractValueEtb?: number | null; approvedOn?: string | null; approvalReference?: string | null; fundingSecuredOn?: string | null; contractSignedOn?: string | null;
+  registrationNote?: string | null; organizations: OrganizationAssignment[]; milestones: { name: string; plannedDate: string; weightPct: number }[];
+  budgetLines: { category: BudgetCategory; allocatedEtb: number }[]; tranches: { plannedDate: string; amountEtb: number; fundingSource?: FundingSource | null }[];
+  facilityIds: number[]; risks: { title: string; category: string; likelihood: Level; impact: Level; mitigation?: string | null; owner?: string | null }[];
+}
+export interface FieldIssue { field: string; message: string }
+export interface RegistrationValidation { valid: boolean; suggestedCode: string | null; errors: FieldIssue[]; warnings: FieldIssue[] }
+export interface SimilarProject { id: number; code: string; name: string; weredaName: string; status: ProjectStatus }
+export interface OrganizationOption { id: number; code: string; name: string; orgType: OrganizationType; contact: string | null; projects: number }
