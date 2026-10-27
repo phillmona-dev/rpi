@@ -245,7 +245,7 @@ function Success({ p, onAnother }: { p: ProjectSummary; onAnother: () => void })
   const locale = useLocale();
   return (
     <div className="mx-auto max-w-2xl rounded-lg border bg-card p-8 text-center shadow-card" role="status" aria-live="polite">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full" style={{ background: `color-mix(in srgb, ${toneVar.good} 15%, transparent)` }}><FileCheck2 className="h-6 w-6" style={{ color: toneVar.good }} /></div>
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full" style={{ background: `color-mix(in srgb, ${toneVar.warning} 15%, transparent)` }}><FileCheck2 className="h-6 w-6" style={{ color: toneVar.warning }} /></div>
       <h2 className="mt-4 text-lg font-semibold">{t('success.title')}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{t('success.body', { code: p.code, name: p.name })}</p>
       <dl className="mx-auto mt-5 grid max-w-md grid-cols-3 gap-3 text-left text-xs">
@@ -255,7 +255,8 @@ function Success({ p, onAnother }: { p: ProjectSummary; onAnother: () => void })
       </dl>
       <p className="mt-4 text-xs text-muted-foreground">{t('success.budget', { budget: money(p.totalBudgetEtb, locale) })}</p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
-        <Button asChild><Link href={`/projects/${p.id}`}>{t('success.open')}<ArrowRight /></Link></Button>
+        <Button asChild><Link href={`/approvals/${p.id}`}>{t('success.queue')}<ArrowRight /></Link></Button>
+        <Button asChild variant="outline"><Link href={`/projects/${p.id}`}>{t('success.open')}</Link></Button>
         <Button variant="outline" onClick={onAnother}><FolderPlus />{t('success.another')}</Button>
         <Button asChild variant="ghost"><Link href="/projects">{t('success.list')}</Link></Button>
       </div>

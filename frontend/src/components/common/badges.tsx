@@ -1,8 +1,8 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { AlertOctagon, AlertTriangle, CheckCircle2, CircleDashed, Clock, PauseCircle, type LucideIcon } from 'lucide-react';
-import type { AlertSeverity, AlertStatus, DamageSeverity, OperationalStatus, ProjectHealth, ProjectStatus, Sector } from '@/lib/api/types';
-import { alertTone, healthTone, operationalTone, sectorVar, severityTone, statusTone, toneVar, type Tone } from '@/lib/domain';
+import type { AgentStatus, ApprovalStatus, AssignmentStatus, CoverageGap, AlertSeverity, AlertStatus, DamageSeverity, OperationalStatus, ProjectHealth, ProjectStatus, Sector } from '@/lib/api/types';
+import { agentStatusTone, approvalTone, assignmentStatusTone, coverageGapTone, alertTone, healthTone, operationalTone, sectorVar, severityTone, statusTone, toneVar, type Tone } from '@/lib/domain';
 import { cn } from '@/lib/utils';
 
 const toneIcon: Record<Tone, LucideIcon> = { good: CheckCircle2, warning: AlertTriangle, serious: Clock, critical: AlertOctagon, neutral: CircleDashed, info: PauseCircle };
@@ -38,3 +38,8 @@ export function SectorLabel({ sector, className }: { sector: Sector; className?:
   const t = useTranslations('enums.sector');
   return <span className={cn('inline-flex items-center gap-1.5', className)}><SectorDot sector={sector} />{t(sector)}</span>;
 }
+
+export function ApprovalBadge({ value }: { value: ApprovalStatus }) { const t = useTranslations('enums.approvalStatus'); return <ToneBadge tone={approvalTone[value]} label={t(value)} />; }
+export function AgentStatusBadge({ value }: { value: AgentStatus }) { const t = useTranslations('enums.agentStatus'); return <ToneBadge tone={agentStatusTone[value]} label={t(value)} />; }
+export function AssignmentStatusBadge({ value }: { value: AssignmentStatus }) { const t = useTranslations('enums.assignmentStatus'); return <ToneBadge tone={assignmentStatusTone[value]} label={t(value)} />; }
+export function CoverageGapBadge({ value }: { value: CoverageGap }) { const t = useTranslations('enums.coverageGap'); return <ToneBadge tone={coverageGapTone[value]} label={t(value)} />; }

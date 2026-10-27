@@ -77,6 +77,11 @@ public final class ProjectRepositories {
     }
 
     @Repository
+    public interface ApprovalEvents extends JpaRepository<ProjectApprovalEvent, Long> {
+        List<ProjectApprovalEvent> findByProjectIdOrderByOccurredAtAsc(Long projectId);
+    }
+
+    @Repository
     public interface Organizations extends JpaRepository<Organization, Long> {
         Optional<Organization> findByCode(String code);
         Optional<Organization> findByNameIgnoreCase(String name);

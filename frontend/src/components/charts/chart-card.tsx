@@ -34,6 +34,6 @@ export function ChartCard({ title, hint, id, actions, table, children }: {
 export const chartTheme = {
   grid: 'var(--chart-grid)', text: 'var(--chart-text)', planned: 'var(--series-planned)', actual: 'var(--seq-450)',
   allocated: 'var(--seq-250)', disbursed: 'var(--seq-450)', spent: 'var(--seq-650)',
-  tooltipStyle: { background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 6, fontSize: 12, color: 'hsl(var(--popover-foreground))' } as React.CSSProperties,
-  tick: { fontSize: 11, fill: 'var(--chart-text)' },
+  tooltipStyle: { background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 6, fontSize: 13, color: 'hsl(var(--popover-foreground))' } as React.CSSProperties,
+  tick: { fontSize: 12, fill: 'var(--chart-text)' },
 };

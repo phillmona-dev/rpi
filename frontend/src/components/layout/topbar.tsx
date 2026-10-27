@@ -11,6 +11,8 @@ import { useUser } from '@/providers/session';
 import { useTheme } from '@/providers/theme';
 import { useLogout } from '@/lib/api/hooks';
 import { LiveIndicator } from './live-indicator';
+import { ChatIndicator } from '@/components/messaging/chat-indicator';
+import { NotificationCenter } from '@/components/notifications/notification-center';
 import { CommandSearch } from './command-search';
 import { Breadcrumbs } from './breadcrumbs';
 import { Badge } from '@/components/ui/badge';
@@ -89,6 +91,8 @@ export function Topbar({ onMenu: _onMenu }: { onMenu: () => void }) {
       <Button variant="ghost" size="icon" className="tablet:hidden" onClick={() => setSearchOpen(true)} aria-label={t('search')}><Search /></Button>
       <CommandSearch open={searchOpen} onOpenChange={setSearchOpen} />
 
+      <NotificationCenter />
+      <ChatIndicator />
       <LiveIndicator />
       {user.sectorScope && <Badge variant="outline" className="hidden laptop:inline-flex">{ts('scopedTo', { sector: te(user.sectorScope) })}</Badge>}
       {user.roles.includes('PMO_FEDERAL') && <Badge variant="outline" className="hidden laptop:inline-flex">{ts('readOnly')}</Badge>}

@@ -22,7 +22,7 @@ public final class ProjectDtos {
                                  BigDecimal totalBudgetEtb, FundingSource fundingSource, BigDecimal physicalProgressPct, BigDecimal plannedProgressPct,
                                  BigDecimal scheduleVariancePp, BigDecimal spi, BigDecimal cpi, BigDecimal disbursedEtb, BigDecimal expendedEtb,
                                  Instant lastProgressReportAt, Integer daysSinceReport, Integer beneficiaries, GeoPoint location,
-                                 LifecycleStage lifecycleStage, Short riskScore, Instant lastVerifiedAt) {}
+                                 LifecycleStage lifecycleStage, Short riskScore, Instant lastVerifiedAt, ApprovalStatus approvalStatus) {}
 
     public record MilestoneDto(Long id, short sequence, String name, LocalDate plannedDate, LocalDate actualDate, BigDecimal weightPct, MilestoneStatus status, Integer slipDays) {}
     public record ProgressPoint(LocalDate date, BigDecimal physicalPct, BigDecimal plannedPct, Integer workforce, String notes, String reportedBy, DataSource source) {}
@@ -42,7 +42,7 @@ public final class ProjectDtos {
     public record ProjectDetail(ProjectSummary project, String description, List<MilestoneDto> milestones, List<ProgressPoint> progress,
                                 FinanceSummary finance, List<RiskDto> risks, List<IssueDto> issues, List<DocumentDto> documents,
                                 List<LinkedFacility> facilities, ForecastDto forecast, int openAlerts,
-                                Governance governance, RiskProfile risk, EvidenceSnapshot evidence) {}
+                                Governance governance, RiskProfile risk, EvidenceSnapshot evidence, ApprovalInfo approval) {}
 
     // ── V3 · lifecycle, governance, risk, evidence, timeline ───────────────
     public record StageEventDto(Long id, LifecycleStage fromStage, LifecycleStage toStage, Instant occurredAt, String actorName, String note, String reference) {}
@@ -54,6 +54,10 @@ public final class ProjectDtos {
     public record EvidenceSnapshot(long inspections, long verified, long disputed, long unverified, long mediaItems, long photos, long videos,
                                    Instant lastInspectionAt, Instant lastVerifiedAt, Integer daysSinceEvidence, String coverage) {}
     public record TimelineEvent(String id, String kind, Instant occurredAt, String title, String detail, String actor, String tone, Map<String, Object> data) {}
+    // ── V4 · executive approval ─────────────────────────────────────────────
+    public record ApprovalEventDto(Long id, ApprovalAction action, Instant occurredAt, String actorName, String note, String conditions, String reference) {}
+    public record ApprovalInfo(ApprovalStatus status, Instant submittedAt, String submittedByName, Instant decidedAt, String decidedByName,
+                               String decisionReference, String conditions, List<ApprovalEventDto> events) {}
     public record StageTransitionRequest(@NotNull LifecycleStage toStage, @Size(max = 2000) String note, @Size(max = 120) String reference, LocalDate effectiveOn) {}
 
     public record ProgressEntryRequest(@NotNull @PastOrPresent LocalDate logDate,

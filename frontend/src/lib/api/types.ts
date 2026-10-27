@@ -53,7 +53,7 @@ export interface ProjectSummary {
   plannedStart: string; plannedEnd: string; revisedEnd: string | null; forecastEnd: string | null; actualStart: string | null; actualEnd: string | null;
   totalBudgetEtb: number; fundingSource: FundingSource; physicalProgressPct: number; plannedProgressPct: number; scheduleVariancePp: number; spi: number | null; cpi: number | null;
   disbursedEtb: number; expendedEtb: number; lastProgressReportAt: string | null; daysSinceReport: number | null; beneficiaries: number | null; location: GeoPoint | null;
-  lifecycleStage: LifecycleStage; riskScore: number | null; lastVerifiedAt: string | null;
+  lifecycleStage: LifecycleStage; riskScore: number | null; lastVerifiedAt: string | null; approvalStatus: ApprovalStatus;
 }
 export interface AlertSummary {
   id: number; rule: AlertRule; severity: AlertSeverity; status: AlertStatus; title: string; detail: string | null; entityType: EntityType; entityId: number; entityName: string | null; entityCode: string | null;
@@ -82,7 +82,7 @@ export interface FinanceSummary {
   budgetEtb: number; allocatedLinesEtb: number; disbursedEtb: number; expendedEtb: number; disbursementPct: number; expenditurePct: number; earnedValueEtb: number; costVarianceEtb: number; forecastCostEtb: number | null;
   budgetLines: BudgetLineDto[]; disbursements: DisbursementDto[]; expenditures: ExpenditureDto[];
 }
-export interface ProjectDetail { project: ProjectSummary; description: string | null; milestones: MilestoneDto[]; progress: ProgressPoint[]; finance: FinanceSummary; risks: RiskDto[]; issues: IssueDto[]; documents: DocumentDto[]; facilities: LinkedFacility[]; forecast: ForecastDto | null; openAlerts: number; governance: Governance; risk: RiskProfile; evidence: EvidenceSnapshot }
+export interface ProjectDetail { project: ProjectSummary; description: string | null; milestones: MilestoneDto[]; progress: ProgressPoint[]; finance: FinanceSummary; risks: RiskDto[]; issues: IssueDto[]; documents: DocumentDto[]; facilities: LinkedFacility[]; forecast: ForecastDto | null; openAlerts: number; governance: Governance; risk: RiskProfile; evidence: EvidenceSnapshot; approval: ApprovalInfo }
 
 export interface FacilitySummary {
   id: number; code: string; name: string; sector: Sector; facilityType: string; wereda: WeredaRef; kebele: string | null; location: GeoPoint | null; operationalStatus: OperationalStatus; latestSeverity: DamageSeverity | null;
@@ -208,3 +208,95 @@ export interface FieldIssue { field: string; message: string }
 export interface RegistrationValidation { valid: boolean; suggestedCode: string | null; errors: FieldIssue[]; warnings: FieldIssue[] }
 export interface SimilarProject { id: number; code: string; name: string; weredaName: string; status: ProjectStatus }
 export interface OrganizationOption { id: number; code: string; name: string; orgType: OrganizationType; contact: string | null; projects: number }
+
+// ── V4 · executive approval ─────────────────────────────────────────────────
+export type ApprovalStatus = 'PENDING' | 'RETURNED' | 'APPROVED' | 'REJECTED';
+export type ApprovalAction = 'SUBMITTED' | 'RESUBMITTED' | 'APPROVED' | 'RETURNED' | 'REJECTED';
+export type ApprovalDecision = 'APPROVE' | 'RETURN' | 'REJECT';
+export interface ApprovalEventDto { id: number; action: ApprovalAction; occurredAt: string; actorName: string | null; note: string | null; conditions: string | null; reference: string | null }
+export interface ApprovalInfo { status: ApprovalStatus; submittedAt: string | null; submittedByName: string | null; decidedAt: string | null; decidedByName: string | null; decisionReference: string | null; conditions: string | null; events: ApprovalEventDto[] }
+export interface ReadinessCheck { code: string; passed: boolean; severity: 'WARN' | 'INFO'; detail: string | null }
+export interface Readiness { passed: number; total: number; warnings: number; checks: ReadinessCheck[] }
+export interface ApprovalQueueItem { project: ProjectSummary; status: ApprovalStatus; submittedAt: string | null; submittedByName: string | null; waitingDays: number | null; decidedAt: string | null; decidedByName: string | null; decisionReference: string | null; lastNote: string | null; resubmissions: number; readiness: Readiness }
+export interface ApprovalCounts { pending: number; returned: number; approvedLast30: number; rejectedLast30: number; returnedLast30: number; oldestPendingDays: number | null; pendingBudgetEtb: number; medianDecisionDays: number | null }
+export interface ApprovalContext { sectorApprovedProjects: number; sectorApprovedBudgetEtb: number; shareOfSectorBudgetPct: number | null; weredaActiveProjects: number; weredaSevereFacilities: number; sameContractorActiveProjects: number; contractorName: string | null }
+export interface ApprovalDossier { detail: ProjectDetail; readiness: Readiness; context: ApprovalContext; similar: SimilarProject[]; canDecide: boolean; cannotDecideReason: string | null; canResubmit: boolean }
+
+// ── V4 · field team ─────────────────────────────────────────────────────────
+export type AgentType = 'DATA_COLLECTOR' | 'FIELD_ANALYST' | 'FIELD_SUPERVISOR';
+export type AgentStatus = 'PENDING_ONBOARDING' | 'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'DEACTIVATED';
+export type EmploymentType = 'STAFF' | 'CONTRACT' | 'SECONDED' | 'VOLUNTEER';
+export type AssignmentRole = 'LEAD' | 'DATA_COLLECTOR' | 'FIELD_ANALYST' | 'VERIFIER';
+export type AssignmentStatus = 'ACTIVE' | 'COMPLETED' | 'RELEASED';
+export type AssignmentPriority = 'NORMAL' | 'HIGH' | 'URGENT';
+export type CoverageGap = 'NO_TEAM' | 'NO_LEAD' | 'OVERDUE' | 'NO_VERIFIER' | 'NOT_STARTED' | 'OK';
+export interface AgentRef { id: number; code: string; fullName: string; agentType: AgentType; status: AgentStatus }
+export interface WeredaLite { id: number; name: LocalizedName; zoneId: number; zoneName: LocalizedName }
+export interface AgentSummary {
+  id: number; code: string; fullName: string; agentType: AgentType; status: AgentStatus; phone: string; email: string | null; organizationName: string | null;
+  homeWereda: WeredaLite | null; coverageWeredas: number; coverageZones: string[]; sectors: Sector[]; activeAssignments: number; maxActiveAssignments: number;
+  overdueVisits: number; inspections30d: number; acceptanceRate90d: number | null; lastInspectionOn: string | null; lastSyncAt: string | null;
+  hasAccount: boolean; username: string | null; onboarded: boolean; contractEnd: string | null; supervisorName: string | null;
+}
+export interface MonthCount { month: string; count: number }
+export interface AgentPerformance { inspectionsTotal: number; inspections30d: number; inspections90d: number; verified90d: number; disputed90d: number; rejected90d: number; acceptanceRate90d: number | null; avgDistanceFromSiteM: number | null; avgGpsAccuracyM: number | null; onScheduleRate: number | null; monthly: MonthCount[] }
+export interface RecentInspection { id: number; visitedOn: string; inspectionType: InspectionType; projectId: number | null; subjectName: string | null; verificationStatus: VerificationStatus; distanceFromSiteM: number | null }
+export interface AgentEventDto { id: number; kind: string; occurredAt: string; actorName: string | null; note: string | null; data: Record<string, unknown> | null }
+export interface DeviceDto { id: number; deviceUid: string; label: string | null; platform: string | null; appVersion: string | null; lastSyncAt: string | null; enabled: boolean }
+export interface AgentDetail {
+  summary: AgentSummary; gender: 'FEMALE' | 'MALE' | null; altPhone: string | null; nationalId: string | null; employeeNumber: string | null; employmentType: EmploymentType | null;
+  organization: { id: number; code: string; name: string } | null; supervisor: AgentRef | null; educationLevel: string | null; yearsExperience: number | null;
+  skills: string[]; languages: string[]; contractStart: string | null; trainingCompletedOn: string | null; codeOfConductSignedOn: string | null; backgroundCheckOn: string | null;
+  emergencyContactName: string | null; emergencyContactPhone: string | null; notes: string | null; statusReason: string | null; statusChangedAt: string | null;
+  registeredByName: string | null; createdAt: string; coverage: WeredaLite[]; team: AgentRef[]; assignments: AssignmentDto[]; performance: AgentPerformance;
+  recentInspections: RecentInspection[]; events: AgentEventDto[]; device: DeviceDto | null; allowedTransitions: AgentStatus[];
+}
+export interface AgentRequest {
+  fullName: string; gender?: 'FEMALE' | 'MALE' | null; phone: string; altPhone?: string | null; email?: string | null; nationalId?: string | null; employeeNumber?: string | null;
+  agentType: AgentType; organizationId?: number | null; employmentType?: EmploymentType | null; homeWeredaId?: number | null; supervisorId?: number | null;
+  educationLevel?: string | null; yearsExperience?: number | null; sectors: Sector[]; skills?: string[]; languages?: string[]; maxActiveAssignments?: number | null;
+  contractStart?: string | null; contractEnd?: string | null; trainingCompletedOn?: string | null; codeOfConductSignedOn?: string | null; backgroundCheckOn?: string | null;
+  emergencyContactName?: string | null; emergencyContactPhone?: string | null; coverageWeredaIds: number[]; notes?: string | null; createAccount?: boolean; username?: string | null;
+}
+export interface AccessResponse { username: string; temporaryPassword: string; created: boolean }
+export interface RegisterAgentResponse { agent: AgentDetail; access: AccessResponse | null }
+export interface TeamSummary {
+  totalAgents: number; active: number; pendingOnboarding: number; onLeave: number; suspended: number; activeByType: Record<AgentType, number>;
+  activeAssignments: number; overdueVisits: number; projectsNeedingCoverage: number; projectsWithoutTeam: number; projectsWithoutLead: number; coveragePct: number | null;
+  availableSlots: number; agentsAtCapacity: number; contractsEndingSoon: number; withoutAccount: number;
+}
+export interface AssignmentProjectRef { id: number; code: string; name: string; sector: Sector; weredaName: string; zoneName: string; lifecycleStage: LifecycleStage; status: ProjectStatus; health: ProjectHealth; approvalStatus: ApprovalStatus; riskScore: number | null }
+export interface AssignmentDto {
+  id: number; project: AssignmentProjectRef; agent: AgentRef; role: AssignmentRole; status: AssignmentStatus; priority: AssignmentPriority; startOn: string; endOn: string | null;
+  visitFrequencyDays: number; requiredInspectionTypes: InspectionType[]; instructions: string | null; overrideNote: string | null; assignedByName: string | null; assignedAt: string;
+  visits: number; lastVisitOn: string | null; nextDueOn: string | null; overdueDays: number | null; closedAt: string | null; closedByName: string | null; closeReason: string | null;
+}
+export interface AssignmentRequest { projectId: number; agentId: number; role: AssignmentRole; priority?: AssignmentPriority; startOn: string; endOn?: string | null; visitFrequencyDays: number; requiredInspectionTypes?: InspectionType[]; instructions?: string | null; overrideNote?: string | null }
+export interface AssignmentCheck { valid: boolean; errors: FieldIssue[]; warnings: FieldIssue[] }
+export interface ScorePart { code: 'AREA' | 'SECTOR' | 'CAPACITY' | 'QUALITY' | 'PROXIMITY'; points: number; max: number }
+export interface Candidate { agent: AgentSummary; score: number; parts: ScorePart[]; flags: string[]; eligible: boolean; distanceKm: number | null }
+export interface CoverageRow { project: AssignmentProjectRef; lastVerifiedAt: string | null; daysSinceVerified: number | null; needsCoverage: boolean; gap: CoverageGap; team: AssignmentDto[]; overdue: number }
+
+// ── Messaging ──────────────────────────────────────────────────────────────
+export type ConversationKind = 'DIRECT' | 'GROUP' | 'CONTEXT';
+export type ChatContextType = 'PROJECT' | 'APPROVAL' | 'ALERT' | 'FIELD_AGENT';
+export interface ChatPerson { id: number; username: string; fullName: string; title: string | null; roles: string[]; sectorScope: Sector | null; online: boolean }
+export interface ChatContextRef { type: ChatContextType; id: number; code: string | null }
+export interface MessagePreview { id: number; senderName: string | null; kind: 'TEXT' | 'SYSTEM'; body: string | null; deleted: boolean; hasAttachments: boolean; createdAt: string }
+export interface ConversationSummary { id: number; kind: ConversationKind; title: string | null; context: ChatContextRef | null; counterpart: ChatPerson | null; memberCount: number; lastMessage: MessagePreview | null; lastActivityAt: string; unread: number; mentioned: boolean; muted: boolean }
+export interface ChatMember { person: ChatPerson; role: 'OWNER' | 'MEMBER'; lastReadMessageId: number; lastReadAt: string | null }
+export interface ConversationDetail { id: number; kind: ConversationKind; title: string | null; context: ChatContextRef | null; counterpart: ChatPerson | null; members: ChatMember[]; following: boolean; muted: boolean; canPost: boolean; cannotPostReason: string | null; canManage: boolean; lastReadMessageId: number | null }
+export interface ChatMention { id: number; username: string; fullName: string }
+export interface ChatAttachment { id: number; fileName: string; mediaType: string; sizeBytes: number }
+export interface ChatReplyRef { id: number; senderName: string | null; excerpt: string | null; deleted: boolean }
+export interface ChatMessage { id: number; conversationId: number; senderId: number | null; senderName: string | null; kind: 'TEXT' | 'SYSTEM'; body: string | null; meta: Record<string, unknown>; replyTo: ChatReplyRef | null; mentions: ChatMention[]; attachments: ChatAttachment[]; createdAt: string; editedAt: string | null; deleted: boolean }
+export interface MessagePage { items: ChatMessage[]; hasMore: boolean }
+export interface ChatUnread { total: number; conversations: number; mentions: number }
+export interface ChatSearchHit { message: ChatMessage; conversationTitle: string | null; kind: ConversationKind }
+export interface ChatFrame { type: 'MESSAGE' | 'MESSAGE_UPDATED' | 'READ' | 'TYPING' | 'CONVERSATION'; conversationId: number; payload: unknown }
+
+// ── Notifications ──────────────────────────────────────────────────────────
+export type NotificationSeverity = 'INFO' | 'SUCCESS' | 'WARNING' | 'CRITICAL';
+export interface AppNotification { id: number; type: string; severity: NotificationSeverity; link: string | null; actorName: string | null; data: Record<string, unknown>; createdAt: string; readAt: string | null }
+export interface NotificationPage { items: AppNotification[]; hasMore: boolean; unread: number }
+export interface NotificationFrame { type: 'NEW' | 'READ'; notification: AppNotification | null; unread: number }

@@ -1,7 +1,10 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Client, type IMessage } from '@stomp/stompjs';
+import { applyChatFrame } from '@/lib/api/messaging';
+import { applyNotificationFrame } from '@/lib/api/notifications';
+import type { ChatFrame, NotificationFrame } from '@/lib/api/types';
 
 export type LiveStatus = 'connecting' | 'live' | 'offline';
 export interface LiveEvent { id: string; type: string; entityType: string; entityId: number | null; sector: string | null; weredaId: number | null; occurredAt: string; payload: Record<string, unknown> }
@@ -16,6 +19,10 @@ export function useRealtime(onEvent?: (e: LiveEvent) => void) {
   const [lastEventAt, setLastEventAt] = useState<number | null>(null);
   const handler = useRef(onEvent);
   handler.current = onEvent;
+  const clientRef = useRef<Client | null>(null);
+  const chatListeners = useRef(new Set<(f: ChatFrame) => void>());
+  const notificationListeners = useRef(new Set<(f: NotificationFrame) => void>());
+  const connectedOnce = useRef(false);
 
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8080/ws';
@@ -50,14 +57,52 @@ export function useRealtime(onEvent?: (e: LiveEvent) => void) {
           } catch { /* ignore malformed frames */ }
         };
         client.subscribe('/topic/dashboard', dispatch);
+        // Messaging: private frames for this user, plus who is online.
+        client.subscribe('/user/queue/chat', (m: IMessage) => {
+          try {
+            const f = JSON.parse(m.body) as ChatFrame;
+            applyChatFrame(qc, f);
+            chatListeners.current.forEach((l) => l(f));
+          } catch { /* ignore malformed frames */ }
+        });
+        client.subscribe('/user/queue/notifications', (m: IMessage) => {
+          try {
+            const f = JSON.parse(m.body) as NotificationFrame;
+            applyNotificationFrame(qc, f);
+            notificationListeners.current.forEach((l) => l(f));
+          } catch { /* ignore malformed frames */ }
+        });
+        client.subscribe('/topic/presence', () => {
+          qc.invalidateQueries({ queryKey: ['chatPeople'] });
+          qc.invalidateQueries({ queryKey: ['chatConversation'] });
+          qc.invalidateQueries({ queryKey: ['chatConversations'] });
+        });
+        // Anything sent while disconnected is fetched again rather than lost.
+        if (connectedOnce.current) ['chatMessages', 'chatConversations', 'chatUnread', 'chatConversation', 'notifications', 'notificationUnread'].forEach((k) => qc.invalidateQueries({ queryKey: [k] }));
+        connectedOnce.current = true;
       },
       onStompError: () => setStatus('offline'),
       onWebSocketClose: () => { if (!disposed) setStatus('connecting'); },
       onWebSocketError: () => setStatus('offline'),
     });
+    clientRef.current = client;
     client.activate();
-    return () => { disposed = true; client.deactivate().catch(() => undefined); };
+    return () => { disposed = true; clientRef.current = null; client.deactivate().catch(() => undefined); };
   }, [qc]);
 
-  return { status, lastEventAt };
+  const sendTyping = useCallback((conversationId: number) => {
+    const c = clientRef.current;
+    if (c?.connected) c.publish({ destination: '/app/chat.typing', body: JSON.stringify({ conversationId }) });
+  }, []);
+  const onChatFrame = useCallback((l: (f: ChatFrame) => void) => {
+    chatListeners.current.add(l);
+    return () => { chatListeners.current.delete(l); };
+  }, []);
+
+  const onNotificationFrame = useCallback((l: (f: NotificationFrame) => void) => {
+    notificationListeners.current.add(l);
+    return () => { notificationListeners.current.delete(l); };
+  }, []);
+
+  return { status, lastEventAt, sendTyping, onChatFrame, onNotificationFrame };
 }

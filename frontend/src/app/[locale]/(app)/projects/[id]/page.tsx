@@ -5,6 +5,12 @@ import { useParams } from 'next/navigation';
 import { Bell, Building2, CalendarDays, Landmark, Users, HardHat, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import { useEvidenceGeo, useMedia, useProject, useProjectIntelligence, useProjectsGeo, useRecordProgress } from '@/lib/api/hooks';
 import { LifecycleStepper, GovernancePanel } from '@/components/projects/lifecycle';
+import { ApprovalBanner } from '@/components/approvals/approval-banner';
+import { AssignmentList } from '@/components/field-team/assignment-list';
+import { AssignDialog } from '@/components/field-team/assign-dialog';
+import { useAssignments } from '@/lib/api/hooks';
+import { ClipboardPlus } from 'lucide-react';
+import { canManageFieldTeam, canSeeFieldTeam } from '@/lib/domain';
 import { RiskScoreCard, RiskChip } from '@/components/projects/risk-score';
 import { ProjectTimeline } from '@/components/projects/project-timeline';
 import { EvidenceGallery } from '@/components/evidence/evidence-gallery';
@@ -20,6 +26,7 @@ import { PageHeader, Section, Stat } from '@/components/common/page-header';
 import { DataState } from '@/components/common/data-state';
 import { HealthBadge, SeverityBadge, SectorLabel, StatusBadge, OperationalBadge } from '@/components/common/badges';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RecordDiscussion } from '@/components/messaging/record-discussion';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -52,6 +59,8 @@ export default function ProjectDetailPage() {
   const { data: inspections, isLoading: il, error: ie, refetch: ir } = useInspections({ projectId: pid, size: 50, sort: 'visitedOn,desc' });
   const { data: intel, isLoading: xl, error: xe, refetch: xr } = useProjectIntelligence(pid, canSeeIntelligence(user.roles));
   const ti = useTranslations('intelligence');
+  const tft = useTranslations('fieldTeam');
+  const tm = useTranslations('messaging');
   const tev = useTranslations('evidence');
   useBreadcrumbs(d ? [
     { href: `/sectors/${sectorSlug[d.project.sector]}`, label: te(`sector.${d.project.sector}`) },
@@ -82,7 +91,7 @@ export default function ProjectDetailPage() {
               title={<span className="flex flex-wrap items-center gap-2">{p.name}</span>}
               subtitle={<span className="flex flex-wrap items-center gap-x-3 gap-y-1"><span className="font-mono text-xs">{p.code}</span><SectorLabel sector={p.sector} /><Link href={`/weredas/${p.wereda.id}`} className="hover:underline">{localizedName(p.wereda.name, locale)} · {localizedName(p.wereda.zoneName, locale)}</Link></span>}
               meta={<><StatusBadge value={p.status} /><HealthBadge value={p.health} /><RiskChip score={p.riskScore} />{d.openAlerts > 0 && <Link href={`/alerts?entityType=PROJECT&q=${p.code}`} className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium" style={{ borderColor: toneVar.critical, color: toneVar.critical }}><Bell className="h-3 w-3" />{t('overview.openAlerts', { count: d.openAlerts })}</Link>}<FreshnessChip at={p.lastProgressReportAt} label={t('columns.lastReport')} /></>}
-              actions={canRecordProgress(user.roles) && p.status === 'ACTIVE' ? <Button onClick={() => setOpen(true)}><HardHat />{t('progress.record')}</Button> : undefined}
+              actions={canRecordProgress(user.roles) && p.status === 'ACTIVE' && p.approvalStatus === 'APPROVED' ? <Button onClick={() => setOpen(true)}><HardHat />{t('progress.record')}</Button> : undefined}
             />
 
             <div className="grid grid-cols-2 gap-3 tablet:grid-cols-4 desktop:grid-cols-8">
@@ -96,11 +105,13 @@ export default function ProjectDetailPage() {
               <Stat label={t('overview.forecastEnd')} value={fmtDate(p.forecastEnd ?? p.plannedEnd, locale, 'short')} hint={<span style={{ color: p.forecastEnd && p.forecastEnd > (p.revisedEnd ?? p.plannedEnd) ? toneVar.serious : undefined }}>{t('overview.plannedEnd')} {fmtDate(p.plannedEnd, locale, 'short')}</span>} />
             </div>
 
+            <ApprovalBanner projectId={p.id} approval={d.approval} />
+
             <LifecycleStepper d={d} onChange={() => refetch()} />
 
             <Tabs value={tab} onValueChange={setTab}>
               <TabsList aria-label={t('title')}>
-                {(['overview', 'timeline', 'evidence', 'intelligence', 'milestones', 'progress', 'finance', 'risks', 'documents', 'audit'] as const).filter((k) => k !== 'intelligence' || canSeeIntelligence(user.roles)).map((k) => <TabsTrigger key={k} value={k}>{t(`tabs.${k}`)}</TabsTrigger>)}
+                {(['overview', 'discussion', 'timeline', 'evidence', 'fieldTeam', 'intelligence', 'milestones', 'progress', 'finance', 'risks', 'documents', 'audit'] as const).filter((k) => (k !== 'intelligence' || canSeeIntelligence(user.roles)) && (k !== 'fieldTeam' || canSeeFieldTeam(user.roles))).map((k) => <TabsTrigger key={k} value={k}>{k === 'fieldTeam' ? tft('projectTab') : k === 'discussion' ? tm('discussion') : t(`tabs.${k}`)}</TabsTrigger>)}
               </TabsList>
               <TabsContent value="overview">
                 <div className="grid gap-4 desktop:grid-cols-12">
@@ -178,6 +189,8 @@ export default function ProjectDetailPage() {
               <TabsContent value="risks"><RisksTab d={d} /></TabsContent>
               <TabsContent value="documents"><DocumentsTab d={d} /></TabsContent>
               <TabsContent value="audit"><AuditTab projectId={pid} /></TabsContent>
+              <TabsContent value="discussion">{tab === 'discussion' && <RecordDiscussion type="PROJECT" id={pid} />}</TabsContent>
+              <TabsContent value="fieldTeam"><ProjectFieldTeam projectId={pid} code={p.code} name={p.name} status={p.status} approved={p.approvalStatus === 'APPROVED'} enabled={tab === 'fieldTeam'} /></TabsContent>
             </Tabs>
 
             <InspectionDrawer id={openInspection} onClose={() => setOpenInspection(null)} />
@@ -200,5 +213,23 @@ export default function ProjectDetailPage() {
         );
       })()}
     </DataState>
+  );
+}
+
+function ProjectFieldTeam({ projectId, code, name, status, approved, enabled }: { projectId: number; code: string; name: string; status: import('@/lib/api/types').ProjectStatus; approved: boolean; enabled: boolean }) {
+  const t = useTranslations('fieldTeam');
+  const user = useUser();
+  const manage = canManageFieldTeam(user.roles);
+  const [open, setOpen] = React.useState(false);
+  const { data, isLoading, error, refetch } = useAssignments({ projectId }, enabled);
+  const finished = status === 'COMPLETED' || status === 'CANCELLED';
+  return (
+    <Section title={t('projectTab')} hint={t('projectTabHint')} actions={manage && approved && !finished && <Button onClick={() => setOpen(true)}><ClipboardPlus />{t('assign')}</Button>}>
+      {!approved && <p className="mb-4 text-sm text-muted-foreground">{t('pendingProject')}</p>}
+      <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.length} emptyTitle={t('empty.projectAssignments')}>
+        <AssignmentList rows={data ?? []} show="agent" canManage={manage} />
+      </DataState>
+      {open && <AssignDialog open onOpenChange={setOpen} project={{ id: projectId, code, name, status }} />}
+    </Section>
   );
 }

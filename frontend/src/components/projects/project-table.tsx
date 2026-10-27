@@ -3,7 +3,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { ProjectSummary } from '@/lib/api/types';
 import { useRouter } from '@/i18n/navigation';
 import { DataTable, type Column, type SortState } from '@/components/common/data-table';
-import { HealthBadge, SectorDot, StatusBadge } from '@/components/common/badges';
+import { HealthBadge, SectorDot, StatusBadge, ApprovalBadge } from '@/components/common/badges';
 import { Progress } from '@/components/ui/progress';
 import { fmtDate, localizedName, money, pct, ratio, signedPp } from '@/lib/format';
 import { healthTone, toneVar } from '@/lib/domain';
@@ -15,7 +15,7 @@ export function ProjectTable({ rows, sort, onSort, hideSector }: { rows: Project
   const locale = useLocale();
   const router = useRouter();
   const cols: Column<ProjectSummary>[] = [
-    { key: 'name', header: t('name'), sortable: true, cell: (p) => <div className="min-w-[200px] max-w-[320px]"><div className="flex items-center gap-1.5 font-medium">{!hideSector && <SectorDot sector={p.sector} />}<span className="truncate">{p.name}</span></div><div className="truncate text-2xs text-muted-foreground">{p.code} · {localizedName(p.wereda.name, locale)} · {p.contractorName ?? '—'}</div></div> },
+    { key: 'name', header: t('name'), sortable: true, cell: (p) => <div className="min-w-[200px] max-w-[280px]"><div className="flex items-center gap-1.5 font-medium">{!hideSector && <SectorDot sector={p.sector} />}<span className="truncate">{p.name}</span></div><div className="truncate text-xs text-muted-foreground">{p.code} · {localizedName(p.wereda.name, locale)} · {p.contractorName ?? '—'}</div>{p.approvalStatus && p.approvalStatus !== 'APPROVED' && <div className="mt-1"><ApprovalBadge value={p.approvalStatus} /></div>}</div> },
     { key: 'status', header: t('status'), sortable: true, cell: (p) => <StatusBadge value={p.status} /> },
     { key: 'health', header: t('health'), sortable: true, cell: (p) => <HealthBadge value={p.health} /> },
     { key: 'riskScore', header: t('risk'), sortable: true, cell: (p) => <RiskChip score={p.riskScore} /> },

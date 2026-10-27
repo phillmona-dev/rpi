@@ -48,4 +48,16 @@ public final class Enums {
     public enum ReportType { EXECUTIVE_SUMMARY, SECTOR, GEOGRAPHIC, PROJECT_PROGRESS, FINANCIAL, RISK, DECISION_LOG, FIELD_EVIDENCE }
     public enum ReportPeriod { DAILY, WEEKLY, MONTHLY, QUARTERLY, CUSTOM }
     public enum ReportFormat { JSON, CSV }
+
+    // ── V4 · executive approval and field team ──────────────────────────────
+    /** Executive acceptance of a registered project into the portfolio; independent of the governance stage. */
+    public enum ApprovalStatus { PENDING, RETURNED, APPROVED, REJECTED }
+    public enum ApprovalAction { SUBMITTED, RESUBMITTED, APPROVED, RETURNED, REJECTED }
+    public enum ApprovalDecision { APPROVE, RETURN, REJECT }
+    public enum AgentType { DATA_COLLECTOR, FIELD_ANALYST, FIELD_SUPERVISOR }
+    public enum AgentStatus { PENDING_ONBOARDING, ACTIVE, ON_LEAVE, SUSPENDED, DEACTIVATED }
+    public enum EmploymentType { STAFF, CONTRACT, SECONDED, VOLUNTEER }
+    public enum AssignmentRole { LEAD, DATA_COLLECTOR, FIELD_ANALYST, VERIFIER }
+    public enum AssignmentStatus { ACTIVE, COMPLETED, RELEASED }
+    public enum AssignmentPriority { NORMAL, HIGH, URGENT }
 }

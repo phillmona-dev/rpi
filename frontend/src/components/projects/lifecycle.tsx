@@ -34,7 +34,7 @@ export function LifecycleStepper({ d, onChange }: { d: ProjectDetail; onChange?:
     <div className="rounded-lg border bg-card p-4 shadow-card">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-sm font-semibold"><Landmark className="h-4 w-4 text-muted-foreground" />{t('title')}<ToneBadge tone={stageTone[g.stage]} label={t(`stages.${g.stage}`)} /></div>
-        {canTransitionStage(user.roles) && g.allowedTransitions.length > 0 && <Button size="sm" variant="outline" onClick={() => setOpen(true)}>{t('transition')}<ChevronRight /></Button>}
+        {canTransitionStage(user.roles) && d.project.approvalStatus === 'APPROVED' && g.allowedTransitions.length > 0 && <Button size="sm" variant="outline" onClick={() => setOpen(true)}>{t('transition')}<ChevronRight /></Button>}
       </div>
       <ol className="mt-3 grid grid-cols-7 gap-1" aria-label={t('title')}>
         {LIFECYCLE_STAGES.map((s, i) => {

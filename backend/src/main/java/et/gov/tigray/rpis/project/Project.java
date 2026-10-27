@@ -1,5 +1,6 @@
 package et.gov.tigray.rpis.project;
 
+import et.gov.tigray.rpis.common.Enums.ApprovalStatus;
 import et.gov.tigray.rpis.common.Enums.FundingSource;
 import et.gov.tigray.rpis.common.Enums.LifecycleStage;
 import et.gov.tigray.rpis.common.Enums.ProjectHealth;
@@ -71,4 +72,16 @@ public class Project {
     @JdbcTypeCode(SqlTypes.JSON) @Column(name = "risk_components", columnDefinition = "jsonb") private Map<String, Object> riskComponents;
     @Column(name = "risk_computed_at") private Instant riskComputedAt;
     @Column(name = "last_verified_at") private Instant lastVerifiedAt;
+
+    // ── V4 · executive approval ────────────────────────────────────────────
+    @Enumerated(EnumType.STRING) @Column(name = "approval_status", nullable = false, length = 16) private ApprovalStatus approvalStatus = ApprovalStatus.APPROVED;
+    @Column(name = "submitted_at") private Instant submittedAt;
+    @Column(name = "submitted_by_user_id") private Long submittedByUserId;
+    @Column(name = "submitted_by_name", length = 160) private String submittedByName;
+    @Column(name = "approval_decided_at") private Instant approvalDecidedAt;
+    @Column(name = "approval_decided_by_name", length = 160) private String approvalDecidedByName;
+    @Column(name = "approval_decision_ref", length = 40) private String approvalDecisionRef;
+    @Column(name = "approval_conditions", columnDefinition = "text") private String approvalConditions;
+
+    public boolean isApproved() { return approvalStatus == ApprovalStatus.APPROVED; }
 }

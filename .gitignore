@@ -30,3 +30,7 @@ infra/db/data/
 
 # Evidence media stored by the backend in development
 backend/data/
+
+# Runtime artifacts
+*.pid
+backend/data/

@@ -16,6 +16,7 @@ import { fmtDateTime, money } from '@/lib/format';
 import { Link } from '@/i18n/navigation';
 import { ApiError } from '@/lib/api/client';
 import { Separator } from '@/components/ui/separator';
+import { RecordDiscussion } from '@/components/messaging/record-discussion';
 
 export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () => void }) {
   const t = useTranslations('alerts');
@@ -116,6 +117,8 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
                   </div>
                 )}
               </section>
+              <Separator />
+              <RecordDiscussion type="ALERT" id={a.id} threadClassName="h-[420px]" className="-mx-1" />
             </>
           )}
         </DataState>

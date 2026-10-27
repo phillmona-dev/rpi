@@ -5,20 +5,21 @@ import {
   LayoutDashboard, BrainCircuit, Globe2, Bell,
   Layers, Map, FolderKanban, Building2, Camera,
   Wallet, FileText, FileBarChart2, Users, ScrollText,
-  ChevronRight, Radio, ShieldCheck, Target, Search, X, History,
+  ChevronRight, Radio, ShieldCheck, Target, Search, X, History, Stamp, UsersRound, MessagesSquare,
   type LucideIcon,
 } from 'lucide-react';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
-import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, canSeeIntelligence } from '@/lib/domain';
-import { useOverview } from '@/lib/api/hooks';
-import type { Overview } from '@/lib/api/types';
+import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, canSeeIntelligence, canSeeApprovals, canSeeFieldTeam } from '@/lib/domain';
+import { useApprovalCounts, useFieldSummary, useOverview } from '@/lib/api/hooks';
+import { useChatUnread } from '@/lib/api/messaging';
+import type { ApprovalCounts, ChatUnread, Overview, TeamSummary } from '@/lib/api/types';
 import { money, num, pct, relTime } from '@/lib/format';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 
 /* ─── Module card definition ──────────────────────────────────────── */
-type Category = 'command' | 'analysis' | 'records' | 'administration';
+type Category = 'command' | 'operations' | 'analysis' | 'records' | 'administration';
 
 interface Stat {
   /** Headline figure, already formatted */
@@ -41,10 +42,10 @@ interface ModuleCard {
   stat?: Stat | null;
 }
 
-const CATEGORIES: Category[] = ['command', 'analysis', 'records', 'administration'];
+const CATEGORIES: Category[] = ['command', 'operations', 'analysis', 'records', 'administration'];
 
 /* ─── Module definitions ───────────────────────────────────────────── */
-function useModules(roles: string[], ov: Overview | undefined, locale: string): ModuleCard[] {
+function useModules(roles: string[], ov: Overview | undefined, locale: string, ap?: ApprovalCounts, ft?: TeamSummary, chat?: ChatUnread): ModuleCard[] {
   const t = useTranslations('launcher.stat');
   const k = ov?.kpis;
   const a = ov?.alertCounts;
@@ -88,6 +89,31 @@ function useModules(roles: string[], ov: Overview | undefined, locale: string): 
         accent: (a?.decisionRequired ?? 0) > 0 ? 'var(--status-critical)' : undefined,
       }),
     },
+    {
+      href: '/messages', key: 'messages', icon: MessagesSquare, category: 'command',
+      stat: chat ? {
+        value: n(chat.total), label: t('unreadMessages'),
+        detail: t('messagesDetail', { conversations: n(chat.conversations), mentions: n(chat.mentions) }),
+        accent: chat.mentions > 0 ? 'var(--status-warning)' : undefined,
+      } : undefined,
+    },
+    /* ── Field operations ─────────────────────────────── */
+    ...(canSeeApprovals(roles) ? [{
+      href: '/approvals', key: 'approvals', icon: Stamp, category: 'operations',
+      stat: ap ? {
+        value: n(ap.pending), label: t('awaitingDecision'),
+        detail: t('approvalDetail', { returned: n(ap.returned), days: ap.oldestPendingDays ?? 0 }),
+        accent: ap.pending > 0 ? 'var(--status-warning)' : undefined,
+      } : undefined,
+    } as ModuleCard] : []),
+    ...(canSeeFieldTeam(roles) ? [{
+      href: '/field-team', key: 'fieldTeam', icon: UsersRound, category: 'operations',
+      stat: ft ? {
+        value: n(ft.active), label: t('membersActive'),
+        detail: t('fieldDetail', { coverage: ft.coveragePct == null ? '—' : `${Math.round(ft.coveragePct)}%`, overdue: n(ft.overdueVisits) }),
+        accent: ft.overdueVisits > 0 ? 'var(--status-serious)' : undefined,
+      } : undefined,
+    } as ModuleCard] : []),
     /* ── Analysis ─────────────────────────────────────── */
     {
       href: '/sectors', key: 'sectors', icon: Layers, category: 'analysis',
@@ -195,7 +221,10 @@ export function ModuleLauncher() {
   const ts = useTranslations('launcher.search');
   const router = useRouter();
   const { data: ov } = useOverview({ sector: user.sectorScope });
-  const modules = useModules(user.roles, ov, locale);
+  const { data: ap } = useApprovalCounts(canSeeApprovals(user.roles));
+  const { data: ft } = useFieldSummary(user.sectorScope, canSeeFieldTeam(user.roles));
+  const { data: chat } = useChatUnread();
+  const modules = useModules(user.roles, ov, locale, ap, ft, chat);
   const { usage, record, forget, clear } = useModuleUsage(user.id);
 
   /* ── Search ── */
@@ -254,7 +283,7 @@ export function ModuleLauncher() {
   ];
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 py-8 tablet:px-6 tablet:py-10 space-y-10">
+    <div className="py-2 tablet:py-4 space-y-10">
 
       {/* ── Page header ──────────────────────────────────────────────── */}
       <div className="flex flex-col gap-5 border-b border-border pb-6">

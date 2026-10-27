@@ -19,8 +19,12 @@ export async function api<T>(path: string, init: RequestInit & { query?: Record<
     credentials: 'same-origin',
   });
   if (res.status === 401 && typeof window !== 'undefined') {
-    const locale = window.location.pathname.split('/')[1] || 'en';
-    window.location.assign(`/${locale}/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+    const [, first = '', ...rest] = window.location.pathname.split('/');
+    const hasLocale = ['en', 'am', 'ti'].includes(first);
+    const locale = hasLocale ? first : 'en';
+    // `next` is locale-free, like the middleware's: the login page navigates with the locale-aware router.
+    const path = '/' + (hasLocale ? rest : [first, ...rest]).filter(Boolean).join('/');
+    window.location.assign(`/${locale}/login?next=${encodeURIComponent(path + window.location.search)}`);
   }
   if (!res.ok) {
     let body: Record<string, unknown> = {};

@@ -1,4 +1,4 @@
-import type { AlertSeverity, DamageSeverity, LifecycleStage, OperationalStatus, ProjectHealth, ProjectStatus, RiskBand, Sector, VerificationStatus } from './api/types';
+import type { AgentStatus, ApprovalStatus, AssignmentStatus, CoverageGap, AlertSeverity, DamageSeverity, LifecycleStage, OperationalStatus, ProjectHealth, ProjectStatus, RiskBand, Sector, VerificationStatus } from './api/types';
 
 /** Semantic mapping of domain states to the reserved status palette. Always paired with a label/icon in UI. */
 export type Tone = 'good' | 'warning' | 'serious' | 'critical' | 'neutral' | 'info';
@@ -11,6 +11,10 @@ export const operationalTone: Record<OperationalStatus, Tone> = { NON_FUNCTIONAL
 export const verificationTone: Record<VerificationStatus, Tone> = { UNVERIFIED: 'neutral', VERIFIED: 'good', DISPUTED: 'serious', REJECTED: 'critical' };
 export const riskBandTone: Record<RiskBand, Tone> = { LOW: 'good', MODERATE: 'warning', HIGH: 'serious', CRITICAL: 'critical' };
 export const stageTone: Record<LifecycleStage, Tone> = { PLANNING: 'neutral', APPROVAL: 'neutral', FUNDING: 'info', PROCUREMENT: 'info', IMPLEMENTATION: 'info', MONITORING: 'warning', COMPLETION: 'good', CANCELLED: 'critical' };
+export const approvalTone: Record<ApprovalStatus, Tone> = { PENDING: 'warning', RETURNED: 'serious', APPROVED: 'good', REJECTED: 'critical' };
+export const agentStatusTone: Record<AgentStatus, Tone> = { PENDING_ONBOARDING: 'warning', ACTIVE: 'good', ON_LEAVE: 'info', SUSPENDED: 'critical', DEACTIVATED: 'neutral' };
+export const assignmentStatusTone: Record<AssignmentStatus, Tone> = { ACTIVE: 'info', COMPLETED: 'good', RELEASED: 'neutral' };
+export const coverageGapTone: Record<CoverageGap, Tone> = { NO_TEAM: 'critical', NO_LEAD: 'serious', OVERDUE: 'warning', NO_VERIFIER: 'warning', NOT_STARTED: 'neutral', OK: 'good' };
 export const riskBand = (score: number | null | undefined): RiskBand | null => score === null || score === undefined ? null : score >= 75 ? 'CRITICAL' : score >= 50 ? 'HIGH' : score >= 25 ? 'MODERATE' : 'LOW';
 
 export const toneVar: Record<Tone, string> = {
@@ -38,6 +42,13 @@ export const canVerifyEvidence = (roles: string[]) => roles.some((r) => ['EXECUT
 export const canTransitionStage = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));
 export const canReviewInsights = canVerifyEvidence;
 export const canExportReports = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));
+/** Executive approval gate: only the Chief Executive decides; registrars and oversight roles can follow the queue. */
+export const canDecideApprovals = (roles: string[]) => roles.includes('EXECUTIVE');
+export const canSeeApprovals = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'ADMIN'].includes(r));
+export const canResubmitProjects = canCreateProject;
+/** Field team: oversight roles read; analysts and administrators register members and assign projects. */
+export const canSeeFieldTeam = canSeeApprovals;
+export const canManageFieldTeam = (roles: string[]) => roles.some((r) => ['ANALYST', 'ADMIN'].includes(r));
 export const canSeeReports = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'ANALYST', 'PMO_FEDERAL', 'ADMIN', 'SECTOR_HEAD'].includes(r));
 
 /** Media URLs: API-relative paths go through the BFF proxy (cookie auth); static demo assets and absolute URLs pass through. */

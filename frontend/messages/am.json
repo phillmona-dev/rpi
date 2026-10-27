@@ -27,7 +27,11 @@
     "reports": "ሪፖርቶች",
     "command": "ትዕዛዝ",
     "analysis": "ትንተና",
-    "records": "መዝገቦች"
+    "records": "መዝገቦች",
+    "approvals": "የፕሮጀክት ማጽደቂያ",
+    "fieldTeam": "የመስክ ቡድን",
+    "operations": "የመስክ ስራዎች",
+    "messages": "መልዕክቶች"
   },
   "common": {
     "loading": "በመጫን ላይ…",
@@ -156,7 +160,13 @@
     "signals": "ቅድመ ማስጠንቀቂያ አመላካቾች",
     "actions": "የአስፈፃሚ የእርምጃ ካርዶች",
     "openIntelligence": "የውሳኔ ድጋፍን ክፈት",
-    "openMap": "የጂኦስፔሻል ትዕዛዝን ክፈት"
+    "openMap": "የጂኦስፔሻል ትዕዛዝን ክፈት",
+    "views": {
+      "overview": "አጠቃላይ እይታ",
+      "map": "ካርታ እና ወረዳዎች",
+      "finance": "ዕድገት እና ፋይናንስ",
+      "activity": "ፕሮጀክቶች እና እንቅስቃሴ"
+    }
   },
   "projects": {
     "title": "ፕሮጀክቶች",
@@ -225,7 +235,12 @@
   },
   "finance": {
     "title": "ፋይናንስ",
-    "subtitle": "ምደባ፣ ልቀት እና የተረጋገጠ ወጪ"
+    "subtitle": "ምደባ፣ ልቀት እና የተረጋገጠ ወጪ",
+    "views": {
+      "overview": "አጠቃላይ እይታ",
+      "pipeline": "ያልተለቀቁ ክፍያዎች",
+      "variance": "የወጪ ልዩነት"
+    }
   },
   "brief": {
     "title": "የሥራ አስፈፃሚ ዕለታዊ ማጠቃለያ",
@@ -328,7 +343,8 @@
       "briefing": "ለዋና ሥራ አስፈፃሚው በሚና የተወሰነ ባለ አንድ ገጽ ሊታተም የሚችል የሁኔታ ማጠቃለያ።",
       "reports": "የተመደቡ የመንግሥት ሪፖርቶች ከአፈጻጸም ታሪክ፣ CSV/PDF ወደ ውጭ መላክ እና ከፌዴራል PMO ትስስር ጋር።",
       "users": "መለያዎች፣ ሚናዎች እና የዘርፍ ወሰን ምደባዎች ለሁሉም የመድረክ ተጠቃሚዎች።",
-      "audit": "የማረጋገጫ ክስተቶች፣ ውሳኔዎች እና የመረጃ ለውጦች የማይሰረዝ መዝገብ።"
+      "audit": "የማረጋገጫ ክስተቶች፣ ውሳኔዎች እና የመረጃ ለውጦች የማይሰረዝ መዝገብ።",
+      "messages": "ቀጥታ መልዕክቶች፣ የቡድን ውይይቶች እና በፕሮጀክቶች፣ ማጽደቆች፣ ማንቂያዎች እና የመስክ ሠራተኞች ላይ የሚደረጉ ውይይቶች።"
     },
     "stat": {
       "activeProjects": "ንቁ ፕሮጀክቶች",
@@ -351,7 +367,9 @@
       "progressReports": "{count} የዕድገት ሪፖርቶች",
       "disbursed": "የተከፈለ",
       "ofBudget": "ከ{budget} በጀት {pct}",
-      "latestProgress": "የቅርብ ጊዜ የዕድገት ሪፖርት"
+      "latestProgress": "የቅርብ ጊዜ የዕድገት ሪፖርት",
+      "unreadMessages": "ያልተነበቡ መልዕክቶች",
+      "messagesDetail": "{conversations} ውይይቶች · {mentions} ጥቅሶች"
     },
     "context": {
       "scope": "ወሰን",
@@ -374,6 +392,301 @@
       "clearHistory": "ታሪክ አጽዳ",
       "opened": "{count} ጊዜ ተከፍቷል",
       "remove": "{module}ን ከተደጋጋሚ የተከፈቱ አስወግድ"
+    }
+  },
+  "approvals": {
+    "title": "የፕሮጀክት ማጽደቂያ"
+  },
+  "fieldTeam": {
+    "title": "የመስክ ቡድን"
+  },
+  "messaging": {
+    "title": "መልዕክቶች",
+    "subtitle": "ቀጥታ መልዕክቶች፣ ቡድኖች እና የመዝገብ ውይይቶች በአንድ ቦታ።",
+    "unreadSummary": "በ{conversations} ውይይቶች ውስጥ {count} ያልተነበቡ መልዕክቶች",
+    "searchMessages": "መልዕክቶችን ፈልግ",
+    "newMessage": "አዲስ መልዕክት",
+    "newDirect": "ቀጥታ መልዕክት",
+    "newGroup": "አዲስ ቡድን",
+    "newDirectHint": "በግል መልዕክት የሚልኩለትን የሥራ ባልደረባ ይምረጡ።",
+    "newGroupHint": "ለቡድኑ ስም ይስጡ እና የሚሳተፉ ሰዎችን ያክሉ።",
+    "addPeople": "ሰዎችን አክል",
+    "addPeopleHint": "አዲስ አባላት በቡድኑ ውስጥ ያሉ የቀድሞ መልዕክቶችን ማንበብ ይችላሉ።",
+    "groupName": "የቡድን ስም",
+    "groupNamePlaceholder": "ለምሳሌ የሁመራ ክሊኒክ ግብረ ኃይል",
+    "createGroup": "ቡድን ፍጠር",
+    "add": "አክል",
+    "searchPeople": "በስም፣ በሚና ወይም በማዕረግ ይፈልጉ",
+    "people": "ሰዎች",
+    "noPeople": "ከፍለጋው ጋር የሚዛመድ ሰው የለም።",
+    "removePerson": "{name}ን አስወግድ",
+    "pickConversation": "ውይይት ይምረጡ",
+    "pickConversationHint": "በግራ በኩል ውይይት ይምረጡ ወይም ቀጥታ መልዕክት ወይም ቡድን ይጀምሩ። በፕሮጀክቶች፣ ማጽደቆች፣ ማንቂያዎች እና የመስክ ሠራተኞች ላይ ያሉ ውይይቶች አንድ ሰው ሲጽፍባቸው እዚህ ይታያሉ።",
+    "searchHint": "በውይይቶችዎ ውስጥ ያሉ የመልዕክቶችን ጽሑፍ ይፈልጋል።",
+    "searchPlaceholder": "የሚፈለጉ ቃላት…",
+    "searchMin": "ቢያንስ ሁለት ፊደላት ይጻፉ።",
+    "noResults": "የሚዛመድ መልዕክት የለም።",
+    "searchConversations": "ውይይቶችን ፈልግ",
+    "filter": "ውይይቶችን አጣራ",
+    "filters": {
+      "all": "ሁሉም",
+      "unread": "ያልተነበቡ",
+      "direct": "ቀጥታ",
+      "groups": "ቡድኖች",
+      "discussions": "ውይይቶች"
+    },
+    "conversations": "ውይይቶች",
+    "noMatches": "የሚዛመድ ውይይት የለም።",
+    "noConversations": "እስካሁን ምንም ውይይት የለም።",
+    "noMessagesYet": "እስካሁን መልዕክት የለም",
+    "untitled": "ርዕስ የሌለው ውይይት",
+    "you": "እርስዎ",
+    "muted": "ድምፅ የጠፋ",
+    "mentionedYou": "ተጠቅሰዋል",
+    "unreadCount": "{count} ያልተነበቡ",
+    "contextType": {
+      "PROJECT": "የፕሮጀክት ውይይት",
+      "APPROVAL": "የማጽደቅ ውይይት",
+      "ALERT": "የማንቂያ ውይይት",
+      "FIELD_AGENT": "የመስክ ቡድን አባል"
+    },
+    "discussion": "ውይይት",
+    "contextHint": {
+      "PROJECT": "በዚህ ፕሮጀክት ላይ ከሥራ ባልደረቦች እና ከተመደበው የመስክ ቡድን ጋር ይቀናጁ። አንድን ሰው ለመጥቀስ @ ይጻፉ።",
+      "APPROVAL": "ጥያቄው እስኪወሰን ድረስ በሥራ አስፈጻሚው እና በተንታኙ መካከል የሚደረጉ ጥያቄዎችና መልሶች። ውሳኔዎች እዚህ በራስ-ሰር ይለጠፋሉ።",
+      "ALERT": "ከዚህ ማንቂያ ጀርባ ያለውን እና ማን እርምጃ እየወሰደ እንደሆነ ይወያዩ።",
+      "FIELD_AGENT": "ከዚህ የመስክ ቡድን አባል እና ከተቆጣጣሪያቸው ጋር መመሪያዎች እና ክትትል።"
+    },
+    "openInMessages": "በመልዕክቶች ክፈት",
+    "openRecord": "መዝገቡን ክፈት",
+    "messagePerson": "መልዕክት",
+    "openAll": "ሁሉንም መልዕክቶች ክፈት",
+    "dismiss": "ዝጋ",
+    "follow": "ተከተል",
+    "unfollow": "መከተል አቁም",
+    "mute": "ድምፅ አጥፋ",
+    "unmute": "ድምፅ መልስ",
+    "leaveGroup": "ቡድኑን ልቀቅ",
+    "rename": "ቡድኑን እንደገና ሰይም",
+    "details": "ዝርዝሮች",
+    "close": "ዝጋ",
+    "owner": "የቡድኑ ባለቤት",
+    "backToList": "ወደ ውይይቶች ተመለስ",
+    "followers": "{count} ተከታዮች",
+    "followersHint": "ተከታዮች ስለ አዲስ መልዕክቶች ይነገራቸዋል። በመዝገቡ ላይ ድርሻ ያላቸው ሰዎች በራስ-ሰር ይከተላሉ፤ ሌሎች እዚህ በመጻፍ ይከተላሉ።",
+    "members": "{count} አባላት",
+    "online": "መስመር ላይ",
+    "onlineCount": "{count} መስመር ላይ",
+    "history": "የመልዕክት ታሪክ",
+    "emptyThread": "እስካሁን መልዕክት የለም",
+    "emptyThreadHint": "ሰላም ይበሉ። መልዕክቶች በመዝገብ ይቀመጣሉ፤ ሊሰረዙ አይችሉም።",
+    "emptyContextHint": "ውይይቱን ይጀምሩ። ይህን መዝገብ የሚከተሉ ሁሉ ይነገራቸዋል፤ አንድን ሰው ለማምጣት @ ይጻፉ።",
+    "loadEarlier": "የቀድሞ መልዕክቶችን ጫን",
+    "newMessages": "አዲስ መልዕክቶች",
+    "jumpToLatest": "የቅርብ ጊዜ መልዕክቶች",
+    "typingOne": "{name} እየጻፉ ነው…",
+    "typingMany": "{count} ሰዎች እየጻፉ ነው…",
+    "readOnly": "ይህን ውይይት ማንበብ ይችላሉ ነገር ግን መጻፍ አይችሉም።",
+    "dropFiles": "ለማያያዝ ፋይሎችን እዚህ ይጣሉ",
+    "today": "ዛሬ",
+    "yesterday": "ትናንት",
+    "seen": "ታይቷል",
+    "sent": "ተልኳል",
+    "seenBy": "በ{count} ታይቷል",
+    "unknownSender": "አንድ ሰው",
+    "deletedMessage": "ይህ መልዕክት ተሰርዟል",
+    "attachmentOnly": "አባሪ",
+    "edited": "ተስተካክሏል",
+    "editMessage": "መልዕክቱን አስተካክል",
+    "reply": "መልስ",
+    "copy": "ጽሑፉን ቅዳ",
+    "edit": "አስተካክል",
+    "delete": "ሰርዝ",
+    "confirmDelete": "ይህ መልዕክት ለሁሉም ይሰረዝ?",
+    "moreActions": "ተጨማሪ ድርጊቶች",
+    "cancel": "ሰርዝ",
+    "save": "አስቀምጥ",
+    "replyingTo": "ለ{name} መልስ",
+    "cancelReply": "መልሱን ሰርዝ",
+    "attachments": "አባሪዎች",
+    "attach": "ፋይሎችን አያይዝ",
+    "failed": "አልተሳካም",
+    "removeAttachment": "{name}ን አስወግድ",
+    "mentionSomeone": "አንድን ሰው ጥቀስ",
+    "placeholder": "መልዕክት ይጻፉ…",
+    "send": "ላክ",
+    "charsLeft": "{count} ፊደላት ቀርተዋል",
+    "composerHint": "ለመላክ Enter · ለአዲስ መስመር Shift+Enter · ለመጥቀስ @",
+    "errors": {
+      "generic": "ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
+      "send": "መልዕክቱ ሊላክ አልቻለም። እባክዎ እንደገና ይሞክሩ።",
+      "upload": "መጫን አልተሳካም",
+      "tooLarge": "ከ25 ሜባ በላይ ነው",
+      "groupTitle": "ለቡድኑ ስም ይስጡ።"
+    },
+    "system": {
+      "GROUP_CREATED": "{actor} “{title}” የተባለውን ቡድን ፈጥረዋል",
+      "MEMBERS_ADDED": "{actor} {names}ን አክለዋል",
+      "MEMBER_LEFT": "{name} ቡድኑን ለቀዋል",
+      "MEMBER_REMOVED": "{actor} {name}ን አስወግደዋል",
+      "RENAMED": "{actor} የቡድኑን ስም ወደ “{title}” ቀይረዋል",
+      "APPROVAL_APPROVED": "{actor} ፕሮጀክቱን አጽድቀዋል ({reference})",
+      "APPROVAL_RETURNED": "{actor} ፕሮጀክቱን ለማሻሻያ መልሰዋል ({reference})",
+      "APPROVAL_REJECTED": "{actor} ፕሮጀክቱን ውድቅ አድርገዋል ({reference})",
+      "APPROVAL_RESUBMITTED": "{actor} ፕሮጀክቱን ለማጽደቅ እንደገና አቅርበዋል"
+    },
+    "systemShort": {
+      "GROUP_CREATED": "ቡድን ተፈጥሯል",
+      "MEMBERS_ADDED": "ሰዎች ተጨምረዋል",
+      "MEMBER_LEFT": "አንድ ሰው ወጥቷል",
+      "MEMBER_REMOVED": "አንድ ሰው ተወግዷል",
+      "RENAMED": "የቡድን ስም ተቀይሯል",
+      "APPROVAL_APPROVED": "ፕሮጀክቱ ጸድቋል",
+      "APPROVAL_RETURNED": "ለማሻሻያ ተመልሷል",
+      "APPROVAL_REJECTED": "ፕሮጀክቱ ውድቅ ተደርጓል",
+      "APPROVAL_RESUBMITTED": "ለማጽደቅ እንደገና ቀርቧል"
+    }
+  },
+  "notifications": {
+    "title": "ማሳወቂያዎች",
+    "bellUnread": "{count} ያልተነበቡ ማሳወቂያዎች",
+    "markAllRead": "ሁሉንም እንደተነበበ ምልክት አድርግ",
+    "tabs": {
+      "all": "ሁሉም",
+      "unread": "ያልተነበቡ ({count})"
+    },
+    "today": "ዛሬ",
+    "earlier": "ቀደም ብሎ",
+    "unread": "ያልተነበበ",
+    "loadMore": "የቆዩ ማሳወቂያዎችን ጫን",
+    "empty": "ሁሉንም ተመልክተዋል",
+    "emptyUnread": "ያልተነበበ ማሳወቂያ የለም",
+    "emptyHint": "ማጽደቆች፣ ማንቂያዎች፣ ምደባዎች፣ የምርመራ ግምገማዎች እና ጥቅሶች እዚህ ይታያሉ።",
+    "desktopOffHint": "የዴስክቶፕ ማሳወቂያዎች ጠፍተዋል። RPIS ከበስተጀርባ ሲሆን እንዲነገርዎ ያብሯቸው →",
+    "toastRegion": "ማሳወቂያዎች",
+    "dismiss": "ዝጋ",
+    "open": "ክፈት",
+    "someone": "አንድ ሰው",
+    "categories": {
+      "messages": "መልዕክቶች",
+      "mentions": "ጥቅሶች",
+      "approvals": "ማጽደቆች",
+      "alerts": "ማንቂያዎች",
+      "assignments": "የመስክ ምደባዎች",
+      "inspections": "የምርመራ ግምገማዎች"
+    },
+    "categoryHints": {
+      "messages": "አዲስ ቀጥታ፣ የቡድን እና የውይይት መልዕክቶች",
+      "mentions": "አንድ ሰው በ@ ሲጠቅስዎ",
+      "approvals": "ውሳኔዎን የሚጠብቁ ፕሮጀክቶች እና ባቀረቧቸው ፕሮጀክቶች ላይ የተሰጡ ውሳኔዎች",
+      "alerts": "በእርስዎ ወሰን ውስጥ ያሉ አሳሳቢ ማንቂያዎች እና ለእርስዎ የተመደቡ ማንቂያዎች",
+      "assignments": "ለአንድ ፕሮጀክት ሲመደቡ",
+      "inspections": "የመዘገቡት ምርመራ ሲረጋገጥ፣ ሲከራከር ወይም ውድቅ ሲደረግ"
+    },
+    "chat": {
+      "inConversation": "{name} በ{conversation}",
+      "attachment": "አባሪ ልከዋል"
+    },
+    "prompt": {
+      "title": "በቅጽበት ይነገርዎ",
+      "body": "RPIS ከበስተጀርባ ቢሆንም ማጽደቆች፣ አሳሳቢ ማንቂያዎች እና መልዕክቶች እንዲደርሱዎ የዴስክቶፕ ማሳወቂያዎችን ይፍቀዱ።",
+      "enable": "ማሳወቂያዎችን አብራ",
+      "later": "አሁን አይደለም",
+      "enabledTitle": "ማሳወቂያዎች በርተዋል",
+      "enabledBody": "ትኩረትዎን የሚሻ ነገር ሲኖር RPIS እዚህ ያሳውቅዎታል።"
+    },
+    "test": {
+      "title": "የሙከራ ማሳወቂያ",
+      "body": "የRPIS ማሳወቂያዎች በዚህ መሣሪያ ላይ እንዲህ ይታያሉ እና ይሰማሉ።"
+    },
+    "settings": {
+      "title": "የማሳወቂያ ቅንብሮች",
+      "description": "RPIS በዚህ መሣሪያ ላይ ትኩረትዎን እንዴት እንደሚስብ ይምረጡ።",
+      "desktop": "የዴስክቶፕ ማሳወቂያዎች",
+      "allow": "ፍቀድ",
+      "state": {
+        "default": "ገና አልተፈቀደም። አሳሽዎ ፈቃድ ይጠይቃል።",
+        "granted": "ተፈቅዷል። ማሳወቂያዎች በሲስተምዎ የማሳወቂያ ቦታ ይታያሉ።",
+        "denied": "በዚህ አሳሽ ታግዷል። በአሳሹ የጣቢያ ቅንብሮች ውስጥ ለዚህ ጣቢያ ማሳወቂያዎችን ይፍቀዱ፣ ከዚያ እንደገና ይጫኑ።",
+        "insecure": "በዚህ ግንኙነት አይገኝም። አሳሾች የሲስተም ማሳወቂያዎችን የሚፈቅዱት በHTTPS ወይም localhost ብቻ ነው፤ በመተግበሪያ ውስጥ ያሉ ማንቂያዎችና ድምፆች ግን ይሠራሉ።",
+        "unsupported": "ይህ አሳሽ የሲስተም ማሳወቂያዎችን አይደግፍም።"
+      },
+      "onlyBackground": "RPIS ከበስተጀርባ ሲሆን ብቻ",
+      "onlyBackgroundHint": "በRPIS ውስጥ እየሠሩ ሳሉ ማንቂያዎች በመተግበሪያው ውስጥ ይታያሉ።",
+      "sound": "ድምፅ",
+      "soundHint": "አጭር ድምፅ፤ አሳሳቢ ጉዳዮች የተለየና ጠንከር ያለ ድምፅ አላቸው።",
+      "volume": "የድምፅ መጠን",
+      "tones": {
+        "message": "መልዕክት",
+        "info": "ማሳወቂያ",
+        "success": "ጸድቋል",
+        "warning": "ትኩረት",
+        "critical": "አሳሳቢ"
+      },
+      "categoriesTitle": "ስለምን ይነገረኝ",
+      "categoriesHint": "የጠፉ ጉዳዮች አሁንም በማሳወቂያ ዝርዝሩ ውስጥ ይታያሉ።",
+      "deviceOnly": "እነዚህ ቅንብሮች ለዚህ አሳሽ ብቻ ይሠራሉ።",
+      "test": "የሙከራ ማሳወቂያ ላክ"
+    },
+    "types": {
+      "someone": "አንድ ሰው",
+      "aSite": "አንድ ቦታ",
+      "APPROVAL_REQUESTED": {
+        "title": "ማጽደቅ ተጠይቋል፦ {code}",
+        "body": "{actor} {name}ን ({wereda}) ለውሳኔዎ አቅርበዋል።"
+      },
+      "APPROVAL_RESUBMITTED": {
+        "title": "ለማጽደቅ እንደገና ቀርቧል፦ {code}",
+        "body": "{actor} {name}ን አሻሽለው እንደገና አቅርበዋል።"
+      },
+      "APPROVAL_APPROVED": {
+        "title": "ፕሮጀክት ጸድቋል፦ {code}",
+        "body": "{actor} {name}ን አጽድቀዋል። ውሳኔ {reference}።"
+      },
+      "APPROVAL_RETURNED": {
+        "title": "ለማሻሻያ ተመልሷል፦ {code}",
+        "body": "{actor} {name}ን ከአስተያየት ጋር መልሰዋል። ውሳኔ {reference}።"
+      },
+      "APPROVAL_REJECTED": {
+        "title": "ፕሮጀክት ውድቅ ተደርጓል፦ {code}",
+        "body": "{actor} {name}ን ውድቅ አድርገዋል። ውሳኔ {reference}።"
+      },
+      "ALERT_CRITICAL": {
+        "title": "አሳሳቢ ማንቂያ",
+        "body": "{title}"
+      },
+      "ALERT_ASSIGNED": {
+        "title": "ማንቂያ ለእርስዎ ተመድቧል",
+        "body": "{actor} መድበውልዎታል፦ {title}"
+      },
+      "ASSIGNMENT_NEW": {
+        "title": "አዲስ የመስክ ምደባ፦ {code}",
+        "body": "{actor} ለ{name} እንደ {role} መድበውዎታል።"
+      },
+      "INSPECTION_VERIFIED": {
+        "title": "ምርመራ ተረጋግጧል",
+        "body": "{actor} የ{subject} ምርመራዎን አረጋግጠዋል።"
+      },
+      "INSPECTION_DISPUTED": {
+        "title": "ምርመራ አከራካሪ ሆኗል",
+        "body": "{actor} የ{subject} ምርመራዎን ተከራክረዋል። እባክዎ ይገምግሙ።"
+      },
+      "INSPECTION_REJECTED": {
+        "title": "ምርመራ ውድቅ ተደርጓል",
+        "body": "{actor} የ{subject} ምርመራዎን ውድቅ አድርገዋል።"
+      },
+      "INSPECTION_UNVERIFIED": {
+        "title": "ምርመራ እንደገና ተከፍቷል",
+        "body": "{actor} የ{subject} ምርመራዎን ለግምገማ እንደገና ከፍተዋል።"
+      },
+      "CHAT_MENTION": {
+        "title": "{actor} ጠቅሰውዎታል",
+        "body": "{excerpt}"
+      },
+      "CHAT_MESSAGE": {
+        "title": "{actor}",
+        "body": "{excerpt}"
+      }
     }
   }
 }

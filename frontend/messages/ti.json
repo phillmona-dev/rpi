@@ -27,7 +27,11 @@
     "reports": "ጸብጻባት",
     "command": "ትእዛዝ",
     "analysis": "ትንተና",
-    "records": "መዛግብቲ"
+    "records": "መዛግብቲ",
+    "approvals": "ምጽዳቕ ፕሮጀክትታት",
+    "fieldTeam": "ጉጅለ ዓውዲ",
+    "operations": "ስራሕቲ ዓውዲ",
+    "messages": "መልእኽትታት"
   },
   "common": {
     "loading": "ይጽዓን ኣሎ…",
@@ -156,7 +160,13 @@
     "signals": "ኣመልካትታት ቅድመ-መጠንቀቕታ",
     "actions": "ካርዳት ስጉምቲ ፈጻሚ",
     "openIntelligence": "ደገፍ ውሳነ ክፈት",
-    "openMap": "ጂኦስፔሻል ትእዛዝ ክፈት"
+    "openMap": "ጂኦስፔሻል ትእዛዝ ክፈት",
+    "views": {
+      "overview": "ሓፈሻዊ እይታ",
+      "map": "ካርታን ወረዳታትን",
+      "finance": "ዕቤትን ፋይናንስን",
+      "activity": "ፕሮጀክትታትን ንጥፈታትን"
+    }
   },
   "projects": {
     "title": "ፕሮጀክትታት",
@@ -225,7 +235,12 @@
   },
   "finance": {
     "title": "ፋይናንስ",
-    "subtitle": "ምደባ፣ ምልቃቕን ዝተረጋገጸ ወጻኢን"
+    "subtitle": "ምደባ፣ ምልቃቕን ዝተረጋገጸ ወጻኢን",
+    "views": {
+      "overview": "ሓፈሻዊ እይታ",
+      "pipeline": "ዘይተፈነዉ ክፍሊታት",
+      "variance": "ፍልልይ ወጻኢ"
+    }
   },
   "brief": {
     "title": "መዓልታዊ ጽማቝ ፈጻሚ ስራሕ",
@@ -328,7 +343,8 @@
       "briefing": "ንዋና ፈጻሚ ስራሕ ብተራ ዝተወሰነ ናይ ሓደ ገጽ ክሕተም ዝኽእል ጽማቝ ኩነታት።",
       "reports": "ዝተመደቡ ጸብጻባት መንግስቲ ምስ ታሪኽ ኣፈጻጽማ፣ CSV/PDF ምውጻእን ምትእስሳር ፌደራል PMOን።",
       "users": "ሕሳባት፣ ተራታትን ምደባታት ወሰን ዘርፍን ንኹሎም ተጠቀምቲ መድረኽ።",
-      "audit": "ዘይስረዝ መዝገብ ፍጻመታት መረጋገጺ፣ ውሳነታትን ለውጥታት ሓበሬታን።"
+      "audit": "ዘይስረዝ መዝገብ ፍጻመታት መረጋገጺ፣ ውሳነታትን ለውጥታት ሓበሬታን።",
+      "messages": "ቀጥታዊ መልእኽትታት፣ ናይ ጉጅለ ዝርርባት ከምኡውን ኣብ ፕሮጀክትታት፣ ምጽዳቓት፣ መጠንቀቕታታትን ሰራሕተኛታት ዓውድን ዝግበሩ ዘተታት።"
     },
     "stat": {
       "activeProjects": "ንጡፋት ፕሮጀክትታት",
@@ -351,7 +367,9 @@
       "progressReports": "{count} ጸብጻባት ዕቤት",
       "disbursed": "ዝተለቐቐ",
       "ofBudget": "ካብ {budget} ባጀት {pct}",
-      "latestProgress": "ናይ ቀረባ እዋን ጸብጻብ ዕቤት"
+      "latestProgress": "ናይ ቀረባ እዋን ጸብጻብ ዕቤት",
+      "unreadMessages": "ዘይተነበቡ መልእኽትታት",
+      "messagesDetail": "{conversations} ዝርርባት · {mentions} ምጥቃሳት"
     },
     "context": {
       "scope": "ወሰን",
@@ -374,6 +392,301 @@
       "clearHistory": "ታሪኽ ኣጽሪ",
       "opened": "{count} ግዜ ተኸፊቱ",
       "remove": "{module} ካብ ብተደጋጋሚ ዝተኸፍቱ ኣውጽእ"
+    }
+  },
+  "approvals": {
+    "title": "ምጽዳቕ ፕሮጀክትታት"
+  },
+  "fieldTeam": {
+    "title": "ጉጅለ ዓውዲ"
+  },
+  "messaging": {
+    "title": "መልእኽትታት",
+    "subtitle": "ቀጥታዊ መልእኽትታት፣ ጉጅለታትን ናይ መዝገብ ዘተታትን ኣብ ሓደ ቦታ።",
+    "unreadSummary": "ኣብ {conversations} ዝርርባት {count} ዘይተነበቡ መልእኽትታት",
+    "searchMessages": "መልእኽትታት ድለ",
+    "newMessage": "ሓድሽ መልእኽቲ",
+    "newDirect": "ቀጥታዊ መልእኽቲ",
+    "newGroup": "ሓድሽ ጉጅለ",
+    "newDirectHint": "ብውልቂ መልእኽቲ እትሰዱሉ መሳርሕቲ ምረጹ።",
+    "newGroupHint": "ንጉጅለ ስም ሃቡን ዝሳተፉ ሰባት ወስኹን።",
+    "addPeople": "ሰባት ወስኽ",
+    "addPeopleHint": "ሓደስቲ ኣባላት ኣብ ጉጅለ ዘለዉ ቀዳሞት መልእኽትታት ከንብቡ ይኽእሉ።",
+    "groupName": "ስም ጉጅለ",
+    "groupNamePlaceholder": "ንኣብነት ግብረ ሓይሊ ክሊኒክ ሑመራ",
+    "createGroup": "ጉጅለ ፍጠር",
+    "add": "ወስኽ",
+    "searchPeople": "ብስም፣ ብተራ ወይ ብመዓርግ ድለዩ",
+    "people": "ሰባት",
+    "noPeople": "ምስ እዚ ድሌት ዝሰማማዕ ሰብ የለን።",
+    "removePerson": "{name} ኣውጽእ",
+    "pickConversation": "ዝርርብ ምረጹ",
+    "pickConversationHint": "ኣብ ጸጋም ዝርርብ ምረጹ ወይ ቀጥታዊ መልእኽቲ ወይ ጉጅለ ጀምሩ። ኣብ ፕሮጀክትታት፣ ምጽዳቓት፣ መጠንቀቕታታትን ሰራሕተኛታት ዓውድን ዘለዉ ዘተታት ሓደ ሰብ ምስ ጸሓፈሎም ኣብዚ ይርኣዩ።",
+    "searchHint": "ኣብ ዝርርባትኩም ዘሎ ጽሑፍ መልእኽትታት ይደሊ።",
+    "searchPlaceholder": "ዝድለዩ ቃላት…",
+    "searchMin": "እንተወሓደ ክልተ ፊደላት ጽሓፉ።",
+    "noResults": "ዝሰማማዕ መልእኽቲ የለን።",
+    "searchConversations": "ዝርርባት ድለ",
+    "filter": "ዝርርባት ኣጻሪ",
+    "filters": {
+      "all": "ኩሉ",
+      "unread": "ዘይተነበቡ",
+      "direct": "ቀጥታዊ",
+      "groups": "ጉጅለታት",
+      "discussions": "ዘተታት"
+    },
+    "conversations": "ዝርርባት",
+    "noMatches": "ዝሰማማዕ ዝርርብ የለን።",
+    "noConversations": "ክሳብ ሕጂ ዝርርብ የለን።",
+    "noMessagesYet": "ክሳብ ሕጂ መልእኽቲ የለን",
+    "untitled": "ኣርእስቲ ዘይብሉ ዝርርብ",
+    "you": "ንስኹም",
+    "muted": "ድምጺ ዝጠፍአ",
+    "mentionedYou": "ተጠቒስኩም ኣለኹም",
+    "unreadCount": "{count} ዘይተነበቡ",
+    "contextType": {
+      "PROJECT": "ዘተ ፕሮጀክት",
+      "APPROVAL": "ዘተ ምጽዳቕ",
+      "ALERT": "ዘተ መጠንቀቕታ",
+      "FIELD_AGENT": "ኣባል ጉጅለ ዓውዲ"
+    },
+    "discussion": "ዘተ",
+    "contextHint": {
+      "PROJECT": "ኣብዚ ፕሮጀክት ምስ መሳርሕቲን ዝተመደበ ጉጅለ ዓውድን ተወሃሃዱ። ሓደ ሰብ ንምጥቃስ @ ጽሓፉ።",
+      "APPROVAL": "እቲ ሕቶ ክሳብ ዝውሰን ኣብ መንጎ ፈጻሚ ኣካልን ተንታንን ዝግበሩ ሕቶታትን መልስታትን። ውሳኔታት ኣብዚ ባዕሎም ይለጠፉ።",
+      "ALERT": "ኣብ ድሕሪ እዚ መጠንቀቕታ ዘሎን መን ስጉምቲ ይወስድ ከም ዘሎን ተዘራረቡ።",
+      "FIELD_AGENT": "ምስዚ ኣባል ጉጅለ ዓውድን ተቖጻጻሪኡን መምርሒታትን ክትትልን።"
+    },
+    "openInMessages": "ኣብ መልእኽትታት ክፈት",
+    "openRecord": "መዝገብ ክፈት",
+    "messagePerson": "መልእኽቲ",
+    "openAll": "ኩሎም መልእኽትታት ክፈት",
+    "dismiss": "ዕጸው",
+    "follow": "ተኸተል",
+    "unfollow": "ምኽታል ኣቋርጽ",
+    "mute": "ድምጺ ኣጥፍእ",
+    "unmute": "ድምጺ መልስ",
+    "leaveGroup": "ጉጅለ ግደፍ",
+    "rename": "ስም ጉጅለ ቀይር",
+    "details": "ዝርዝራት",
+    "close": "ዕጸው",
+    "owner": "ወናኒ ጉጅለ",
+    "backToList": "ናብ ዝርርባት ተመለስ",
+    "followers": "{count} ሰዓብቲ",
+    "followersHint": "ሰዓብቲ ብዛዕባ ሓደስቲ መልእኽትታት ይሕበሩ። ኣብቲ መዝገብ ግደ ዘለዎም ሰባት ባዕሎም ይኽተሉ፤ ካልኦት ኣብዚ ብምጽሓፍ ይኽተሉ።",
+    "members": "{count} ኣባላት",
+    "online": "ኣብ መስመር",
+    "onlineCount": "{count} ኣብ መስመር",
+    "history": "ታሪኽ መልእኽቲ",
+    "emptyThread": "ክሳብ ሕጂ መልእኽቲ የለን",
+    "emptyThreadHint": "ሰላም በሉ። መልእኽትታት ኣብ መዝገብ ይዕቀቡ፤ ክድምሰሱ ኣይክእሉን።",
+    "emptyContextHint": "ዘተ ጀምሩ። ነዚ መዝገብ ዝኽተሉ ኩሎም ክሕበሩ እዮም፤ ሓደ ሰብ ንምምጻእ @ ጽሓፉ።",
+    "loadEarlier": "ቀዳሞት መልእኽትታት ኣምጽእ",
+    "newMessages": "ሓደስቲ መልእኽትታት",
+    "jumpToLatest": "ናይ ቀረባ እዋን መልእኽትታት",
+    "typingOne": "{name} ይጽሕፉ ኣለዉ…",
+    "typingMany": "{count} ሰባት ይጽሕፉ ኣለዉ…",
+    "readOnly": "ነዚ ዝርርብ ከተንብቡ ትኽእሉ ግን ክትጽሕፉ ኣይትኽእሉን።",
+    "dropFiles": "ንምትሓዝ ፋይላት ኣብዚ ኣንብሩ",
+    "today": "ሎሚ",
+    "yesterday": "ትማሊ",
+    "seen": "ተራእዩ",
+    "sent": "ተላኢኹ",
+    "seenBy": "ብ{count} ተራእዩ",
+    "unknownSender": "ሓደ ሰብ",
+    "deletedMessage": "እዚ መልእኽቲ ተደምሲሱ",
+    "attachmentOnly": "ተተሓሒዙ ዘሎ",
+    "edited": "ተመዓራርዩ",
+    "editMessage": "መልእኽቲ ኣመዓራሪ",
+    "reply": "መልሲ",
+    "copy": "ጽሑፍ ቅዳሕ",
+    "edit": "ኣመዓራሪ",
+    "delete": "ደምስስ",
+    "confirmDelete": "እዚ መልእኽቲ ንኹሉ ይደምሰስ?",
+    "moreActions": "ተወሳኺ ስጉምትታት",
+    "cancel": "ሰርዝ",
+    "save": "ዓቅብ",
+    "replyingTo": "ን{name} መልሲ",
+    "cancelReply": "መልሲ ሰርዝ",
+    "attachments": "ተተሓሒዞም ዘለዉ",
+    "attach": "ፋይላት ኣተሓሕዝ",
+    "failed": "ኣይተዓወተን",
+    "removeAttachment": "{name} ኣውጽእ",
+    "mentionSomeone": "ሓደ ሰብ ጥቀስ",
+    "placeholder": "መልእኽቲ ጽሓፉ…",
+    "send": "ስደድ",
+    "charsLeft": "{count} ፊደላት ተሪፎም",
+    "composerHint": "ንምስዳድ Enter · ንሓድሽ መስመር Shift+Enter · ንምጥቃስ @",
+    "errors": {
+      "generic": "ጸገም ኣጋጢሙ። በጃኹም እንደገና ፈትኑ።",
+      "send": "እቲ መልእኽቲ ክለኣኽ ኣይከኣለን። በጃኹም እንደገና ፈትኑ።",
+      "upload": "ምጽዓን ኣይተዓወተን",
+      "tooLarge": "ካብ 25 ሜባ ይዓቢ",
+      "groupTitle": "ንጉጅለ ስም ሃቡ።"
+    },
+    "system": {
+      "GROUP_CREATED": "{actor} “{title}” ዝብል ጉጅለ ፈጢሮም",
+      "MEMBERS_ADDED": "{actor} {names} ወሲኾም",
+      "MEMBER_LEFT": "{name} ንጉጅለ ገዲፎም",
+      "MEMBER_REMOVED": "{actor} {name} ኣውጺኦም",
+      "RENAMED": "{actor} ስም ጉጅለ ናብ “{title}” ቀይሮም",
+      "APPROVAL_APPROVED": "{actor} ንፕሮጀክት ኣጽዲቖም ({reference})",
+      "APPROVAL_RETURNED": "{actor} ንፕሮጀክት ንምምሕያሽ መሊሶም ({reference})",
+      "APPROVAL_REJECTED": "{actor} ንፕሮጀክት ነጺጎም ({reference})",
+      "APPROVAL_RESUBMITTED": "{actor} ንፕሮጀክት ንምጽዳቕ እንደገና ኣቕሪቦም"
+    },
+    "systemShort": {
+      "GROUP_CREATED": "ጉጅለ ተፈጢሩ",
+      "MEMBERS_ADDED": "ሰባት ተወሲኾም",
+      "MEMBER_LEFT": "ሓደ ሰብ ወጺኡ",
+      "MEMBER_REMOVED": "ሓደ ሰብ ወጺኡ",
+      "RENAMED": "ስም ጉጅለ ተቐይሩ",
+      "APPROVAL_APPROVED": "ፕሮጀክት ጸዲቑ",
+      "APPROVAL_RETURNED": "ንምምሕያሽ ተመሊሱ",
+      "APPROVAL_REJECTED": "ፕሮጀክት ተነጺጉ",
+      "APPROVAL_RESUBMITTED": "ንምጽዳቕ እንደገና ቀሪቡ"
+    }
+  },
+  "notifications": {
+    "title": "መፍለጢታት",
+    "bellUnread": "{count} ዘይተነበቡ መፍለጢታት",
+    "markAllRead": "ኩሉ ከም ዝተነበበ ምልክት ግበር",
+    "tabs": {
+      "all": "ኩሉ",
+      "unread": "ዘይተነበቡ ({count})"
+    },
+    "today": "ሎሚ",
+    "earlier": "ቅድሚ ሕጂ",
+    "unread": "ዘይተነበበ",
+    "loadMore": "ዝቐደሙ መፍለጢታት ኣምጽእ",
+    "empty": "ኩሉ ርኢኹም ኣለኹም",
+    "emptyUnread": "ዘይተነበበ መፍለጢ የለን",
+    "emptyHint": "ምጽዳቓት፣ መጠንቀቕታታት፣ ምደባታት፣ ገምጋም ምርመራታትን ምጥቃሳትን ኣብዚ ይርኣዩ።",
+    "desktopOffHint": "መፍለጢታት ዴስክቶፕ ጠፊኦም ኣለዉ። RPIS ኣብ ድሕሪት ክኸውን ከሎ ምእንቲ ክሕበሩኹም ወልዑዎም →",
+    "toastRegion": "መፍለጢታት",
+    "dismiss": "ዕጸው",
+    "open": "ክፈት",
+    "someone": "ሓደ ሰብ",
+    "categories": {
+      "messages": "መልእኽትታት",
+      "mentions": "ምጥቃሳት",
+      "approvals": "ምጽዳቓት",
+      "alerts": "መጠንቀቕታታት",
+      "assignments": "ምደባታት ዓውዲ",
+      "inspections": "ገምጋም ምርመራ"
+    },
+    "categoryHints": {
+      "messages": "ሓደስቲ ቀጥታዊ፣ ናይ ጉጅለን ናይ ዘተን መልእኽትታት",
+      "mentions": "ሓደ ሰብ ብ@ ምስ ዝጠቕሰኩም",
+      "approvals": "ውሳኔኹም ዝጽበዩ ፕሮጀክትታትን ኣብ ዘቕረብኩምዎም ፕሮጀክትታት ዝተዋህቡ ውሳኔታትን",
+      "alerts": "ኣብ ወሰንኩም ዘለዉ ኣሰከፍቲ መጠንቀቕታታትን ንዓኹም ዝተመደቡ መጠንቀቕታታትን",
+      "assignments": "ናብ ሓደ ፕሮጀክት ምስ እትምደቡ",
+      "inspections": "ዝመዝገብኩምዎ ምርመራ ምስ ዝረጋገጽ፣ ምስ ዝካታዕ ወይ ምስ ዝንጸግ"
+    },
+    "chat": {
+      "inConversation": "{name} ኣብ {conversation}",
+      "attachment": "ተተሓሒዙ ዘሎ ሰዲዶም"
+    },
+    "prompt": {
+      "title": "ብቕጽበት ተሓበሩ",
+      "body": "RPIS ኣብ ድሕሪት እንተሃለወ'ውን ምጽዳቓት፣ ኣሰከፍቲ መጠንቀቕታታትን መልእኽትታትን ምእንቲ ክበጽሑኹም መፍለጢታት ዴስክቶፕ ፍቐዱ።",
+      "enable": "መፍለጢታት ወልዕ",
+      "later": "ሕጂ ኣይኮነን",
+      "enabledTitle": "መፍለጢታት ወሊዖም ኣለዉ",
+      "enabledBody": "ኣቓልቦኹም ዝሓትት ነገር ምስ ዝህሉ RPIS ኣብዚ ክሕብረኩም እዩ።"
+    },
+    "test": {
+      "title": "ናይ ፈተነ መፍለጢ",
+      "body": "መፍለጢታት RPIS ኣብዚ መሳርሒ ከምዚ ይርኣዩን ይስምዑን።"
+    },
+    "settings": {
+      "title": "ቅጥዕታት መፍለጢ",
+      "description": "RPIS ኣብዚ መሳርሒ ኣቓልቦኹም ብኸመይ ከም ዝስሕብ ምረጹ።",
+      "desktop": "መፍለጢታት ዴስክቶፕ",
+      "allow": "ፍቐድ",
+      "state": {
+        "default": "ገና ኣይተፈቕደን። መርበብኩም ፍቓድ ክሓትት እዩ።",
+        "granted": "ተፈቒዱ። መፍለጢታት ኣብ ቦታ መፍለጢ ሲስተምኩም ይርኣዩ።",
+        "denied": "ኣብዚ መርበብ ተዓጊቱ። ኣብ ቅጥዕታት መርበብ ንዚ ሳይት መፍለጢታት ፍቐዱ፣ ድሕሪኡ እንደገና ጽዓኑ።",
+        "insecure": "ኣብዚ ርክብ ኣይርከብን። መርበባት መፍለጢታት ሲስተም ዝፈቕዱ ብHTTPS ወይ ኣብ localhost ጥራይ እዩ፤ ኣብ ውሽጢ መተግበሪ ዘለዉ መጠንቀቕታታትን ድምጽታትን ግን ይሰርሑ።",
+        "unsupported": "እዚ መርበብ መፍለጢታት ሲስተም ኣይድግፍን።"
+      },
+      "onlyBackground": "RPIS ኣብ ድሕሪት ክኸውን ከሎ ጥራይ",
+      "onlyBackgroundHint": "ኣብ RPIS ክትሰርሑ ከለኹም መጠንቀቕታታት ኣብ ውሽጢ መተግበሪ ይርኣዩ።",
+      "sound": "ድምጺ",
+      "soundHint": "ሓጺር ድምጺ፤ ኣሰከፍቲ ጉዳያት ፍሉይን ዝሓየለን ድምጺ ኣለዎም።",
+      "volume": "ዓቐን ድምጺ",
+      "tones": {
+        "message": "መልእኽቲ",
+        "info": "መፍለጢ",
+        "success": "ጸዲቑ",
+        "warning": "ኣቓልቦ",
+        "critical": "ኣሰካፊ"
+      },
+      "categoriesTitle": "ብዛዕባ እንታይ ይሕበረኒ",
+      "categoriesHint": "ዝጠፍኡ ጉዳያት ሕጂ'ውን ኣብ ዝርዝር መፍለጢ ይርኣዩ።",
+      "deviceOnly": "እዞም ቅጥዕታት ንዚ መርበብ ጥራይ ይሰርሑ።",
+      "test": "ናይ ፈተነ መፍለጢ ስደድ"
+    },
+    "types": {
+      "someone": "ሓደ ሰብ",
+      "aSite": "ሓደ ቦታ",
+      "APPROVAL_REQUESTED": {
+        "title": "ምጽዳቕ ተሓቲቱ፦ {code}",
+        "body": "{actor} {name} ({wereda}) ንውሳኔኹም ኣቕሪቦም።"
+      },
+      "APPROVAL_RESUBMITTED": {
+        "title": "ንምጽዳቕ እንደገና ቀሪቡ፦ {code}",
+        "body": "{actor} {name} ኣመሓይሾም እንደገና ኣቕሪቦም።"
+      },
+      "APPROVAL_APPROVED": {
+        "title": "ፕሮጀክት ጸዲቑ፦ {code}",
+        "body": "{actor} {name} ኣጽዲቖም። ውሳኔ {reference}።"
+      },
+      "APPROVAL_RETURNED": {
+        "title": "ንምምሕያሽ ተመሊሱ፦ {code}",
+        "body": "{actor} {name} ምስ ርእይቶ መሊሶም። ውሳኔ {reference}።"
+      },
+      "APPROVAL_REJECTED": {
+        "title": "ፕሮጀክት ተነጺጉ፦ {code}",
+        "body": "{actor} {name} ነጺጎም። ውሳኔ {reference}።"
+      },
+      "ALERT_CRITICAL": {
+        "title": "ኣሰካፊ መጠንቀቕታ",
+        "body": "{title}"
+      },
+      "ALERT_ASSIGNED": {
+        "title": "መጠንቀቕታ ንዓኹም ተመዲቡ",
+        "body": "{actor} መዲቦምኹም፦ {title}"
+      },
+      "ASSIGNMENT_NEW": {
+        "title": "ሓድሽ ምደባ ዓውዲ፦ {code}",
+        "body": "{actor} ን{name} ከም {role} መዲቦምኹም።"
+      },
+      "INSPECTION_VERIFIED": {
+        "title": "ምርመራ ተረጋጊጹ",
+        "body": "{actor} ምርመራኹም ናይ {subject} ኣረጋጊጾም።"
+      },
+      "INSPECTION_DISPUTED": {
+        "title": "ምርመራ ኣካታዒ ኮይኑ",
+        "body": "{actor} ምርመራኹም ናይ {subject} ተካቲዖም። በጃኹም ገምግሙ።"
+      },
+      "INSPECTION_REJECTED": {
+        "title": "ምርመራ ተነጺጉ",
+        "body": "{actor} ምርመራኹም ናይ {subject} ነጺጎም።"
+      },
+      "INSPECTION_UNVERIFIED": {
+        "title": "ምርመራ እንደገና ተኸፊቱ",
+        "body": "{actor} ምርመራኹም ናይ {subject} ንገምጋም እንደገና ከፊቶም።"
+      },
+      "CHAT_MENTION": {
+        "title": "{actor} ጠቒሶምኹም",
+        "body": "{excerpt}"
+      },
+      "CHAT_MESSAGE": {
+        "title": "{actor}",
+        "body": "{excerpt}"
+      }
     }
   }
 }

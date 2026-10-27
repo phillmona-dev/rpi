@@ -34,9 +34,10 @@ public class ProjectController {
         @RequestParam(required = false) List<ProjectStatus> status, @RequestParam(required = false) List<ProjectHealth> health,
         @RequestParam(required = false) FundingSource fundingSource, @RequestParam(required = false) String q,
         @RequestParam(required = false) List<LifecycleStage> stage, @RequestParam(required = false) Integer minRiskScore, @RequestParam(required = false) String contractor,
+        @RequestParam(required = false) List<ApprovalStatus> approval,
         @ParameterObject @PageableDefault(size = 25, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Sector scoped = CurrentUser.get().map(u -> u.effectiveSectorFilter(sector)).orElse(sector);
-        return PageResponse.of(service.search(new ProjectService.Filter(scoped, zoneId, weredaId, status, health, fundingSource, q, stage, minRiskScore, contractor), pageable));
+        return PageResponse.of(service.search(new ProjectService.Filter(scoped, zoneId, weredaId, status, health, fundingSource, q, stage, minRiskScore, contractor, approval), pageable));
     }
 
     // ── Registration (analysts and administrators) ──────────────────────

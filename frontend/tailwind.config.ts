@@ -31,7 +31,18 @@ const config: Config = {
       },
       borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' },
       fontFamily: { sans: ['var(--font-sans)', 'var(--font-ethiopic)', 'system-ui', 'sans-serif'] },
-      fontSize: { '2xs': ['0.6875rem', { lineHeight: '1rem' }] },
+      /* Readability scale: every step is one size up from Tailwind's default so dense
+         executive views stay legible on office displays (smallest text = 12px). */
+      fontSize: {
+        '2xs': ['0.75rem', { lineHeight: '1rem' }],
+        xs: ['0.8125rem', { lineHeight: '1.125rem' }],
+        sm: ['0.9375rem', { lineHeight: '1.375rem' }],
+        base: ['1rem', { lineHeight: '1.5rem' }],
+        lg: ['1.125rem', { lineHeight: '1.75rem' }],
+        xl: ['1.3125rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.625rem', { lineHeight: '2rem' }],
+        '3xl': ['2rem', { lineHeight: '2.375rem' }],
+      },
       boxShadow: { card: '0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06)' },
       keyframes: { pulseDot: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.35' } } },
       animation: { pulseDot: 'pulseDot 1.6s ease-in-out infinite' },

@@ -28,7 +28,11 @@
     "reports": "Reports",
     "command": "Command",
     "analysis": "Analysis",
-    "records": "Records"
+    "records": "Records",
+    "approvals": "Project Approvals",
+    "fieldTeam": "Field Team",
+    "operations": "Field operations",
+    "messages": "Messages"
   },
   "common": {
     "loading": "Loading…",
@@ -256,6 +260,12 @@
       "why": "Why?",
       "risk": "What is at risk?",
       "decision": "What requires my decision?"
+    },
+    "views": {
+      "overview": "Overview",
+      "map": "Map & weredas",
+      "finance": "Progress & finance",
+      "activity": "Projects & activity"
     }
   },
   "sector": {
@@ -642,7 +652,12 @@
       "released": "Released",
       "utilisation": "Utilisation"
     },
-    "utilisationHint": "Released ÷ allocated"
+    "utilisationHint": "Released ÷ allocated",
+    "views": {
+      "overview": "Overview",
+      "pipeline": "Pending disbursements",
+      "variance": "Cost variance"
+    }
   },
   "brief": {
     "title": "Executive Daily Brief",
@@ -893,6 +908,79 @@
       "NGO": "NGO",
       "COMMUNITY": "Community",
       "PRIVATE": "Private"
+    },
+    "approvalStatus": {
+      "PENDING": "Pending approval",
+      "RETURNED": "Returned for revision",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "approvalAction": {
+      "SUBMITTED": "Submitted",
+      "RESUBMITTED": "Resubmitted",
+      "APPROVED": "Approved",
+      "RETURNED": "Returned for revision",
+      "REJECTED": "Rejected"
+    },
+    "agentType": {
+      "DATA_COLLECTOR": "Data collector",
+      "FIELD_ANALYST": "Field analyst",
+      "FIELD_SUPERVISOR": "Field supervisor"
+    },
+    "agentStatus": {
+      "PENDING_ONBOARDING": "Onboarding",
+      "ACTIVE": "Active",
+      "ON_LEAVE": "On leave",
+      "SUSPENDED": "Suspended",
+      "DEACTIVATED": "Deactivated"
+    },
+    "employmentType": {
+      "STAFF": "Staff",
+      "CONTRACT": "Contract",
+      "SECONDED": "Seconded",
+      "VOLUNTEER": "Volunteer"
+    },
+    "assignmentRole": {
+      "LEAD": "Lead",
+      "DATA_COLLECTOR": "Data collector",
+      "FIELD_ANALYST": "Field analyst",
+      "VERIFIER": "Verifier"
+    },
+    "assignmentStatus": {
+      "ACTIVE": "Active",
+      "COMPLETED": "Completed",
+      "RELEASED": "Released"
+    },
+    "priority": {
+      "NORMAL": "Normal",
+      "HIGH": "High",
+      "URGENT": "Urgent"
+    },
+    "gender": {
+      "FEMALE": "Female",
+      "MALE": "Male"
+    },
+    "education": {
+      "CERTIFICATE": "Certificate",
+      "DIPLOMA": "Diploma",
+      "BACHELOR": "Bachelor's degree",
+      "MASTER": "Master's degree",
+      "DOCTORATE": "Doctorate"
+    },
+    "language": {
+      "ti": "Tigrinya",
+      "am": "Amharic",
+      "en": "English",
+      "om": "Afaan Oromo",
+      "ar": "Arabic"
+    },
+    "coverageGap": {
+      "NO_TEAM": "No team",
+      "NO_LEAD": "No lead",
+      "OVERDUE": "Visits overdue",
+      "NO_VERIFIER": "No verifier",
+      "NOT_STARTED": "Works not started",
+      "OK": "Covered"
     }
   },
   "intelligence": {
@@ -1253,7 +1341,10 @@
       "briefing": "One-page printable situation summary for the Chief Executive, scoped by role.",
       "reports": "Typed government reports with run history, CSV/PDF export and Federal PMO linkage.",
       "users": "Accounts, roles and sector-scope assignments for all platform users.",
-      "audit": "Append-only record of authentication events, decisions and data changes."
+      "audit": "Append-only record of authentication events, decisions and data changes.",
+      "approvals": "Registered projects awaiting the Chief Executive's decision, with readiness checks and the full decision trail.",
+      "fieldTeam": "Data collectors, field analysts and supervisors: registration, onboarding, assignments, coverage and visit cadence.",
+      "messages": "Direct messages, group conversations and the discussions on projects, approvals, alerts and field staff."
     },
     "stat": {
       "activeProjects": "active projects",
@@ -1276,7 +1367,13 @@
       "progressReports": "{count} progress reports",
       "disbursed": "disbursed",
       "ofBudget": "{pct} of {budget} budget",
-      "latestProgress": "latest progress report"
+      "latestProgress": "latest progress report",
+      "awaitingDecision": "awaiting decision",
+      "approvalDetail": "{returned} returned · oldest {days} d",
+      "membersActive": "active team members",
+      "fieldDetail": "{coverage} coverage · {overdue} overdue visits",
+      "unreadMessages": "unread messages",
+      "messagesDetail": "{conversations} conversations · {mentions} mentions"
     },
     "context": {
       "scope": "Scope",
@@ -1595,15 +1692,16 @@
       "completeness": "Completeness"
     },
     "success": {
-      "title": "Project registered",
-      "body": "{code} · {name} is now in the portfolio, dashboards and maps.",
+      "title": "Submitted for executive approval",
+      "body": "{code} · {name} is registered and waiting for the Chief Executive's decision. It joins the active portfolio once approved.",
       "stage": "Stage",
       "health": "Health",
       "risk": "Risk score",
-      "budget": "Approved budget {budget}. The registration is recorded in the audit trail and the project’s lifecycle history.",
+      "budget": "Requested budget {budget}. The submission is recorded in the audit trail and the approval history.",
       "open": "Open project",
       "another": "Register another",
-      "list": "Back to projects"
+      "list": "Back to projects",
+      "queue": "View approval queue"
     },
     "v": {
       "required": "Required",
@@ -1632,6 +1730,742 @@
       "afterApproval": "Must be on or after the approval date",
       "afterFunding": "Must be on or after the funding date",
       "contractExceeds": "Cannot exceed the total budget"
+    }
+  },
+  "approvals": {
+    "title": "Project Approvals",
+    "subtitle": "Every registered project waits here for the Chief Executive's decision before it joins the active portfolio.",
+    "noAccess": "Approvals are not available for your role",
+    "noAccessHint": "The approval queue is open to the Chief Executive, sector heads, analysts and administrators.",
+    "tabs": {
+      "pending": "Awaiting decision",
+      "returned": "Returned for revision",
+      "decided": "Decision history"
+    },
+    "kpi": {
+      "pending": "Awaiting decision",
+      "pendingHint": "ETB {budget} requested",
+      "oldest": "Oldest request",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "none": "None waiting",
+      "returned": "Returned for revision",
+      "returnedHint": "{count} returned in 30 days",
+      "decided": "Decided in 30 days",
+      "decidedHint": "{approved} approved · {rejected} rejected",
+      "median": "Median decision time",
+      "medianHint": "from submission to decision"
+    },
+    "columns": {
+      "project": "Project",
+      "requested": "Requested",
+      "submitted": "Submitted",
+      "waiting": "Waiting",
+      "readiness": "Readiness",
+      "decision": "Decision",
+      "decided": "Decided",
+      "reference": "Reference",
+      "note": "Latest note"
+    },
+    "waiting": "{count, plural, =0 {today} one {# day} other {# days}}",
+    "resubmitted": "Resubmitted {count}×",
+    "by": "by {name}",
+    "empty": {
+      "pending": "No projects are waiting for a decision",
+      "pendingHint": "New registrations appear here as soon as an analyst submits them.",
+      "returned": "No projects are waiting for revision",
+      "decided": "No decisions on record yet"
+    },
+    "review": "Review",
+    "openDossier": "Open dossier",
+    "dossier": {
+      "title": "Approval dossier",
+      "back": "Approval queue",
+      "summary": "Request summary",
+      "readiness": "Readiness checks",
+      "readinessHint": "{passed} of {total} checks passed. Checks inform the decision; they do not block it.",
+      "context": "Portfolio context",
+      "similar": "Possible duplicates",
+      "similarHint": "Existing projects with a similar name. Confirm this request is not already funded.",
+      "noSimilar": "No similar projects found.",
+      "history": "Decision trail",
+      "scope": "Scope & justification",
+      "schedule": "Schedule",
+      "budget": "Budget",
+      "funding": "Funding",
+      "stage": "Registered at stage",
+      "beneficiaries": "Beneficiaries",
+      "organizations": "Responsible organisations",
+      "milestones": "Milestones",
+      "budgetLines": "Budget breakdown",
+      "tranches": "Disbursement schedule",
+      "risks": "Registered risks",
+      "facilities": "Linked facilities",
+      "noneRecorded": "None recorded",
+      "openProject": "Open full project record",
+      "ctx": {
+        "sectorPortfolio": "{sector} portfolio",
+        "sectorPortfolioValue": "{count} approved projects · ETB {budget}",
+        "share": "Share of sector budget",
+        "shareValue": "{pct} after approval",
+        "wereda": "Same wereda",
+        "weredaValue": "{active} active projects · {severe} severely damaged facilities",
+        "contractor": "Contractor workload",
+        "contractorValue": "{count} other active projects for {name}",
+        "noContractor": "No contractor named yet"
+      }
+    },
+    "check": {
+      "DESCRIPTION": "Scope described",
+      "BENEFICIARIES": "Beneficiaries estimated",
+      "IMPLEMENTING_AGENCY": "Implementing agency named",
+      "CONTRACTOR": "Contractor named",
+      "BUDGET_BREAKDOWN": "Budget fully broken down",
+      "DISBURSEMENT_SCHEDULE": "Disbursements cover the budget",
+      "MILESTONES": "At least two milestones",
+      "RISKS": "Risks registered",
+      "FACILITY_LINKED": "Linked to a damaged facility",
+      "NO_DUPLICATES": "No similar projects"
+    },
+    "decision": {
+      "title": "Your decision",
+      "hint": "Decisions are numbered, recorded in the audit trail and visible to the analyst who submitted the project.",
+      "approve": "Approve",
+      "return": "Return for revision",
+      "reject": "Reject",
+      "note": "Reason",
+      "noteHint": "Required to return or reject. The analyst sees this text.",
+      "notePlaceholder": "What must change, or why the project cannot proceed",
+      "approveNote": "Comment (optional)",
+      "conditions": "Conditions of approval",
+      "conditionsHint": "Optional. Shown on the project record and to the field team.",
+      "externalReference": "External reference",
+      "externalReferenceHint": "Optional: council minute or letter number. A decision number is generated automatically.",
+      "confirmApprove": "Approve project",
+      "confirmReturn": "Return to analyst",
+      "confirmReject": "Reject project",
+      "rejectWarning": "Rejection cancels the project. It stays on record but leaves the portfolio.",
+      "approveEffect": "The project joins the active portfolio, can be assigned to the field team, and its status follows its stage ({stage}).",
+      "done": "Decision {reference} recorded",
+      "cannot": "You cannot decide on this project",
+      "separation": "Separation of duties"
+    },
+    "status": {
+      "title": "Status",
+      "submittedBy": "Submitted by {name}",
+      "decidedBy": "{action} by {name}",
+      "reference": "Decision {reference}",
+      "conditions": "Conditions"
+    },
+    "banner": {
+      "PENDING": "Awaiting the Chief Executive's decision",
+      "PENDING_hint": "Submitted {time} by {name}. Progress, stage changes and field assignments are on hold until approval.",
+      "RETURNED": "Returned for revision",
+      "RETURNED_hint": "{name} returned this project {time}. Address the comments and resubmit.",
+      "REJECTED": "Rejected",
+      "REJECTED_hint": "Rejected {time} by {name}. The project has been cancelled.",
+      "decide": "Review and decide",
+      "resubmit": "Revise and resubmit",
+      "viewDossier": "View approval dossier"
+    },
+    "resubmit": {
+      "title": "Resubmit for approval",
+      "hint": "Respond to the executive's comments. You can also correct the name, description or beneficiaries here.",
+      "comments": "Executive's comments",
+      "response": "Your response",
+      "responseHint": "At least 10 characters. Explain what changed.",
+      "name": "Project name",
+      "description": "Description",
+      "beneficiaries": "Beneficiaries",
+      "submit": "Resubmit",
+      "done": "Resubmitted for approval",
+      "editNote": "Budget, schedule and organisation changes are made by the finance and planning offices before resubmission."
+    }
+  },
+  "fieldTeam": {
+    "title": "Field Team",
+    "subtitle": "Data collectors, field analysts and supervisors who collect and verify evidence on approved projects.",
+    "noAccess": "The field team is not available for your role",
+    "noAccessHint": "Field team records are open to the Chief Executive, sector heads, analysts and administrators.",
+    "register": "Register member",
+    "assign": "Assign to project",
+    "assignShort": "Assign",
+    "tabs": {
+      "roster": "Team roster",
+      "assignments": "Assignments",
+      "coverage": "Project coverage"
+    },
+    "kpi": {
+      "active": "Active members",
+      "activeHint": "{collectors} collectors · {analysts} analysts · {supervisors} supervisors",
+      "onboarding": "In onboarding",
+      "onboardingHint": "{leave} on leave · {suspended} suspended",
+      "coverage": "Project coverage",
+      "coverageHint": "{without} active projects have no team",
+      "assignments": "Active assignments",
+      "assignmentsHint": "{slots} open slots · {full} members at capacity",
+      "overdue": "Overdue visits",
+      "overdueHint": "visits past their cadence",
+      "attention": "Needs attention",
+      "attentionHint": "{contracts} contracts ending · {accounts} without app access"
+    },
+    "filters": {
+      "search": "Search name, code, phone or username",
+      "type": "Role: all",
+      "status": "Status: all",
+      "zone": "Zone: all",
+      "sector": "Sector: all",
+      "available": "Has capacity",
+      "overdueOnly": "Overdue only",
+      "gapsOnly": "Gaps only",
+      "assignmentStatus": "Status: all"
+    },
+    "columns": {
+      "member": "Member",
+      "role": "Role",
+      "status": "Status",
+      "area": "Coverage",
+      "sectors": "Sectors",
+      "workload": "Workload",
+      "overdue": "Overdue",
+      "inspections": "Inspections (30 d)",
+      "quality": "Acceptance (90 d)",
+      "lastActivity": "Last field activity",
+      "access": "App access",
+      "project": "Project",
+      "assignedTo": "Assigned to",
+      "cadence": "Cadence",
+      "lastVisit": "Last visit",
+      "nextDue": "Next visit due",
+      "visits": "Visits",
+      "priority": "Priority",
+      "team": "Team",
+      "gap": "Coverage",
+      "verified": "Last verified",
+      "risk": "Risk",
+      "since": "Since",
+      "assignedBy": "Assigned by"
+    },
+    "workload": "{active} / {max}",
+    "every": "every {days} d",
+    "overdueBy": "{days} d overdue",
+    "dueIn": "due {date}",
+    "noAccount": "No account",
+    "neverSynced": "never synced",
+    "empty": {
+      "roster": "No team members match these filters",
+      "rosterHint": "Register data collectors and field analysts to start assigning projects.",
+      "assignments": "No assignments match these filters",
+      "coverage": "Every approved project in scope has a field team",
+      "agentAssignments": "No assignments yet",
+      "projectAssignments": "No field team assigned to this project yet"
+    },
+    "form": {
+      "titleNew": "Register field team member",
+      "subtitleNew": "Profile, deployment area and onboarding. Access to the field app can be created now or after onboarding.",
+      "titleEdit": "Edit {name}",
+      "subtitleEdit": "Changes are recorded in the member's history.",
+      "steps": {
+        "identity": "Identity & contact",
+        "deployment": "Role & deployment",
+        "onboarding": "Onboarding & access"
+      },
+      "identity": "Personal details",
+      "contact": "Contact",
+      "emergency": "Emergency contact",
+      "fullName": "Full name",
+      "fullNameHint": "As on the national ID",
+      "gender": "Gender",
+      "nationalId": "National ID / Kebele ID",
+      "nationalIdHint": "Checked for duplicates",
+      "employeeNumber": "Employee or contract number",
+      "phone": "Mobile phone",
+      "phoneHint": "Ethiopian number, e.g. 0914 123 456",
+      "altPhone": "Alternative phone",
+      "email": "Email",
+      "emergencyName": "Contact name",
+      "emergencyPhone": "Contact phone",
+      "role": "Role",
+      "roleHint": {
+        "DATA_COLLECTOR": "Collects site photos, progress readings and checklists on assigned projects.",
+        "FIELD_ANALYST": "Verifies reported progress and quality; can act as verifier or lead.",
+        "FIELD_SUPERVISOR": "Leads a team of collectors and analysts and reviews their submissions."
+      },
+      "organization": "Employing organisation",
+      "organizationNone": "Not specified",
+      "employmentType": "Employment",
+      "supervisor": "Supervisor",
+      "supervisorNone": "No supervisor",
+      "supervisorHint": "Only registered field supervisors are listed",
+      "education": "Education",
+      "experience": "Years of experience",
+      "sectors": "Sector competencies",
+      "sectorsHint": "Assignments outside these sectors raise a warning",
+      "skills": "Skills",
+      "skillsHint": "Press Enter to add",
+      "skillsPlaceholder": "e.g. Quantity surveying",
+      "languages": "Languages",
+      "area": "Deployment area",
+      "homeWereda": "Home wereda",
+      "homeWeredaHint": "Used to rank members by distance to a site",
+      "coverage": "Coverage weredas",
+      "coverageHint": "{count} selected. Assignments outside these weredas raise a warning.",
+      "coverageSearch": "Filter weredas",
+      "selectZone": "Select all in zone",
+      "clearZone": "Clear zone",
+      "capacity": "Maximum active assignments",
+      "capacityHint": "Assignments beyond this raise a capacity warning",
+      "contract": "Engagement",
+      "contractStart": "Contract start",
+      "contractEnd": "Contract end",
+      "onboarding": "Onboarding checklist",
+      "onboardingHint": "Training and a signed code of conduct are required before the member can be activated.",
+      "training": "Field training completed",
+      "conduct": "Code of conduct signed",
+      "background": "Reference / background check",
+      "access": "Field app access",
+      "createAccount": "Create a field app login now",
+      "createAccountHint": "The login stays disabled until the member is activated. A temporary password is shown once.",
+      "username": "Username",
+      "usernameHint": "Leave blank to generate one from the name",
+      "notes": "Internal notes",
+      "save": "Register member",
+      "saveEdit": "Save changes",
+      "cancel": "Cancel",
+      "next": "Continue",
+      "back": "Back",
+      "saving": "Saving…",
+      "fixErrors": "{count, plural, one {# problem} other {# problems}} to fix",
+      "required": "Required"
+    },
+    "access": {
+      "title": "Field app access",
+      "created": "Login created for {name}",
+      "reset": "Password reset for {name}",
+      "username": "Username",
+      "password": "Temporary password",
+      "once": "Copy this password now. It is not stored and will not be shown again. Ask the member to change it at first sign-in.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "done": "Done",
+      "grant": "Create login",
+      "resetAction": "Reset password",
+      "confirmReset": "Resetting signs the member out of every device and issues a new temporary password.",
+      "disabledNote": "The login is disabled until the member is active."
+    },
+    "status": {
+      "change": "Change status",
+      "title": "Change status of {name}",
+      "to": "New status",
+      "reason": "Reason",
+      "reasonHint": "Required for leave, suspension and deactivation; kept in the history.",
+      "release": "Release the member's {count, plural, one {# active assignment} other {# active assignments}}",
+      "releaseHint": "Required for suspension and deactivation. The projects will appear as coverage gaps.",
+      "activateNeeds": "Activation needs training and a signed code of conduct on record.",
+      "loginEffect": "Only active members can sign in to the field app.",
+      "apply": "Apply"
+    },
+    "profile": {
+      "overview": "Overview",
+      "assignments": "Assignments",
+      "performance": "Performance",
+      "history": "History",
+      "contact": "Contact",
+      "deployment": "Deployment",
+      "onboarding": "Onboarding",
+      "engagement": "Engagement",
+      "coverage": "Coverage area",
+      "team": "Team members",
+      "supervisor": "Supervisor",
+      "organization": "Organisation",
+      "home": "Home wereda",
+      "skills": "Skills",
+      "languages": "Languages",
+      "device": "Field device",
+      "noDevice": "No device registered",
+      "registered": "Registered {date} by {name}",
+      "statusSince": "since {date}",
+      "edit": "Edit profile",
+      "onboarded": "Onboarding complete",
+      "notOnboarded": "Onboarding incomplete",
+      "inspectionsTotal": "Inspections on record",
+      "acceptance": "Acceptance rate (90 d)",
+      "acceptanceHint": "Share of reviewed inspections that were verified",
+      "onSchedule": "Visits on schedule",
+      "onScheduleHint": "Visits made within the assignment cadence",
+      "distance": "Average distance from site",
+      "distanceHint": "GPS distance when the inspection was recorded",
+      "accuracy": "Average GPS accuracy",
+      "monthly": "Inspections per month",
+      "recent": "Recent inspections",
+      "disputed": "{disputed} disputed · {rejected} rejected in 90 days",
+      "noInspections": "No inspections recorded under this member's account yet."
+    },
+    "event": {
+      "REGISTERED": "Registered",
+      "PROFILE_UPDATED": "Profile updated",
+      "STATUS_CHANGED": "Status changed",
+      "ACCESS_GRANTED": "Field app login created",
+      "ACCESS_RESET": "Password reset",
+      "ASSIGNED": "Assigned to project",
+      "ASSIGNMENT_COMPLETED": "Assignment completed",
+      "ASSIGNMENT_RELEASED": "Released from project"
+    },
+    "assignDialog": {
+      "title": "Assign field team",
+      "titleFor": "Assign to {name}",
+      "project": "Project",
+      "projectHint": "Only approved projects that are not finished can be assigned",
+      "projectSearch": "Search approved projects",
+      "role": "Assignment role",
+      "roleHint": {
+        "LEAD": "Owns the visit plan and is accountable for evidence on this project. One per project.",
+        "DATA_COLLECTOR": "Collects photos, readings and checklists on the cadence below.",
+        "FIELD_ANALYST": "Analyses progress and quality on site.",
+        "VERIFIER": "Independently verifies reported progress; should not be the contractor's staff."
+      },
+      "candidates": "Recommended members",
+      "candidatesHint": "Ranked by coverage area, sector competency, spare capacity, inspection quality and distance.",
+      "member": "Team member",
+      "score": "Fit {score}",
+      "showAll": "Show all {count}",
+      "showFewer": "Show fewer",
+      "noCandidates": "No active members available. Register or activate members first.",
+      "schedule": "Schedule",
+      "startOn": "Start",
+      "endOn": "End (optional)",
+      "cadence": "Visit every",
+      "cadenceUnit": "days",
+      "priority": "Priority",
+      "inspectionTypes": "Required inspection types",
+      "instructions": "Instructions",
+      "instructionsPlaceholder": "What to verify, who to meet on site, safety notes",
+      "warnings": "Review before assigning",
+      "override": "Justification",
+      "overrideHint": "Required because of the warnings above. Kept with the assignment.",
+      "check": "Check assignment",
+      "submit": "Assign",
+      "done": "{name} assigned as {role}",
+      "part": {
+        "AREA": "Area",
+        "SECTOR": "Sector",
+        "CAPACITY": "Capacity",
+        "QUALITY": "Quality",
+        "PROXIMITY": "Distance"
+      },
+      "flag": {
+        "OUT_OF_AREA": "Outside coverage",
+        "NEARBY_AREA": "Same zone",
+        "NO_SECTOR_MATCH": "Other sector",
+        "AT_CAPACITY": "At capacity",
+        "HAS_OVERDUE": "Has overdue visits",
+        "NO_ACCOUNT": "No app login",
+        "CONTRACT_ENDING": "Contract ending",
+        "ROLE_MISMATCH": "Role mismatch",
+        "ALREADY_ASSIGNED": "Already assigned",
+        "CONFLICT_OF_INTEREST": "Conflict of interest"
+      },
+      "km": "{km} km away"
+    },
+    "close": {
+      "complete": "Mark complete",
+      "release": "Release",
+      "titleComplete": "Complete assignment",
+      "titleRelease": "Release from project",
+      "reason": "Reason",
+      "reasonHint": "Required when releasing; optional when completing.",
+      "confirm": "Confirm"
+    },
+    "projectTab": "Field team",
+    "projectTabHint": "Who collects and verifies evidence on this project, and when the next visit is due.",
+    "pendingProject": "This project can be assigned once the Chief Executive approves it."
+  },
+  "messaging": {
+    "title": "Messages",
+    "subtitle": "Direct messages, groups and record discussions in one place.",
+    "unreadSummary": "{count, plural, one {# unread message} other {# unread messages}} in {conversations, plural, one {# conversation} other {# conversations}}",
+    "searchMessages": "Search messages",
+    "newMessage": "New message",
+    "newDirect": "Direct message",
+    "newGroup": "New group",
+    "newDirectHint": "Choose a colleague to message privately.",
+    "newGroupHint": "Name the group and add the people who should take part.",
+    "addPeople": "Add people",
+    "addPeopleHint": "New members can read the earlier messages in the group.",
+    "groupName": "Group name",
+    "groupNamePlaceholder": "e.g. Humera clinic task force",
+    "createGroup": "Create group",
+    "add": "Add",
+    "searchPeople": "Search by name, role or title",
+    "people": "People",
+    "noPeople": "No one matches that search.",
+    "removePerson": "Remove {name}",
+    "pickConversation": "Select a conversation",
+    "pickConversationHint": "Pick a conversation on the left, or start a direct message or group. Discussions on projects, approvals, alerts and field staff appear here once someone writes in them.",
+    "searchHint": "Searches the text of messages in your conversations.",
+    "searchPlaceholder": "Words to find…",
+    "searchMin": "Type at least two characters.",
+    "noResults": "No messages match.",
+    "searchConversations": "Search conversations",
+    "filter": "Filter conversations",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "direct": "Direct",
+      "groups": "Groups",
+      "discussions": "Discussions"
+    },
+    "conversations": "Conversations",
+    "noMatches": "No conversations match.",
+    "noConversations": "No conversations yet.",
+    "noMessagesYet": "No messages yet",
+    "untitled": "Untitled conversation",
+    "you": "You",
+    "muted": "Muted",
+    "mentionedYou": "You were mentioned",
+    "unreadCount": "{count, plural, one {# unread} other {# unread}}",
+    "contextType": {
+      "PROJECT": "Project discussion",
+      "APPROVAL": "Approval discussion",
+      "ALERT": "Alert discussion",
+      "FIELD_AGENT": "Field team member"
+    },
+    "discussion": "Discussion",
+    "contextHint": {
+      "PROJECT": "Coordinate on this project with colleagues and the assigned field team. Type @ to mention someone.",
+      "APPROVAL": "Questions and answers between the executive and the analyst while the request is decided. Decisions are posted here automatically.",
+      "ALERT": "Discuss what is behind this alert and who is acting on it.",
+      "FIELD_AGENT": "Instructions and follow-up with this field team member and their supervisor."
+    },
+    "openInMessages": "Open in Messages",
+    "openRecord": "Open record",
+    "messagePerson": "Message",
+    "openAll": "Open all messages",
+    "dismiss": "Dismiss",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "leaveGroup": "Leave group",
+    "rename": "Rename group",
+    "details": "Details",
+    "close": "Close",
+    "owner": "Group owner",
+    "backToList": "Back to conversations",
+    "followers": "{count, plural, one {# follower} other {# followers}}",
+    "followersHint": "Followers are notified of new messages. People with a stake in the record follow automatically; anyone else follows by writing here.",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "online": "Online",
+    "onlineCount": "{count} online",
+    "history": "Message history",
+    "emptyThread": "No messages yet",
+    "emptyThreadHint": "Say hello. Messages are kept on record and cannot be erased.",
+    "emptyContextHint": "Start the discussion. Everyone following this record will be notified; type @ to bring someone in.",
+    "loadEarlier": "Load earlier messages",
+    "newMessages": "New messages",
+    "jumpToLatest": "Latest messages",
+    "typingOne": "{name} is typing…",
+    "typingMany": "{count} people are typing…",
+    "readOnly": "You can read this conversation but not write in it.",
+    "dropFiles": "Drop files to attach",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "seen": "Seen",
+    "sent": "Sent",
+    "seenBy": "Seen by {count}",
+    "unknownSender": "Someone",
+    "deletedMessage": "This message was deleted",
+    "attachmentOnly": "Attachment",
+    "edited": "edited",
+    "editMessage": "Edit message",
+    "reply": "Reply",
+    "copy": "Copy text",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this message for everyone?",
+    "moreActions": "More actions",
+    "cancel": "Cancel",
+    "save": "Save",
+    "replyingTo": "Replying to {name}",
+    "cancelReply": "Cancel reply",
+    "attachments": "Attachments",
+    "attach": "Attach files",
+    "failed": "Failed",
+    "removeAttachment": "Remove {name}",
+    "mentionSomeone": "Mention someone",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "charsLeft": "{count} characters left",
+    "composerHint": "Enter to send · Shift+Enter for a new line · @ to mention",
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "send": "The message could not be sent. Please try again.",
+      "upload": "Upload failed",
+      "tooLarge": "Larger than 25 MB",
+      "groupTitle": "Give the group a name."
+    },
+    "system": {
+      "GROUP_CREATED": "{actor} created the group “{title}”",
+      "MEMBERS_ADDED": "{actor} added {names}",
+      "MEMBER_LEFT": "{name} left the group",
+      "MEMBER_REMOVED": "{actor} removed {name}",
+      "RENAMED": "{actor} renamed the group to “{title}”",
+      "APPROVAL_APPROVED": "{actor} approved the project ({reference})",
+      "APPROVAL_RETURNED": "{actor} returned the project for revision ({reference})",
+      "APPROVAL_REJECTED": "{actor} rejected the project ({reference})",
+      "APPROVAL_RESUBMITTED": "{actor} resubmitted the project for approval"
+    },
+    "systemShort": {
+      "GROUP_CREATED": "Group created",
+      "MEMBERS_ADDED": "People added",
+      "MEMBER_LEFT": "Someone left",
+      "MEMBER_REMOVED": "Someone was removed",
+      "RENAMED": "Group renamed",
+      "APPROVAL_APPROVED": "Project approved",
+      "APPROVAL_RETURNED": "Returned for revision",
+      "APPROVAL_REJECTED": "Project rejected",
+      "APPROVAL_RESUBMITTED": "Resubmitted for approval"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "bellUnread": "{count, plural, one {# unread notification} other {# unread notifications}}",
+    "markAllRead": "Mark all read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread ({count})"
+    },
+    "today": "Today",
+    "earlier": "Earlier",
+    "unread": "Unread",
+    "loadMore": "Load older notifications",
+    "empty": "You're all caught up",
+    "emptyUnread": "No unread notifications",
+    "emptyHint": "Approvals, alerts, assignments, inspection reviews and mentions will appear here.",
+    "desktopOffHint": "Desktop notifications are off. Turn them on to be alerted while RPIS is in the background →",
+    "toastRegion": "Notifications",
+    "dismiss": "Dismiss",
+    "open": "Open",
+    "someone": "Someone",
+    "categories": {
+      "messages": "Messages",
+      "mentions": "Mentions",
+      "approvals": "Approvals",
+      "alerts": "Alerts",
+      "assignments": "Field assignments",
+      "inspections": "Inspection reviews"
+    },
+    "categoryHints": {
+      "messages": "New direct, group and discussion messages",
+      "mentions": "When someone @mentions you",
+      "approvals": "Projects awaiting your decision, and decisions on projects you submitted",
+      "alerts": "Critical alerts in your scope, and alerts assigned to you",
+      "assignments": "When you are assigned to a project",
+      "inspections": "When an inspection you recorded is verified, disputed or rejected"
+    },
+    "chat": {
+      "inConversation": "{name} in {conversation}",
+      "attachment": "Sent an attachment"
+    },
+    "prompt": {
+      "title": "Get notified in real time",
+      "body": "Allow desktop notifications so approvals, critical alerts and messages reach you even when RPIS is in the background.",
+      "enable": "Turn on notifications",
+      "later": "Not now",
+      "enabledTitle": "Notifications are on",
+      "enabledBody": "RPIS will alert you here when something needs your attention."
+    },
+    "test": {
+      "title": "Test notification",
+      "body": "This is how RPIS notifications look and sound on this device."
+    },
+    "settings": {
+      "title": "Notification settings",
+      "description": "Choose how RPIS gets your attention on this device.",
+      "desktop": "Desktop notifications",
+      "allow": "Allow",
+      "state": {
+        "default": "Not yet allowed. Your browser will ask for permission.",
+        "granted": "Allowed. Notifications appear in your system's notification area.",
+        "denied": "Blocked in this browser. Allow notifications for this site in the browser's site settings, then reload.",
+        "insecure": "Unavailable on this connection. Browsers allow system notifications only over HTTPS or on localhost; in-app alerts and sounds still work.",
+        "unsupported": "This browser does not support system notifications."
+      },
+      "onlyBackground": "Only when RPIS is in the background",
+      "onlyBackgroundHint": "While you are working in RPIS, alerts appear inside the app instead.",
+      "sound": "Sound",
+      "soundHint": "A short tone; critical items use a distinct, firmer tone.",
+      "volume": "Volume",
+      "tones": {
+        "message": "Message",
+        "info": "Notification",
+        "success": "Approved",
+        "warning": "Attention",
+        "critical": "Critical"
+      },
+      "categoriesTitle": "What to notify me about",
+      "categoriesHint": "Switched-off items still appear in the notification list.",
+      "deviceOnly": "These settings apply to this browser only.",
+      "test": "Send a test notification"
+    },
+    "types": {
+      "someone": "Someone",
+      "aSite": "a site",
+      "APPROVAL_REQUESTED": {
+        "title": "Approval requested: {code}",
+        "body": "{actor} submitted {name} ({wereda}) for your decision."
+      },
+      "APPROVAL_RESUBMITTED": {
+        "title": "Resubmitted for approval: {code}",
+        "body": "{actor} revised and resubmitted {name}."
+      },
+      "APPROVAL_APPROVED": {
+        "title": "Project approved: {code}",
+        "body": "{actor} approved {name}. Decision {reference}."
+      },
+      "APPROVAL_RETURNED": {
+        "title": "Returned for revision: {code}",
+        "body": "{actor} returned {name} with comments. Decision {reference}."
+      },
+      "APPROVAL_REJECTED": {
+        "title": "Project rejected: {code}",
+        "body": "{actor} rejected {name}. Decision {reference}."
+      },
+      "ALERT_CRITICAL": {
+        "title": "Critical alert",
+        "body": "{title}"
+      },
+      "ALERT_ASSIGNED": {
+        "title": "Alert assigned to you",
+        "body": "{actor} assigned you: {title}"
+      },
+      "ASSIGNMENT_NEW": {
+        "title": "New field assignment: {code}",
+        "body": "{actor} assigned you to {name} as {role}."
+      },
+      "INSPECTION_VERIFIED": {
+        "title": "Inspection verified",
+        "body": "{actor} verified your inspection of {subject}."
+      },
+      "INSPECTION_DISPUTED": {
+        "title": "Inspection disputed",
+        "body": "{actor} disputed your inspection of {subject}. Please review."
+      },
+      "INSPECTION_REJECTED": {
+        "title": "Inspection rejected",
+        "body": "{actor} rejected your inspection of {subject}."
+      },
+      "INSPECTION_UNVERIFIED": {
+        "title": "Inspection reopened",
+        "body": "{actor} reopened your inspection of {subject} for review."
+      },
+      "CHAT_MENTION": {
+        "title": "{actor} mentioned you",
+        "body": "{excerpt}"
+      },
+      "CHAT_MESSAGE": {
+        "title": "{actor}",
+        "body": "{excerpt}"
+      }
     }
   }
 }

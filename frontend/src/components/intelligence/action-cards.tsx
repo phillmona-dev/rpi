@@ -41,11 +41,11 @@ export function ActionCards({ actions, isLoading, error, refetch, limit, columns
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted text-2xs font-semibold text-foreground tabular">{a.priority}</span><span className="inline-flex items-center gap-1 font-medium"><Icon className="h-3.5 w-3.5" />{t(`kind.${a.kind}`)}</span></div>
                   <AlertSeverityBadge value={a.severity} />
                 </div>
-                <h3 className="mt-2 text-sm font-semibold leading-snug">{a.title}</h3>
+                <h3 className="mt-2 text-base font-semibold leading-snug">{a.title}</h3>
                 <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">{a.sector && <SectorDot sector={a.sector} />}{a.entityName && <span className="truncate max-w-[260px]">{a.entityName}</span>}{a.weredaName && <span>· {a.weredaName}</span>}{a.ageHours > 0 && <span>· {age(a.ageHours)}</span>}</div>
-                <p className="mt-2 text-xs text-muted-foreground line-clamp-3">{a.rationale}</p>
-                {a.evidence.length > 0 && <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-2xs">{a.evidence.map((e) => <div key={e.label} className="min-w-0"><dt className="truncate text-muted-foreground">{e.label}</dt><dd className="truncate font-medium tabular">{e.value}</dd></div>)}</dl>}
-                <div className="mt-3 rounded-md bg-muted/40 p-2 text-xs"><span className="font-medium">{t('suggested')}: </span>{a.suggestedAction}</div>
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{a.rationale}</p>
+                {a.evidence.length > 0 && <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">{a.evidence.map((e) => <div key={e.label} className="min-w-0"><dt className="truncate text-muted-foreground">{e.label}</dt><dd className="truncate font-medium tabular">{e.value}</dd></div>)}</dl>}
+                <div className="mt-3 rounded-md bg-muted/40 p-2.5 text-sm"><span className="font-medium">{t('suggested')}: </span>{a.suggestedAction}</div>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                   <span className="text-2xs uppercase tracking-wide text-muted-foreground">{a.basis === 'RULE' ? 'Rule-based' : 'Model'}</span>
                   <div className="flex gap-1.5" onClick={stop} onKeyDown={stop}>

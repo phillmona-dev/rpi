@@ -72,11 +72,12 @@ const C = {
 
 /* ─── Demo accounts ──────────────────────────────────────────────────────── */
 const DEMO_ACCOUNTS = [
-  ['executive',    'EXECUTIVE'   ],
-  ['health.head',  'SECTOR_HEAD' ],
-  ['analyst',      'ANALYST'     ],
-  ['pmo.observer', 'PMO_FEDERAL' ],
-  ['admin',        'ADMIN'       ],
+  ['executive',     'EXECUTIVE'    ],
+  ['health.head',   'SECTOR_HEAD'  ],
+  ['analyst',       'ANALYST'      ],
+  ['pmo.observer',  'PMO_FEDERAL'  ],
+  ['field.officer', 'FIELD_OFFICER'],
+  ['admin',         'ADMIN'        ],
 ] as const;
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -643,7 +644,9 @@ function LoginForm() {
       if (!res.ok)            { setError(t('generic'));  return; }
       qc.clear();
       const next = params.get('next');
-      router.replace(next && next.startsWith('/') ? (next as '/') : '/');
+      // Same-site paths only; drop a leading locale (older links carried one) since the router adds it.
+      const safe = next && next.startsWith('/') && !next.startsWith('//') ? next.replace(/^\/(en|am|ti)(?=[/?#]|$)/, '') || '/' : '/';
+      router.replace(safe as '/');
     } catch { setError(t('generic')); } finally { setBusy(false); }
   };
 

@@ -40,6 +40,7 @@ public class ProjectCreationService {
     private final ProjectRepositories.Disbursements disbursements;
     private final ProjectRepositories.Risks risks;
     private final ProjectRepositories.StageEvents stageEvents;
+    private final ProjectRepositories.ApprovalEvents approvalEvents;
     private final ProjectRepositories.Organizations organizations;
     private final ProjectRepositories.ProjectOrganizations projectOrganizations;
     private final ProjectRepositories.ProjectFacilities projectFacilities;
@@ -269,7 +270,11 @@ public class ProjectCreationService {
         p.setBeneficiaries(r.beneficiaries());
         p.setLocation(r.latitude() != null ? GeoPoint.jts(r.latitude(), r.longitude()) : wereda.getCentroid());
         p.setLifecycleStage(stage);
-        p.setStatus(switch (stage) { case PROCUREMENT -> ProjectStatus.PROCUREMENT; case IMPLEMENTATION -> ProjectStatus.ACTIVE; default -> ProjectStatus.PLANNED; });
+        // Held at PLANNED until the Chief Executive approves; the approval releases the status that matches the stage.
+        p.setStatus(ProjectStatus.PLANNED);
+        p.setApprovalStatus(ApprovalStatus.PENDING);
+        p.setSubmittedAt(Instant.now());
+        if (actor != null) { p.setSubmittedByUserId(actor.id()); p.setSubmittedByName(actor.fullName()); }
         p.setPlannedStart(r.plannedStart());
         p.setPlannedEnd(r.plannedEnd());
         p.setActualStart(r.actualStart());
@@ -330,8 +335,14 @@ public class ProjectCreationService {
         if (actor != null) { ev.setActorUserId(actor.id()); ev.setActorName(actor.fullName()); }
         stageEvents.save(ev);
 
+        ProjectApprovalEvent submitted = new ProjectApprovalEvent();
+        submitted.setProject(saved); submitted.setAction(ApprovalAction.SUBMITTED); submitted.setOccurredAt(Instant.now());
+        submitted.setNote(blankToNull(r.registrationNote()));
+        if (actor != null) { submitted.setActorUserId(actor.id()); submitted.setActorName(actor.fullName()); }
+        approvalEvents.save(submitted);
+
         Project computed = metrics.recompute(saved, today);
-        events.publishEvent(DomainEvent.of("PROJECT_CREATED", "PROJECT", computed.getId(), computed.getSector(), wereda.getId(),
+        events.publishEvent(DomainEvent.of("PROJECT_SUBMITTED", "PROJECT", computed.getId(), computed.getSector(), wereda.getId(),
             Map.of("projectName", computed.getName(), "projectCode", computed.getCode(), "stage", stage.name(), "budgetEtb", computed.getTotalBudgetEtb(),
                    "actor", actor == null ? "system" : actor.fullName(), "weredaName", wereda.getNameEn())));
         return ProjectService.summary(computed);

@@ -148,3 +148,51 @@ export function useCreateProject() {
     onSuccess: () => { ['projects', 'overview', 'briefing', 'weredaMetrics', 'organizations', 'facilities', 'stream', 'codeSuggestion'].forEach((k) => qc.invalidateQueries({ queryKey: [k] })); },
   });
 }
+
+// ── Executive approval ─────────────────────────────────────────────────────
+export const useApprovalCounts = (enabled = true) => useQuery({ queryKey: ['approvalCounts'], queryFn: () => api<T.ApprovalCounts>('approvals/counts'), staleTime: STALE, enabled });
+export const useApprovalQueue = (p: Record<string, unknown>) => useQuery({ queryKey: ['approvals', p], queryFn: () => api<T.PageResponse<T.ApprovalQueueItem>>('approvals', { query: p }), staleTime: STALE, placeholderData: keepPreviousData });
+export const useApprovalDossier = (projectId: number) => useQuery({ queryKey: ['approvalDossier', projectId], queryFn: () => api<T.ApprovalDossier>(`approvals/${projectId}`), staleTime: 10_000, enabled: Number.isFinite(projectId) });
+const invalidateApproval = (qc: ReturnType<typeof useQueryClient>) => ['approvals', 'approvalCounts', 'approvalDossier', 'project', 'projects', 'overview', 'timeline', 'fieldCoverage', 'fieldSummary'].forEach((k) => qc.invalidateQueries({ queryKey: [k] }));
+export function useApprovalDecision(projectId: number) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: { decision: T.ApprovalDecision; note?: string; conditions?: string; externalReference?: string }) => api<T.ApprovalQueueItem>(`approvals/${projectId}/decision`, { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateApproval(qc) });
+}
+export function useResubmitProject(projectId: number) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: { note: string; name?: string; description?: string; beneficiaries?: number }) => api<T.ApprovalQueueItem>(`approvals/${projectId}/resubmit`, { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateApproval(qc) });
+}
+
+// ── Field team ─────────────────────────────────────────────────────────────
+export const useFieldSummary = (sector?: T.Sector | null, enabled = true) => useQuery({ queryKey: ['fieldSummary', sector ?? null], queryFn: () => api<T.TeamSummary>('field-team/summary', { query: { sector: sector ?? undefined } }), staleTime: STALE, enabled });
+export const useFieldAgents = (p: Record<string, unknown>, enabled = true) => useQuery({ queryKey: ['fieldAgents', p], queryFn: () => api<T.AgentSummary[]>('field-team/agents', { query: p }), staleTime: STALE, placeholderData: keepPreviousData, enabled });
+export const useFieldAgent = (id: number) => useQuery({ queryKey: ['fieldAgent', id], queryFn: () => api<T.AgentDetail>(`field-team/agents/${id}`), staleTime: 10_000, enabled: Number.isFinite(id) });
+export const useAssignments = (p: Record<string, unknown>, enabled = true) => useQuery({ queryKey: ['assignments', p], queryFn: () => api<T.AssignmentDto[]>('field-team/assignments', { query: p }), staleTime: STALE, placeholderData: keepPreviousData, enabled });
+export const useCandidates = (projectId: number | null, role: T.AssignmentRole) => useQuery({ queryKey: ['candidates', projectId, role], queryFn: () => api<T.Candidate[]>('field-team/candidates', { query: { projectId, role } }), staleTime: 10_000, enabled: projectId !== null });
+export const useCoverage = (p: Record<string, unknown>, enabled = true) => useQuery({ queryKey: ['fieldCoverage', p], queryFn: () => api<T.CoverageRow[]>('field-team/coverage', { query: p }), staleTime: STALE, placeholderData: keepPreviousData, enabled });
+const invalidateField = (qc: ReturnType<typeof useQueryClient>) => ['fieldSummary', 'fieldAgents', 'fieldAgent', 'assignments', 'candidates', 'fieldCoverage'].forEach((k) => qc.invalidateQueries({ queryKey: [k] }));
+export const useCheckAssignment = () => useMutation({ mutationFn: (body: T.AssignmentRequest) => api<T.AssignmentCheck>('field-team/assignments/check', { method: 'POST', body: JSON.stringify(body) }) });
+export function useCreateAssignment() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: T.AssignmentRequest) => api<T.AssignmentDto>('field-team/assignments', { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}
+export function useCloseAssignment() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: ({ id, ...body }: { id: number; outcome: 'COMPLETED' | 'RELEASED'; reason?: string }) => api<T.AssignmentDto>(`field-team/assignments/${id}/close`, { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}
+export function useRegisterAgent() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: T.AgentRequest) => api<T.RegisterAgentResponse>('field-team/agents', { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}
+export function useUpdateAgent(id: number) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: T.AgentRequest) => api<T.AgentDetail>(`field-team/agents/${id}`, { method: 'PUT', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}
+export function useAgentStatus(id: number) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: { status: T.AgentStatus; reason?: string; releaseAssignments?: boolean }) => api<T.AgentDetail>(`field-team/agents/${id}/status`, { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}
+export function useAgentAccess(id: number) {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (body: { username?: string }) => api<T.AccessResponse>(`field-team/agents/${id}/access`, { method: 'POST', body: JSON.stringify(body) }), onSuccess: () => invalidateField(qc) });
+}

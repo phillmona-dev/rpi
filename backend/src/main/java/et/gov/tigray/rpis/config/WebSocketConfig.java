@@ -39,8 +39,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/topic", "/queue");
         registry.setApplicationDestinationPrefixes("/app");
+        // Private per-user delivery (messaging): clients subscribe to /user/queue/chat.
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
@@ -60,6 +62,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     } catch (JwtException e) {
                         throw new IllegalArgumentException("Invalid bearer token on STOMP CONNECT");
                     }
+                }
+                // Private queues are reachable only through the /user prefix, which resolves to the caller's own session.
+                if (accessor != null && StompCommand.SUBSCRIBE.equals(accessor.getCommand())
+                        && accessor.getDestination() != null && accessor.getDestination().startsWith("/queue")) {
+                    throw new IllegalArgumentException("Subscribe to /user/queue/... instead");
                 }
                 return message;
             }

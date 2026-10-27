@@ -45,6 +45,7 @@ public class ProjectLifecycleService {
     @Transactional
     public ProjectDtos.ProjectSummary transition(Long projectId, ProjectDtos.StageTransitionRequest req) {
         Project p = projects.findWithWeredaById(projectId).orElseThrow(() -> new NotFoundException("Project", projectId));
+        if (!p.isApproved()) throw BusinessException.conflict("project_not_approved", "The lifecycle cannot change until the Chief Executive approves the project");
         LifecycleStage from = p.getLifecycleStage(), to = req.toStage();
         if (from == to) throw BusinessException.conflict("same_stage", "Project is already in stage " + to);
         if (!allowedTransitions(from).contains(to)) throw BusinessException.badRequest("illegal_transition", "Cannot move from " + from + " to " + to);

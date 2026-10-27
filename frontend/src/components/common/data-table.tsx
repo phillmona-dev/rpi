@@ -44,7 +44,7 @@ export function DataTable<T>({ columns, rows, rowKey, onRowClick, sort, onSort, 
         {rows.map((r) => (
           <TableRow key={rowKey(r)} data-clickable={Boolean(onRowClick)} tabIndex={onRowClick ? 0 : undefined} onClick={onRowClick ? () => onRowClick(r) : undefined}
             onKeyDown={onRowClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(r); } } : undefined}
-            aria-label={rowHref ? undefined : undefined} className={cn(dense && '[&>td]:py-1.5', rowClassName?.(r))}>
+            aria-label={rowHref ? undefined : undefined} className={cn(dense && '[&>td]:py-2', rowClassName?.(r))}>
             {columns.map((c) => <TableCell key={c.key} className={cn(c.className, c.align === 'right' && 'text-right tabular whitespace-nowrap', c.align === 'center' && 'text-center')}>{c.cell(r)}</TableCell>)}
           </TableRow>
         ))}
@@ -60,12 +60,12 @@ export function Pagination({ page, totalPages, totalElements, size, onPage, onSi
   const from = totalElements === 0 ? 0 : page * size + 1;
   const to = Math.min(totalElements, (page + 1) * size);
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t px-3 py-2 text-xs text-muted-foreground">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 text-sm text-muted-foreground">
       <span>{t('showing', { from, to, total: totalElements })}</span>
       <div className="flex items-center gap-2">
         {onSize && (
           <Select value={String(size)} onValueChange={(v) => onSize(Number(v))}>
-            <SelectTrigger className="h-8 w-[88px] text-xs" aria-label={t('rowsPerPage')}><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-9 w-[92px] text-sm" aria-label={t('rowsPerPage')}><SelectValue /></SelectTrigger>
             <SelectContent>{sizes.map((s) => <SelectItem key={s} value={String(s)}>{s}</SelectItem>)}</SelectContent>
           </Select>
         )}

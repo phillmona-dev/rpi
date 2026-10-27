@@ -45,6 +45,7 @@ public class ProjectService {
     private final ProjectRepositories.Documents documents;
     private final ProjectRepositories.Forecasts forecasts;
     private final ProjectRepositories.StageEvents stageEvents;
+    private final ProjectRepositories.ApprovalEvents approvalEvents;
     private final ProjectRepositories.ProjectOrganizations projectOrganizations;
     private final FacilityRepository facilities;
     private final AlertRepository alerts;
@@ -53,9 +54,9 @@ public class ProjectService {
     private final ApplicationEventPublisher events;
 
     public record Filter(Sector sector, Short zoneId, Integer weredaId, List<ProjectStatus> statuses, List<ProjectHealth> healths,
-                         FundingSource fundingSource, String q, List<LifecycleStage> stages, Integer minRiskScore, String contractor) {
+                         FundingSource fundingSource, String q, List<LifecycleStage> stages, Integer minRiskScore, String contractor, List<ApprovalStatus> approvals) {
         public Filter(Sector sector, Short zoneId, Integer weredaId, List<ProjectStatus> statuses, List<ProjectHealth> healths, FundingSource fundingSource, String q) {
-            this(sector, zoneId, weredaId, statuses, healths, fundingSource, q, null, null, null);
+            this(sector, zoneId, weredaId, statuses, healths, fundingSource, q, null, null, null, null);
         }
     }
 
@@ -70,6 +71,7 @@ public class ProjectService {
             if (f.healths() != null && !f.healths().isEmpty()) ps.add(root.get("health").in(f.healths()));
             if (f.fundingSource() != null) ps.add(cb.equal(root.get("fundingSource"), f.fundingSource()));
             if (f.stages() != null && !f.stages().isEmpty()) ps.add(root.get("lifecycleStage").in(f.stages()));
+            if (f.approvals() != null && !f.approvals().isEmpty()) ps.add(root.get("approvalStatus").in(f.approvals()));
             if (f.minRiskScore() != null) ps.add(cb.greaterThanOrEqualTo(root.get("riskScore"), f.minRiskScore().shortValue()));
             if (f.contractor() != null && !f.contractor().isBlank()) ps.add(cb.equal(cb.lower(root.get("contractorName")), f.contractor().toLowerCase()));
             if (f.q() != null && !f.q().isBlank()) {
@@ -123,7 +125,14 @@ public class ProjectService {
             p.getHandoverOn(), p.getDefectsLiabilityEnd(), stages, orgs);
         ProjectDtos.RiskProfile risk = new ProjectDtos.RiskProfile(p.getRiskScore(), et.gov.tigray.rpis.analytics.RiskScoringService.band(p.getRiskScore()), p.getRiskComputedAt(), p.getRiskComponents());
         ProjectDtos.EvidenceSnapshot evidenceSnapshot = evidence.snapshotForProject(id);
-        return new ProjectDtos.ProjectDetail(summary(p), p.getDescription(), ms, progress, finance, rs, is, docs, facs, fdto, openAlerts, gov, risk, evidenceSnapshot);
+        return new ProjectDtos.ProjectDetail(summary(p), p.getDescription(), ms, progress, finance, rs, is, docs, facs, fdto, openAlerts, gov, risk, evidenceSnapshot, approvalInfo(p));
+    }
+
+    ProjectDtos.ApprovalInfo approvalInfo(Project p) {
+        List<ProjectDtos.ApprovalEventDto> ev = approvalEvents.findByProjectIdOrderByOccurredAtAsc(p.getId()).stream().map(e ->
+            new ProjectDtos.ApprovalEventDto(e.getId(), e.getAction(), e.getOccurredAt(), e.getActorName(), e.getNote(), e.getConditions(), e.getReference())).toList();
+        return new ProjectDtos.ApprovalInfo(p.getApprovalStatus(), p.getSubmittedAt(), p.getSubmittedByName(), p.getApprovalDecidedAt(), p.getApprovalDecidedByName(),
+            p.getApprovalDecisionRef(), p.getApprovalConditions(), ev);
     }
 
     /** Web progress entry (site-manager app will post the same shape through /sync). */
@@ -131,6 +140,7 @@ public class ProjectService {
     @Transactional
     public ProjectDtos.ProjectSummary recordProgress(Long projectId, ProjectDtos.ProgressEntryRequest req, String reportedBy, DataSource source) {
         Project p = projects.findWithWeredaById(projectId).orElseThrow(() -> new NotFoundException("Project", projectId));
+        if (!p.isApproved()) throw BusinessException.conflict("project_not_approved", "Progress cannot be logged before the project is approved by the Chief Executive");
         if (p.getStatus() != ProjectStatus.ACTIVE) throw BusinessException.conflict("project_not_active", "Progress can only be logged on ACTIVE projects");
         var latest = progressLogs.findFirstByProjectIdOrderByLogDateDesc(projectId);
         if (latest.isPresent() && req.logDate().isBefore(latest.get().getLogDate()))
@@ -182,6 +192,6 @@ public class ProjectService {
             p.getForecastEnd(), p.getActualStart(), p.getActualEnd(), p.getTotalBudgetEtb(), p.getFundingSource(), p.getPhysicalProgressPct(),
             p.getPlannedProgressPct(), p.getScheduleVariancePp(), p.getSpi(), p.getCpi(), p.getDisbursedEtb(), p.getExpendedEtb(),
             p.getLastProgressReportAt(), daysSince, p.getBeneficiaries(), GeoPoint.of(p.getLocation()),
-            p.getLifecycleStage(), p.getRiskScore(), p.getLastVerifiedAt());
+            p.getLifecycleStage(), p.getRiskScore(), p.getLastVerifiedAt(), p.getApprovalStatus());
     }
 }
