@@ -50,6 +50,9 @@ public class InsightEngine {
 
     @Transactional
     public int evaluateAll() {
+        // One evaluation at a time (scheduler, seeder, other instances): a concurrent run would insert the same
+        // active insights and trip ux_insight_active. The lock is released when this transaction ends.
+        jdbc.getJdbcOperations().execute("SELECT pg_advisory_xact_lock(4207001)");
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
         int n = 0;
         for (Project p : projects.findByStatusIn(List.of(ProjectStatus.ACTIVE, ProjectStatus.SUSPENDED, ProjectStatus.PROCUREMENT, ProjectStatus.PLANNED))) {

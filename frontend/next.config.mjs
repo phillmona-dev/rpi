@@ -11,7 +11,9 @@ const nextConfig = {
   experimental: { optimizePackageImports: ['lucide-react', 'recharts', 'date-fns'] },
   async headers() {
     const mapOrigin = (() => { try { return new URL(process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? 'https://tiles.openfreemap.org').origin; } catch { return ''; } })();
-    const wsOrigin = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8080/ws';
+    // A relative WebSocket path is same-origin; CSP 'self' covers it.
+    const wsSetting = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8080/ws';
+    const wsOrigin = wsSetting.startsWith('/') ? '' : wsSetting;
     const csp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline'" + (process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''),

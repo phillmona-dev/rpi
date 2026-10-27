@@ -38,6 +38,10 @@ services:
       RPIS_JWT_REFRESH_TTL_HOURS: ${RPIS_JWT_REFRESH_TTL_HOURS:-8}
       RPIS_CORS_ALLOWED_ORIGINS: ${RPIS_CORS_ALLOWED_ORIGINS:-http://localhost:3000}
       RPIS_DEMO_PASSWORD: ${RPIS_DEMO_PASSWORD:-Rpis@2026!}
+      RPIS_MEDIA_DIR: /data/media
+      JAVA_OPTS: ${JAVA_OPTS:--XX:MaxRAMPercentage=75}
+    volumes:
+      - rpis-media:/data/media
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     healthcheck:
@@ -45,6 +49,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 30
+      # First boot runs migrations and seeds demo data; on a busy host that can take several minutes.
+      start_period: 600s
     restart: unless-stopped
 
   frontend:
@@ -61,9 +67,11 @@ services:
     environment:
       RPIS_API_BASE_URL: http://backend:8080
       NODE_ENV: production
+      RPIS_COOKIE_SECURE: ${RPIS_COOKIE_SECURE:-true}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     restart: unless-stopped
 
 volumes:
   rpis-db-data:
+  rpis-media:

@@ -47,6 +47,8 @@ public class AlertRuleEngine {
 
     @Transactional
     public int evaluateAll() {
+        // One evaluation at a time, so concurrent runs cannot raise the same alert twice. Released at transaction end.
+        jdbc.getJdbcOperations().execute("SELECT pg_advisory_xact_lock(4207002)");
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
         var a = props.getAlerts();
         Set<String> stillFiring = new HashSet<>();

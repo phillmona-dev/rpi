@@ -8,7 +8,8 @@ RUN mvn -q -B -DskipTests package
 
 # ---- runtime stage ----
 FROM eclipse-temurin:21-jre-alpine
-RUN addgroup -S rpis && adduser -S rpis -G rpis && apk add --no-cache wget
+RUN addgroup -S rpis && adduser -S rpis -G rpis && apk add --no-cache wget \
+    && mkdir -p /data/media && chown -R rpis:rpis /data
 WORKDIR /app
 COPY --from=build /workspace/target/rpis-backend.jar app.jar
 USER rpis

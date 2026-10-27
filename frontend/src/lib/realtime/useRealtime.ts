@@ -25,7 +25,9 @@ export function useRealtime(onEvent?: (e: LiveEvent) => void) {
   const connectedOnce = useRef(false);
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8080/ws';
+    // A relative URL (e.g. /ws behind a reverse proxy) follows whatever host and scheme the page was opened on.
+    const configured = process.env.NEXT_PUBLIC_WS_URL ?? 'ws://localhost:8080/ws';
+    const url = configured.startsWith('/') ? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}${configured}` : configured;
     let disposed = false;
     const client = new Client({
       brokerURL: url,
