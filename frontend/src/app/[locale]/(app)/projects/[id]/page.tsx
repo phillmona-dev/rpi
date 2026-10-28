@@ -11,7 +11,7 @@ import { AssignDialog } from '@/components/field-team/assign-dialog';
 import { useAssignments } from '@/lib/api/hooks';
 import { ClipboardPlus } from 'lucide-react';
 import { canManageFieldTeam, canSeeFieldTeam } from '@/lib/domain';
-import { RiskScoreCard, RiskChip } from '@/components/projects/risk-score';
+import { RiskScoreCard } from '@/components/projects/risk-score';
 import { ProjectTimeline } from '@/components/projects/project-timeline';
 import { EvidenceGallery } from '@/components/evidence/evidence-gallery';
 import { EvidenceSummaryStrip } from '@/components/evidence/evidence-summary';
@@ -35,12 +35,12 @@ import { Link } from '@/i18n/navigation';
 import { ProgressCurve } from '@/components/charts/progress-curve';
 import { ChartCard } from '@/components/charts/chart-card';
 import { MilestoneTimeline, ProgressLogTab, FinanceTab, RisksTab, DocumentsTab, AuditTab } from '@/components/projects/project-tabs';
-import { fmtDate, localizedName, money, num, pct, ratio, signedPp } from '@/lib/format';
+import { fmtDate, localizedName, money, num, pct } from '@/lib/format';
 import { healthTone, sectorSlug, toneVar, canRecordProgress, canSeeIntelligence } from '@/lib/domain';
 import { useUser } from '@/providers/session';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ApiError } from '@/lib/api/client';
-import { FreshnessChip } from '@/components/common/freshness';
+import { useProgressPhrase } from '@/components/dashboard/kpi-strip';
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -68,6 +68,26 @@ export default function ProjectDetailPage() {
     { label: d.project.code },
   ] : [{ label: t('title') }]);
 
+  const phrase = useProgressPhrase();
+  /** One plain sentence on where the project stands, so nobody has to read the figures to know. */
+  const summary = (p: import('@/lib/api/types').ProjectDetail['project'], ms: import('@/lib/api/types').MilestoneDto[]) => {
+    if (p.status === 'COMPLETED') return t('summary.completed', { date: fmtDate(p.actualEnd ?? p.plannedEnd, locale) });
+    if (p.status === 'CANCELLED') return t('summary.cancelled');
+    if (p.status === 'SUSPENDED') return t('summary.suspended', { done: pct(p.physicalProgressPct) });
+    if (p.status !== 'ACTIVE') return t('summary.notStarted', { status: te(`status.${p.status}`), start: fmtDate(p.plannedStart, locale) });
+    const finish = fmtDate(p.forecastEnd ?? p.revisedEnd ?? p.plannedEnd, locale);
+    const base = t('summary.active', { done: pct(p.physicalProgressPct), planned: pct(p.plannedProgressPct), how: phrase(p.physicalProgressPct, p.plannedProgressPct).toLowerCase(), finish,
+      report: p.daysSinceReport === null ? t('summary.noReport') : tc('daysAgo', { count: p.daysSinceReport }) });
+    // Say why the health label is what it is when overall progress alone would not explain it.
+    const today = new Date().toISOString().slice(0, 10);
+    const overdue = ms.filter((m) => !m.actualDate && m.plannedDate < today).sort((a, b) => a.plannedDate.localeCompare(b.plannedDate))[0];
+    const days = overdue ? Math.round((Date.parse(today) - Date.parse(overdue.plannedDate)) / 86_400_000) : 0;
+    if (p.health === 'STALLED') return `${base} ${t('summary.whyStalled')}`;
+    if ((p.health === 'DELAYED' || p.health === 'AT_RISK') && p.scheduleVariancePp > -5 && overdue) return `${base} ${t('summary.whyMilestone', { label: te(`health.${p.health}`), name: overdue.name, days })}`;
+    if (p.health === 'AT_RISK' && p.scheduleVariancePp > -5) return `${base} ${t('summary.whyCost')}`;
+    return base;
+  };
+
   const [open, setOpen] = React.useState(false);
   const record = useRecordProgress(pid);
   const [form, setForm] = React.useState({ logDate: new Date().toISOString().slice(0, 10), physicalProgressPct: '', workforceCount: '', notes: '' });
@@ -90,19 +110,17 @@ export default function ProjectDetailPage() {
             <PageHeader
               title={<span className="flex flex-wrap items-center gap-2">{p.name}</span>}
               subtitle={<span className="flex flex-wrap items-center gap-x-3 gap-y-1"><span className="font-mono text-xs">{p.code}</span><SectorLabel sector={p.sector} /><Link href={`/weredas/${p.wereda.id}`} className="hover:underline">{localizedName(p.wereda.name, locale)} · {localizedName(p.wereda.zoneName, locale)}</Link></span>}
-              meta={<><StatusBadge value={p.status} /><HealthBadge value={p.health} /><RiskChip score={p.riskScore} />{d.openAlerts > 0 && <Link href={`/alerts?entityType=PROJECT&q=${p.code}`} className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium" style={{ borderColor: toneVar.critical, color: toneVar.critical }}><Bell className="h-3 w-3" />{t('overview.openAlerts', { count: d.openAlerts })}</Link>}<FreshnessChip at={p.lastProgressReportAt} label={t('columns.lastReport')} /></>}
+              meta={<><StatusBadge value={p.status} /><HealthBadge value={p.health} />{d.openAlerts > 0 && <Link href={`/alerts?entityType=PROJECT&q=${p.code}`} className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-sm font-medium" style={{ borderColor: toneVar.critical, color: toneVar.critical }}><Bell className="h-3.5 w-3.5" />{t('overview.openAlerts', { count: d.openAlerts })}</Link>}</>}
               actions={canRecordProgress(user.roles) && p.status === 'ACTIVE' && p.approvalStatus === 'APPROVED' ? <Button onClick={() => setOpen(true)}><HardHat />{t('progress.record')}</Button> : undefined}
             />
 
-            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-4 desktop:grid-cols-8">
-              <Stat label={t('columns.progress')} value={pct(p.physicalProgressPct)} hint={<Progress value={p.physicalProgressPct} planned={p.plannedProgressPct} tone={toneVar[healthTone[p.health]]} className="mt-1.5" label={t('columns.progress')} />} />
-              <Stat label={t('columns.planned')} value={pct(p.plannedProgressPct)} hint={<span style={{ color: p.scheduleVariancePp <= -5 ? toneVar.serious : undefined }}>{signedPp(p.scheduleVariancePp)} {tc('vsPlan')}</span>} />
-              <Stat label={t('columns.spi')} value={ratio(p.spi)} hint={t('overview.spiHint')} />
-              <Stat label={t('columns.cpi')} value={<span style={{ color: p.cpi !== null && p.cpi < 0.9 ? toneVar.serious : undefined }}>{ratio(p.cpi)}</span>} hint={t('overview.cpiHint')} />
+            <p className="rounded-lg border bg-card px-5 py-4 text-base leading-relaxed shadow-card">{summary(p, d.milestones)}</p>
+
+            <div className="grid grid-cols-2 gap-3 laptop:grid-cols-4">
+              <Stat label={t('columns.progress')} value={pct(p.physicalProgressPct)} hint={<><Progress value={p.physicalProgressPct} planned={p.plannedProgressPct} tone={toneVar[healthTone[p.health]]} className="mt-1.5" label={t('columns.progress')} /><span className="mt-1 block" style={{ color: p.scheduleVariancePp <= -5 ? toneVar.serious : undefined }}>{phrase(p.physicalProgressPct, p.plannedProgressPct)}</span></>} />
               <Stat label={t('columns.budget')} value={money(p.totalBudgetEtb, locale)} hint={te(`funding.${p.fundingSource}`)} />
-              <Stat label={t('columns.disbursed')} value={money(p.disbursedEtb, locale)} hint={pct(p.totalBudgetEtb ? (p.disbursedEtb / p.totalBudgetEtb) * 100 : 0)} />
-              <Stat label={t('columns.spent')} value={money(p.expendedEtb, locale)} hint={pct(p.totalBudgetEtb ? (p.expendedEtb / p.totalBudgetEtb) * 100 : 0)} />
-              <Stat label={t('overview.forecastEnd')} value={fmtDate(p.forecastEnd ?? p.plannedEnd, locale, 'short')} hint={<span style={{ color: p.forecastEnd && p.forecastEnd > (p.revisedEnd ?? p.plannedEnd) ? toneVar.serious : undefined }}>{t('overview.plannedEnd')} {fmtDate(p.plannedEnd, locale, 'short')}</span>} />
+              <Stat label={t('columns.disbursed')} value={money(p.disbursedEtb, locale)} hint={t('overview.spentOf', { spent: money(p.expendedEtb, locale), pct: pct(p.totalBudgetEtb ? (p.disbursedEtb / p.totalBudgetEtb) * 100 : 0) })} />
+              <Stat label={t('overview.forecastEnd')} value={fmtDate(p.status === 'ACTIVE' && p.forecastEnd ? p.forecastEnd : (p.actualEnd ?? p.revisedEnd ?? p.plannedEnd), locale, 'short')} hint={<span style={{ color: p.forecastEnd && p.forecastEnd > (p.revisedEnd ?? p.plannedEnd) ? toneVar.serious : undefined }}>{t('overview.plannedEnd')} {fmtDate(p.revisedEnd ?? p.plannedEnd, locale, 'short')}</span>} />
             </div>
 
             <ApprovalBanner projectId={p.id} approval={d.approval} />
@@ -111,17 +129,11 @@ export default function ProjectDetailPage() {
 
             <Tabs value={tab} onValueChange={setTab}>
               <TabsList aria-label={t('title')}>
-                {(['overview', 'discussion', 'timeline', 'evidence', 'fieldTeam', 'intelligence', 'milestones', 'progress', 'finance', 'risks', 'documents', 'audit'] as const).filter((k) => (k !== 'intelligence' || canSeeIntelligence(user.roles)) && (k !== 'fieldTeam' || canSeeFieldTeam(user.roles))).map((k) => <TabsTrigger key={k} value={k}>{k === 'fieldTeam' ? tft('projectTab') : k === 'discussion' ? tm('discussion') : t(`tabs.${k}`)}</TabsTrigger>)}
+                {(['overview', 'progress', 'finance', 'evidence', 'risks', 'fieldTeam', 'discussion', 'documents', 'timeline'] as const).filter((k) => k !== 'fieldTeam' || canSeeFieldTeam(user.roles)).map((k) => <TabsTrigger key={k} value={k}>{k === 'fieldTeam' ? tft('projectTab') : k === 'discussion' ? tm('discussion') : t(`tabs.${k}`)}</TabsTrigger>)}
               </TabsList>
               <TabsContent value="overview">
                 <div className="grid gap-4 desktop:grid-cols-12">
                   <div className="desktop:col-span-7 space-y-4">
-                    <ChartCard title={t('progress.title')} table={{ columns: [t('progress.date'), t('progress.plannedPct'), t('progress.physical')], rows: curve.map((c) => [fmtDate(c.date, locale, 'short'), c.planned, c.actual]) }}>
-                      {curve.length ? <ProgressCurve data={curve} height={240} /> : <p className="text-sm text-muted-foreground">{t('progress.empty')}</p>}
-                    </ChartCard>
-                    <Section title={t('milestones.title')}><MilestoneTimeline d={d} /></Section>
-                  </div>
-                  <div className="desktop:col-span-5 space-y-4">
                     <Section title={t('overview.description')}>
                       <p className="text-sm leading-relaxed">{d.description}</p>
                       <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
@@ -132,6 +144,8 @@ export default function ProjectDetailPage() {
                       </dl>
                       {d.forecast && <p className="mt-4 rounded-md bg-muted/40 p-2 text-xs text-muted-foreground">{t('overview.forecastBy', { provider: d.forecast.provider.replace(/_/g, ' ').toLowerCase(), confidence: Math.round((d.forecast.confidence ?? 0) * 100) })}: {d.forecast.rationale}</p>}
                     </Section>
+                  </div>
+                  <div className="desktop:col-span-5 space-y-4">
                     <Section title={t('overview.facilities')}>
                       <ul className="divide-y">{d.facilities.map((f) => (
                         <li key={f.id} className="flex items-center justify-between gap-3 py-2">
@@ -152,7 +166,7 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="mt-4"><Section title={t('lifecycle.governance')}><GovernancePanel g={d.governance} /></Section></div>
               </TabsContent>
-              <TabsContent value="timeline"><Section title={t('timeline.title')} hint={t('timeline.hint')}><ProjectTimeline projectId={pid} /></Section></TabsContent>
+              <TabsContent value="timeline" className="space-y-4"><Section title={t('timeline.title')} hint={t('timeline.hint')}><ProjectTimeline projectId={pid} /></Section><AuditTab projectId={pid} /></TabsContent>
               <TabsContent value="evidence">
                 <div className="space-y-4">
                   <EvidenceSummaryStrip s={d.evidence} />
@@ -163,7 +177,9 @@ export default function ProjectDetailPage() {
                   <Section title={tev('detail.location')}><CommandMap projects={siteProjects} evidence={siteEvidence} layers={{ boundaries: false, weredas: false, projects: true, facilities: false, evidence: true }} height={360} fitTo="data" focus={p.location ? { lng: p.location.lng, lat: p.location.lat, zoom: 14 } : null} interactive /></Section>
                 </div>
               </TabsContent>
-              <TabsContent value="intelligence">
+              <TabsContent value="risks" className="space-y-4">
+                <RisksTab d={d} />
+                {canSeeIntelligence(user.roles) && <>
                 <DataState isLoading={xl} error={xe} onRetry={xr} rows={6}>
                   {intel && (
                     <div className="grid gap-4 desktop:grid-cols-12">
@@ -182,13 +198,17 @@ export default function ProjectDetailPage() {
                     </div>
                   )}
                 </DataState>
+                </>}
               </TabsContent>
-              <TabsContent value="milestones"><Section title={t('milestones.title')}><MilestoneTimeline d={d} /></Section></TabsContent>
-              <TabsContent value="progress"><ProgressLogTab d={d} /></TabsContent>
+              <TabsContent value="progress" className="space-y-4">
+                <ChartCard title={t('progress.title')} table={{ columns: [t('progress.date'), t('progress.plannedPct'), t('progress.physical')], rows: curve.map((c) => [fmtDate(c.date, locale, 'short'), c.planned, c.actual]) }}>
+                  {curve.length ? <ProgressCurve data={curve} height={260} /> : <p className="text-sm text-muted-foreground">{t('progress.empty')}</p>}
+                </ChartCard>
+                <Section title={t('milestones.title')}><MilestoneTimeline d={d} /></Section>
+                <ProgressLogTab d={d} />
+              </TabsContent>
               <TabsContent value="finance"><FinanceTab d={d} /></TabsContent>
-              <TabsContent value="risks"><RisksTab d={d} /></TabsContent>
               <TabsContent value="documents"><DocumentsTab d={d} /></TabsContent>
-              <TabsContent value="audit"><AuditTab projectId={pid} /></TabsContent>
               <TabsContent value="discussion">{tab === 'discussion' && <RecordDiscussion type="PROJECT" id={pid} />}</TabsContent>
               <TabsContent value="fieldTeam"><ProjectFieldTeam projectId={pid} code={p.code} name={p.name} status={p.status} approved={p.approvalStatus === 'APPROVED'} enabled={tab === 'fieldTeam'} /></TabsContent>
             </Tabs>
