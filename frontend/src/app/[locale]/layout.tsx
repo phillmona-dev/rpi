@@ -17,7 +17,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   const t = await getTranslations({ locale, namespace: 'app' });
   return { title: { default: t('name'), template: `%s · ${t('short')}` }, description: t('tagline'), applicationName: t('name'), robots: { index: false, follow: false } };
 }
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: [{ media: '(prefers-color-scheme: light)', color: '#f5f8fb' }, { media: '(prefers-color-scheme: dark)', color: '#0d1420' }] };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#f5f8fb' };
 
 export default async function LocaleLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
   if (!routing.locales.includes(locale as Locale)) notFound();
