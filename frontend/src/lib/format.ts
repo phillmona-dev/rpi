@@ -26,10 +26,11 @@ export function pct(value: number | null | undefined, digits = 0) {
   if (value === null || value === undefined || Number.isNaN(value)) return '—';
   return `${Number(value).toFixed(digits)}%`;
 }
+/** Difference between actual and planned progress, shown the way non-specialists read it ("+16%", "−10%"). */
 export function signedPp(value: number | null | undefined, digits = 0) {
   if (value === null || value === undefined) return '—';
   const v = Number(value);
-  return `${v > 0 ? '+' : ''}${v.toFixed(digits)} pp`;
+  return `${v > 0 ? '+' : ''}${v.toFixed(digits)}%`;
 }
 export function ratio(value: number | null | undefined) { return value === null || value === undefined ? '—' : Number(value).toFixed(2); }
 

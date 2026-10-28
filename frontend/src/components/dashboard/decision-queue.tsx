@@ -15,10 +15,11 @@ export function DecisionQueue({ alerts, isLoading, error, refetch }: { alerts?: 
   const t = useTranslations('dashboard');
   const ta = useTranslations('alerts');
   const tr = useTranslations('enums.rule');
+  const tc = useTranslations('common');
   const [open, setOpen] = React.useState<number | null>(null);
   useLocale();
   return (
-    <Section id="decision-queue" title={t('decisionQueue')} hint={t('decisionQueueHint')} actions={<Button asChild variant="ghost" size="sm"><Link href="/alerts">{ta('title')}<ArrowRight /></Link></Button>}>
+    <Section id="decision-queue" title={t('decisionQueue')} hint={t('decisionQueueHint')} actions={<Button asChild variant="ghost" size="sm"><Link href="/alerts">{t('seeAll')}<ArrowRight /></Link></Button>}>
       <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!alerts?.length} emptyTitle={t('noDecisions')} rows={5}>
         <ul className="divide-y -mx-2">
           {alerts?.map((a) => (
@@ -26,8 +27,8 @@ export function DecisionQueue({ alerts, isLoading, error, refetch }: { alerts?: 
               <button type="button" onClick={() => setOpen(a.id)} className="flex w-full items-start gap-3 rounded-md px-2 py-2.5 text-left hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-ring">
                 <AlertSeverityBadge value={a.severity} />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium">{a.title}</div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                  <div className="truncate text-base font-medium">{a.title}</div>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
                     {a.sector && <SectorDot sector={a.sector} />}
                     <span className="truncate max-w-[220px]">{a.entityName ?? a.entityCode}</span>
                     {a.weredaName && <span>· {a.weredaName}</span>}
@@ -35,7 +36,7 @@ export function DecisionQueue({ alerts, isLoading, error, refetch }: { alerts?: 
                   </div>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1">
-                  <span className="inline-flex items-center gap-1 text-2xs text-muted-foreground tabular"><Clock className="h-3 w-3" />{a.ageHours < 48 ? `${a.ageHours}h` : `${Math.floor(a.ageHours / 24)}d`}</span>
+                  <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Clock className="h-3 w-3" />{tc('daysAgo', { count: Math.floor(a.ageHours / 24) })}</span>
                   {a.decisionRequired && <Badge variant="outline" className="text-2xs">{ta('decisionBadge')}</Badge>}
                 </div>
               </button>

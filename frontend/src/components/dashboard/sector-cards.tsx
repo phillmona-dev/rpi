@@ -3,7 +3,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import type { SectorSummary } from '@/lib/api/types';
 import { Link } from '@/i18n/navigation';
-import { Sparkline } from '@/components/charts/sparkline';
 import { Progress } from '@/components/ui/progress';
 import { sectorSlug, sectorVar, toneVar } from '@/lib/domain';
 import { money, pct } from '@/lib/format';
@@ -28,18 +27,15 @@ export function SectorCards({ sectors, isLoading }: { sectors?: SectorSummary[];
                 <span className="text-base font-semibold">{te(s.sector)}</span>
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground group-hover:text-foreground">{tp('count', { count: s.projectsTotal })}<ArrowRight className="h-3.5 w-3.5" /></span>
               </div>
-              <div className="mt-2 flex items-end justify-between gap-3">
-                <div>
-                  <div className="text-2xl font-semibold tabular leading-none">{pct(s.avgPhysicalProgressPct)}</div>
-                  <div className="mt-1 text-xs text-muted-foreground" style={{ color: variance <= -5 ? toneVar.serious : undefined }}>{Math.abs(variance) < 0.5 ? tk('onPlan') : variance < 0 ? tk('behind', { value: Math.abs(variance).toFixed(0) }) : tk('ahead', { value: variance.toFixed(0) })}</div>
-                </div>
-                <Sparkline values={s.progressSparkline} color={sectorVar[s.sector]} />
+              <div className="mt-2">
+                <div className="text-2xl font-semibold tabular leading-none">{pct(s.avgPhysicalProgressPct)} <span className="text-sm font-normal text-muted-foreground">{t('workDone')}</span></div>
+                <div className="mt-1 text-sm font-medium" style={{ color: variance <= -5 ? toneVar.serious : variance > 0.5 ? toneVar.good : undefined }}>{Math.abs(variance) < 0.5 ? tk('onPlan') : variance < 0 ? tk('behind', { value: Math.abs(variance).toFixed(0) }) : tk('ahead', { value: variance.toFixed(0) })}</div>
               </div>
               <Progress value={s.avgPhysicalProgressPct ?? 0} planned={s.avgPlannedProgressPct} tone={sectorVar[s.sector]} className="mt-2" label={te(s.sector)} />
-              <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-muted-foreground">
-                <div><dt>{t('kpi.activeProjects')}</dt><dd className="text-sm font-medium text-foreground tabular">{s.projectsActive}<span className="text-muted-foreground font-normal">/{s.projectsTotal}</span></dd></div>
-                <div><dt>{t('released')}</dt><dd className="text-sm font-medium text-foreground tabular">{pct(util)}<span className="text-muted-foreground font-normal"> · {money(s.budgetEtb, locale)}</span></dd></div>
-                <div><dt>{t('metric.openAlerts')}</dt><dd className="text-sm font-medium tabular" style={{ color: s.criticalAlerts ? toneVar.critical : undefined }}>{s.openAlerts}{s.criticalAlerts ? <span className="font-normal text-xs"> ({s.criticalAlerts} crit.)</span> : null}</dd></div>
+              <dl className="mt-3 grid grid-cols-3 gap-2 text-sm text-muted-foreground">
+                <div><dt>{t('sector.underWay')}</dt><dd className="font-medium text-foreground tabular">{s.projectsActive} <span className="font-normal text-muted-foreground">{t('sector.ofTotal', { total: s.projectsTotal })}</span></dd></div>
+                <div><dt>{t('sector.money')}</dt><dd className="font-medium text-foreground tabular">{pct(util)} <span className="font-normal text-muted-foreground">{t('sector.ofBudget', { budget: money(s.budgetEtb, locale) })}</span></dd></div>
+                <div><dt>{t('sector.problems')}</dt><dd className="font-medium tabular" style={{ color: s.criticalAlerts ? toneVar.critical : undefined }}>{s.openAlerts}{s.criticalAlerts ? <span className="font-normal"> · {t('sector.serious', { count: s.criticalAlerts })}</span> : null}</dd></div>
               </dl>
             </Link>
           );

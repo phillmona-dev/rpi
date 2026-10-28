@@ -13,8 +13,8 @@ describe('format', () => {
   it('formats percentages and variance', () => {
     expect(pct(49.2)).toBe('49%');
     expect(pct(49.26, 1)).toBe('49.3%');
-    expect(signedPp(-9.5)).toBe('-10 pp');
-    expect(signedPp(3.2, 1)).toBe('+3.2 pp');
+    expect(signedPp(-9.5)).toBe('-10%');
+    expect(signedPp(3.2, 1)).toBe('+3.2%');
   });
   it('resolves localized names with fallback', () => {
     const n = { en: 'Adwa', ti: 'ዓድዋ', am: null };
