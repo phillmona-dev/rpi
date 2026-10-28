@@ -1,5 +1,5 @@
-import { ModuleLauncher } from '@/components/layout/module-launcher';
+import { HomePage } from '@/components/home/home-page';
 
-export default function HomePage() {
-  return <ModuleLauncher />;
+export default function Home() {
+  return <HomePage />;
 }

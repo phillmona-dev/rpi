@@ -6,33 +6,36 @@
     "office": "Office of the Chief Executive for Economic Affairs and Reconstruction"
   },
   "nav": {
-    "commandCenter": "Command Center",
+    "commandCenter": "Overview",
     "sectors": "Sectors",
-    "geography": "Geography",
+    "geography": "Zones & weredas",
     "projects": "Projects",
-    "facilities": "Facilities & Damage",
-    "damage": "Damage Assessment",
-    "finance": "Finance",
+    "facilities": "Facilities",
+    "damage": "Damage assessment",
+    "finance": "Budget & spending",
     "alerts": "Alerts",
-    "briefing": "Daily Brief",
+    "briefing": "Daily summary",
     "administration": "Administration",
-    "users": "Users",
-    "audit": "Audit Log",
+    "users": "User accounts",
+    "audit": "Activity history",
     "collapse": "Collapse navigation",
     "expand": "Expand navigation",
     "main": "Main navigation",
     "skip": "Skip to content",
-    "map": "Geospatial Command",
-    "intelligence": "Intelligence",
-    "evidence": "Field Evidence",
+    "map": "Map",
+    "intelligence": "Risks & priorities",
+    "evidence": "Site photos & inspections",
     "reports": "Reports",
     "command": "Command",
     "analysis": "Analysis",
     "records": "Records",
-    "approvals": "Project Approvals",
-    "fieldTeam": "Field Team",
+    "approvals": "Project approvals",
+    "fieldTeam": "Field team",
     "operations": "Field operations",
-    "messages": "Messages"
+    "messages": "Messages",
+    "home": "Home",
+    "menu": "Menu",
+    "mySites": "My assessment sites"
   },
   "common": {
     "loading": "Loading…",
@@ -181,8 +184,8 @@
     "readOnly": "Read-only access"
   },
   "dashboard": {
-    "title": "Command Center",
-    "subtitle": "Single-window oversight of reconstruction across Tigray",
+    "title": "Overview",
+    "subtitle": "The state of reconstruction across Tigray at a glance",
     "kpi": {
       "activeProjects": "Active projects",
       "ofTotal": "of {total} total",
@@ -295,7 +298,7 @@
   },
   "projects": {
     "title": "Projects",
-    "subtitle": "Reconstruction project portfolio",
+    "subtitle": "All reconstruction projects and how they are progressing",
     "count": "{count, plural, one {# project} other {# projects}}",
     "columns": {
       "code": "Code",
@@ -508,8 +511,8 @@
     "register": "Register project"
   },
   "facilities": {
-    "title": "Facilities & Damage",
-    "subtitle": "Damage register across all sectors",
+    "title": "Facilities",
+    "subtitle": "Schools, health facilities, factories and farms, and how badly each was damaged",
     "count": "{count, plural, one {# facility} other {# facilities}}",
     "columns": {
       "code": "Code",
@@ -555,8 +558,8 @@
     }
   },
   "damage": {
-    "title": "Damage Assessment",
-    "subtitle": "Plan assessment campaigns, assign field teams, verify findings and hand verified needs to project registration",
+    "title": "Damage assessment",
+    "subtitle": "Plan site assessments, assign field staff, check their findings, and turn checked damage into projects",
     "noAccess": "Damage assessment is available to oversight, planning and field team roles",
     "newCampaign": "New campaign",
     "adHoc": "Ad hoc visit",
@@ -1113,7 +1116,7 @@
   },
   "alerts": {
     "title": "Alerts",
-    "subtitle": "Decision queue of rule-based alerts requiring acknowledgement, assignment or resolution. Unresolved critical alerts older than 72 hours are highlighted in red.",
+    "subtitle": "Problems the system has spotted that need someone to look at them. Serious problems left open for more than 3 days are shown in red.",
     "count": "{count, plural, one {# alert} other {# alerts}}",
     "columns": {
       "severity": "Severity",
@@ -1169,8 +1172,8 @@
     "overdue": "Critical > 72 h"
   },
   "finance": {
-    "title": "Finance",
-    "subtitle": "Allocation, release and certified expenditure across the portfolio",
+    "title": "Budget & spending",
+    "subtitle": "How much money is planned, released and spent",
     "bySector": "By sector",
     "bySource": "By funding source",
     "byZone": "By zone",
@@ -1625,8 +1628,8 @@
     }
   },
   "intelligence": {
-    "title": "Reconstruction Intelligence",
-    "subtitle": "Early warnings, executive actions, comparisons and risk — every figure traceable to recorded data",
+    "title": "Risks & priorities",
+    "subtitle": "Which projects need attention, why, and what to decide first",
     "tabs": {
       "brief": "Brief",
       "risk": "Risk Register",
@@ -1779,8 +1782,8 @@
     "age": "Open for"
   },
   "evidence": {
-    "title": "Field Evidence",
-    "subtitle": "Site inspections, geotagged photos and videos, and their verification status",
+    "title": "Site photos & inspections",
+    "subtitle": "What field staff saw on site, with photos, and whether it has been checked",
     "gallery": "Evidence gallery",
     "galleryHint": "Newest first. Geotag and timestamp badges show what the capture device recorded.",
     "inspections": "Inspections",
@@ -1873,8 +1876,8 @@
     "demoNote": "Demonstration placeholders stand in for field photos until the Phase-2 field app delivers real media."
   },
   "map": {
-    "title": "Geospatial Command",
-    "subtitle": "Projects, facilities, damage and field evidence on one map",
+    "title": "Map",
+    "subtitle": "Projects, facilities and damage on the map of Tigray",
     "layers": {
       "boundaries": "Boundaries",
       "weredas": "Wereda indicators",
@@ -1921,7 +1924,7 @@
   },
   "reports": {
     "title": "Reports",
-    "subtitle": "Executive, sector, geographic, progress, financial, risk and evidence reports — export-ready and recorded",
+    "subtitle": "Ready-made reports you can view, print or download",
     "type": "Report",
     "period": "Period",
     "periods": {
@@ -2388,8 +2391,8 @@
     }
   },
   "approvals": {
-    "title": "Project Approvals",
-    "subtitle": "Every registered project waits here for the Chief Executive's decision before it joins the active portfolio.",
+    "title": "Project approvals",
+    "subtitle": "New projects wait here until the Chief Executive approves them.",
     "noAccess": "Approvals are not available for your role",
     "noAccessHint": "The approval queue is open to the Chief Executive, sector heads, analysts and administrators.",
     "tabs": {
@@ -2538,8 +2541,8 @@
     }
   },
   "fieldTeam": {
-    "title": "Field Team",
-    "subtitle": "Data collectors, field analysts and supervisors who collect and verify evidence on approved projects.",
+    "title": "Field team",
+    "subtitle": "The people who visit sites to collect and check information.",
     "noAccess": "The field team is not available for your role",
     "noAccessHint": "Field team records are open to the Chief Executive, sector heads, analysts and administrators.",
     "register": "Register member",
@@ -3172,6 +3175,72 @@
         "title": "Campaign returned to fieldwork",
         "body": "{code}: {excerpt}"
       }
+    }
+  },
+  "home": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "allTigray": "All of Tigray",
+    "attention": "Needs your attention",
+    "allClear": "Nothing needs your attention right now.",
+    "tasks": {
+      "approve": "{count, plural, one {# new project is waiting for your approval} other {# new projects are waiting for your approval}}",
+      "returnedProjects": "{count, plural, one {# project was sent back to you for changes} other {# projects were sent back to you for changes}}",
+      "returnedSites": "{count, plural, one {# damage assessment was sent back to you for changes} other {# damage assessments were sent back to you for changes}}",
+      "toAssess": "{count, plural, one {# site is waiting for you to assess} other {# sites are waiting for you to assess}}",
+      "toReview": "{count, plural, one {# damage assessment is waiting for you to check} other {# damage assessments are waiting for you to check}}",
+      "endorse": "{count, plural, one {# damage assessment campaign is finished and waiting for your approval} other {# damage assessment campaigns are finished and waiting for your approval}}",
+      "needs": "{count, plural, one {# checked damage report has no project yet} other {# checked damage reports have no project yet}}",
+      "alerts": "{count, plural, one {# problem needs a decision} other {# problems need a decision}}",
+      "visits": "{count, plural, one {# site visit is overdue} other {# site visits are overdue}}",
+      "messages": "{count, plural, one {You have # unread message} other {You have # unread messages}}"
+    },
+    "actions": {
+      "decide": "Decide",
+      "fix": "Make changes",
+      "open": "Open",
+      "check": "Check",
+      "see": "See them",
+      "read": "Read"
+    },
+    "glance": {
+      "title": "Today in numbers",
+      "underWay": "Projects under way",
+      "underWayNote": "{total} projects in total · {done} finished",
+      "behind": "Projects behind schedule",
+      "behindNote": "Late or stopped — see which ones",
+      "released": "Money released",
+      "releasedNote": "{pct}% of the {budget} budget",
+      "damaged": "Badly damaged facilities",
+      "damagedNote": "{restored} already back in service"
+    },
+    "goTo": "Where do you want to go?",
+    "groups": {
+      "work": "Your daily work",
+      "follow": "Follow progress",
+      "records": "Reports and administration"
+    },
+    "desc": {
+      "approvals": "Approve, return or reject new projects before they start.",
+      "damage": "Plan damage assessments, assign field staff and check their findings.",
+      "mySites": "The sites you have been asked to assess or check.",
+      "alerts": "Problems the system has spotted that need someone to act.",
+      "fieldTeam": "The people who visit sites, where they work and what they are assigned.",
+      "messages": "Talk with colleagues about projects, approvals and sites.",
+      "commandCenter": "The state of reconstruction across Tigray on one page.",
+      "projects": "Every reconstruction project and how it is progressing.",
+      "map": "Projects, facilities and damage on the map.",
+      "intelligence": "Which projects need attention first, and why.",
+      "finance": "How much money is planned, released and spent.",
+      "facilities": "Schools, health facilities, factories and farms, and their damage.",
+      "evidence": "Photos and inspection notes from field visits.",
+      "sectors": "Education, health, industry and agriculture side by side.",
+      "geography": "Progress and damage zone by zone, wereda by wereda.",
+      "briefing": "A one-page summary of the day, ready to print.",
+      "reports": "Ready-made reports to view, print or download.",
+      "users": "Create accounts and decide what each person can see and do.",
+      "audit": "Who did what, and when."
     }
   }
 }

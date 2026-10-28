@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { BarChart3, Globe, Home, LogOut, Moon, Search, Sun, SunMoon, UserCircle2 } from 'lucide-react';
+import { BarChart3, Globe, Home, LayoutGrid, LogOut, Moon, Search, Sun, SunMoon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -16,10 +16,13 @@ import { NotificationCenter } from '@/components/notifications/notification-cent
 import { CommandSearch } from './command-search';
 import { Breadcrumbs } from './breadcrumbs';
 import { Badge } from '@/components/ui/badge';
+import { DESTINATION_GROUPS, destinationsFor } from './destinations';
 import { cn } from '@/lib/utils';
 
 export function Topbar({ onMenu: _onMenu }: { onMenu: () => void }) {
   const t  = useTranslations('common');
+  const tn = useTranslations('nav');
+  const th = useTranslations('home.groups');
   const tr = useTranslations('roles');
   const ts = useTranslations('scope');
   const te = useTranslations('enums.sector');
@@ -45,10 +48,10 @@ export function Topbar({ onMenu: _onMenu }: { onMenu: () => void }) {
   return (
     <header className="dark-chrome sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-sidebar-border bg-sidebar/95 px-4 text-sidebar-foreground backdrop-blur supports-[backdrop-filter]:bg-sidebar/90">
 
-      {/* Brand / Home pill */}
+      {/* Home */}
       <Link
         href="/"
-        aria-label="Module Launcher — Home"
+        aria-label={tn('home')}
         className={cn(
           'flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-sidebar-accent',
           isHome && 'bg-sidebar-accent',
@@ -58,42 +61,53 @@ export function Topbar({ onMenu: _onMenu }: { onMenu: () => void }) {
         <span className="hidden tablet:block text-sm font-semibold text-white leading-none">RPIS</span>
       </Link>
 
+      {/* Menu: every section, grouped as on the home page */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="shrink-0 gap-2 text-sm font-medium"><LayoutGrid className="h-4 w-4" />{tn('menu')}</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="max-h-[80vh] w-64 overflow-y-auto">
+          <DropdownMenuItem asChild><Link href="/"><Home className="mr-2 h-4 w-4" />{tn('home')}</Link></DropdownMenuItem>
+          {DESTINATION_GROUPS.map((g) => {
+            const items = destinationsFor(user.roles).filter((d) => d.group === g);
+            if (!items.length) return null;
+            return (
+              <React.Fragment key={g}>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">{th(g)}</DropdownMenuLabel>
+                {items.map((d) => (
+                  <DropdownMenuItem key={d.href} asChild>
+                    <Link href={d.href as '/'} className={cn(pathname.startsWith(d.href) && 'font-semibold')}><d.icon className="mr-2 h-4 w-4" />{tn(d.key)}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       {/* Separator */}
       <div className="h-5 w-px bg-sidebar-border shrink-0" aria-hidden />
 
-      {/* Breadcrumbs / page title */}
-      {!isHome && (
-        <>
-          <Button
-            asChild
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            aria-label="Return to module launcher"
-          >
-            <Link href="/"><Home className="h-4 w-4" /></Link>
-          </Button>
-          <div className="min-w-0 flex-1"><Breadcrumbs /></div>
-        </>
-      )}
+      {/* Where you are */}
+      {!isHome && <div className="min-w-0 flex-1"><Breadcrumbs /></div>}
       {isHome && <div className="flex-1" />}
 
       {/* Search */}
       <Button
         variant="outline"
         size="sm"
-        className="hidden tablet:inline-flex w-56 justify-between text-muted-foreground font-normal"
+        className="hidden tablet:inline-flex w-48 justify-start gap-2 text-muted-foreground font-normal"
         onClick={() => setSearchOpen(true)}
       >
-        <span className="inline-flex items-center gap-2"><Search className="h-4 w-4" />{t('search')}…</span>
-        <kbd className="rounded border bg-muted px-1.5 text-2xs">{t('searchShortcut')}</kbd>
+        <Search className="h-4 w-4" />{t('search')}…
       </Button>
       <Button variant="ghost" size="icon" className="tablet:hidden" onClick={() => setSearchOpen(true)} aria-label={t('search')}><Search /></Button>
       <CommandSearch open={searchOpen} onOpenChange={setSearchOpen} />
 
       <NotificationCenter />
       <ChatIndicator />
-      <LiveIndicator />
+      <span className="hidden laptop:contents"><LiveIndicator /></span>
       {user.sectorScope && <Badge variant="outline" className="hidden laptop:inline-flex">{ts('scopedTo', { sector: te(user.sectorScope) })}</Badge>}
       {user.roles.includes('PMO_FEDERAL') && <Badge variant="outline" className="hidden laptop:inline-flex">{ts('readOnly')}</Badge>}
 
@@ -140,7 +154,6 @@ export function Topbar({ onMenu: _onMenu }: { onMenu: () => void }) {
           <DropdownMenuItem onSelect={signOut}><LogOut />{t('signOut')}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <span className="sr-only"><UserCircle2 /></span>
     </header>
   );
 }
