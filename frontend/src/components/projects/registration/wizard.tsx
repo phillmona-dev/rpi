@@ -1,13 +1,15 @@
 'use client';
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { AlertCircle, ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, FileCheck2, FolderPlus, History, Loader2, Save, Trash2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { AlertCircle, ArrowLeft, ArrowRight, Check, CheckCircle2, ClipboardCheck, Clock, FileCheck2, FolderPlus, History, Loader2, Save, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HealthBadge, SectorDot } from '@/components/common/badges';
 import { RiskChip } from '@/components/projects/risk-score';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
 import { useCreateProject, useValidateProject, useWeredaMetrics, useCodeSuggestion } from '@/lib/api/hooks';
+import { useAssessment } from '@/lib/api/damage';
 import { ApiError } from '@/lib/api/client';
 import type { ProjectSummary, RegistrationValidation } from '@/lib/api/types';
 import { fmtDateTime, localizedName, money } from '@/lib/format';
@@ -54,9 +56,32 @@ export function RegistrationWizard() {
   const create = useCreateProject();
   const msg = React.useCallback((k: string, v?: Record<string, string | number>) => t(k as 'v.required', v as never), [t]);
   const key = STEPS[step];
+  const te = useTranslations('enums');
+  const basisId = Number(useSearchParams().get('assessment') ?? NaN);
+  const basis = useAssessment(basisId);
+  const [basisApplied, setBasisApplied] = React.useState(false);
 
-  // Draft: offer to restore once, then autosave while editing
-  React.useEffect(() => { const d = readDraft(draftKey); if (d && isDirty(d.state)) setPendingDraft(d); }, [draftKey]);
+  // Registering from a verified need: carry the assessment's facility, location, people and estimate across.
+  React.useEffect(() => {
+    const d = basis.data;
+    if (!d || basisApplied) return;
+    const a = d.summary;
+    const est = a.recommendedIntervention === 'RECONSTRUCTION' || a.recommendedIntervention === 'RELOCATION' ? a.estimatedReplacementCostEtb ?? a.estimatedRepairCostEtb : a.estimatedRepairCostEtb ?? a.estimatedReplacementCostEtb;
+    const action = a.recommendedIntervention ? te(`intervention.${a.recommendedIntervention}`) : te('intervention.REHABILITATION');
+    setState({
+      ...emptyForm(),
+      name: t('fromAssessment.name', { action, facility: a.facility.name }), sector: a.facility.sector, zoneId: a.facility.wereda.zoneId, weredaId: a.facility.wereda.id,
+      latitude: d.location ? String(d.location.lat) : '', longitude: d.location ? String(d.location.lng) : '', facilityIds: [a.facility.id],
+      beneficiaries: a.beneficiariesAffected ? String(a.beneficiariesAffected) : '', totalBudgetEtb: est ? String(Math.round(est)) : '',
+      description: t('fromAssessment.description', { facility: a.facility.name, severity: te(`severity.${a.severity}`), date: a.assessedOn, action,
+        priority: a.interventionPriority ? te(`needPriority.${a.interventionPriority}`) : '—', source: d.campaign ? `${d.campaign.code} · ${d.campaign.name}` : t('fromAssessment.adHoc'), notes: d.notes ?? '' }).trim(),
+      registrationNote: t('fromAssessment.note', { id: a.id }), assessmentIds: [a.id],
+    });
+    setBasisApplied(true);
+  }, [basis.data, basisApplied, t, te]);
+
+  // Draft: offer to restore once, then autosave while editing (not when starting from an assessment)
+  React.useEffect(() => { if (Number.isFinite(basisId)) return; const d = readDraft(draftKey); if (d && isDirty(d.state)) setPendingDraft(d); }, [draftKey, basisId]);
   React.useEffect(() => {
     if (created || pendingDraft || !isDirty(s)) return;
     const h = setTimeout(() => { const at = new Date().toISOString(); writeDraft(draftKey, { v: DRAFT_VERSION, savedAt: at, step, state: s }); setSavedAt(at); }, 700);
@@ -131,8 +156,16 @@ export function RegistrationWizard() {
   if (created) return <Success p={created} onAnother={() => { setState(emptyForm()); setStep(0); setAttempted(new Set()); setResult(null); setCreated(null); }} />;
 
   const blockers = result?.errors.length ?? 0;
+  const basisShown = s.assessmentIds.length > 0 && basis.data && s.assessmentIds.includes(basis.data.summary.id);
   return (
     <div className="space-y-4">
+      {basisShown && basis.data && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border-2 border-primary/40 bg-card px-4 py-3 shadow-card" role="status">
+          <p className="flex items-center gap-2 text-sm"><ClipboardCheck className="h-4 w-4 shrink-0 text-primary" />
+            <span>{t('fromAssessment.banner', { facility: basis.data.summary.facility.name })} <Link href={`/damage/assessments/${basis.data.summary.id}`} className="font-medium text-primary hover:underline">{t('fromAssessment.view')}</Link></span></p>
+          <Button size="sm" variant="ghost" onClick={() => set({ assessmentIds: [] })}><X />{t('fromAssessment.unlink')}</Button>
+        </div>
+      )}
       {pendingDraft && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-card px-4 py-3 shadow-card" role="status">
           <p className="flex items-center gap-2 text-sm"><History className="h-4 w-4 text-muted-foreground" />{t('draft.found', { name: pendingDraft.state.name || t('draft.untitled'), time: fmtDateTime(pendingDraft.savedAt) })}</p>

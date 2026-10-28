@@ -228,13 +228,35 @@ public class ProjectCreationService {
         else if (tr.isEmpty()) warnings.add(issue("tranches", "No disbursement schedule — disbursement-lag alerts cannot fire for this project"));
         else if (total.subtract(scheduled).compareTo(MONEY_TOLERANCE) > 0) warnings.add(issue("tranches", "ETB " + fmt(total.subtract(scheduled)) + " of the budget has no disbursement scheduled"));
 
+        // Damage assessments: reconstruction starts from verified findings
+        List<Long> aids = nz(r.assessmentIds());
+        Set<Long> assessedFacilities = new LinkedHashSet<>();
+        for (Long aid : new LinkedHashSet<>(aids)) {
+            var rows = jdbc.queryForList("""
+                SELECT a.status, a.recommended_intervention, a.facility_id, f.name, f.sector, f.wereda_id, p.code project_code, p.status project_status
+                FROM damage_assessment a JOIN facility f ON f.id = a.facility_id LEFT JOIN project p ON p.id = a.project_id WHERE a.id = :id
+                """, new MapSqlParameterSource("id", aid));
+            if (rows.isEmpty()) { errors.add(issue("assessmentIds", "Unknown damage assessment #" + aid)); continue; }
+            var a = rows.get(0);
+            String fname = (String) a.get("name");
+            if (!"VERIFIED".equals(a.get("status"))) errors.add(issue("assessmentIds", "The assessment of " + fname + " has not been verified (" + a.get("status") + ")"));
+            if (a.get("project_code") != null && !"CANCELLED".equals(a.get("project_status"))) errors.add(issue("assessmentIds", "The assessment of " + fname + " is already the basis of project " + a.get("project_code")));
+            if (r.sector() != null && !r.sector().name().equals(a.get("sector"))) errors.add(issue("assessmentIds", fname + " belongs to the " + a.get("sector") + " sector"));
+            if (r.weredaId() != null && !r.weredaId().equals(a.get("wereda_id"))) warnings.add(issue("assessmentIds", fname + " is in a different wereda from the project"));
+            if ("NO_ACTION".equals(a.get("recommended_intervention"))) warnings.add(issue("assessmentIds", "The assessment of " + fname + " recommends no action"));
+            assessedFacilities.add(((Number) a.get("facility_id")).longValue());
+        }
+
         // Facilities
         List<Long> fids = nz(r.facilityIds());
         if (new HashSet<>(fids).size() != fids.size()) errors.add(issue("facilityIds", "A facility is listed twice"));
+        if (fids.isEmpty() && aids.isEmpty()) warnings.add(issue("facilityIds", "No damage assessment or facility is linked — reconstruction projects should start from a verified damage assessment"));
         for (Long id : new LinkedHashSet<>(fids)) {
             Facility f = facilities.findById(id).orElse(null);
             if (f == null) { errors.add(issue("facilityIds", "Unknown facility #" + id)); continue; }
             if (r.sector() != null && f.getSector() != r.sector()) errors.add(issue("facilityIds", f.getName() + " belongs to the " + f.getSector() + " sector"));
+            if (!assessedFacilities.contains(id) && !hasVerifiedAssessment(id))
+                errors.add(issue("facilityIds", f.getName() + " has no verified damage assessment — assess it in a damage assessment campaign before registering a project"));
             int linked = projectFacilities.countByFacilityId(id);
             if (linked > 0) warnings.add(issue("facilityIds", f.getName() + " is already covered by " + linked + " other project" + (linked > 1 ? "s" : "")));
         }
@@ -246,6 +268,11 @@ public class ProjectCreationService {
         if (rk.isEmpty()) warnings.add(issue("risks", "No risks registered — the issues & risks component of the risk score starts at zero"));
 
         return new ProjectDtos.ValidationResult(errors.isEmpty(), code == null && r.sector() != null ? suggestCode(r.sector()) : code, errors, warnings);
+    }
+
+    private boolean hasVerifiedAssessment(Long facilityId) {
+        Long n = jdbc.queryForObject("SELECT count(*) FROM damage_assessment WHERE facility_id = :f AND status = 'VERIFIED'", new MapSqlParameterSource("f", facilityId), Long.class);
+        return n != null && n > 0;
     }
 
     // ── registration ─────────────────────────────────────────────────────
@@ -320,7 +347,20 @@ public class ProjectCreationService {
             e.setFundingSource(t.fundingSource() != null ? t.fundingSource() : r.fundingSource());
             disbursements.save(e);
         }
-        for (Long fid : new LinkedHashSet<>(nz(r.facilityIds()))) projectFacilities.save(new ProjectFacility(saved, facilities.getReferenceById(fid)));
+        Set<Long> linkedFacilities = new LinkedHashSet<>(nz(r.facilityIds()));
+        List<Long> basis = new ArrayList<>(new LinkedHashSet<>(nz(r.assessmentIds())));
+        if (!basis.isEmpty()) linkedFacilities.addAll(jdbc.queryForList("SELECT facility_id FROM damage_assessment WHERE id IN (:ids)", new MapSqlParameterSource("ids", basis), Long.class));
+        for (Long fid : linkedFacilities) projectFacilities.save(new ProjectFacility(saved, facilities.getReferenceById(fid)));
+        if (!basis.isEmpty()) {
+            MapSqlParameterSource lp = new MapSqlParameterSource("ids", basis).addValue("p", saved.getId()).addValue("code", saved.getCode())
+                .addValue("uid", actor == null ? null : actor.id(), java.sql.Types.BIGINT).addValue("name", actor == null ? "system" : actor.fullName());
+            jdbc.update("UPDATE damage_assessment SET project_id = :p, project_linked_at = now() WHERE id IN (:ids)", lp);
+            jdbc.update("""
+                INSERT INTO assessment_event(campaign_id, assessment_id, kind, actor_user_id, actor_name, note, data)
+                SELECT campaign_id, id, 'PROJECT_REGISTERED', :uid, :name, 'Basis of project ' || :code, jsonb_build_object('projectId', :p, 'projectCode', :code)
+                FROM damage_assessment WHERE id IN (:ids)
+                """, lp);
+        }
         for (var k : nz(r.risks())) {
             ProjectRisk e = new ProjectRisk();
             e.setProject(saved); e.setTitle(k.title().trim()); e.setCategory(k.category()); e.setLikelihood(k.likelihood()); e.setImpact(k.impact());

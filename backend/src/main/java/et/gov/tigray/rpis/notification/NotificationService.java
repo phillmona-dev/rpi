@@ -3,6 +3,7 @@ package et.gov.tigray.rpis.notification;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import et.gov.tigray.rpis.common.BusinessException;
+import et.gov.tigray.rpis.damage.AssessmentNotice;
 import et.gov.tigray.rpis.messaging.ChatRealtime;
 import et.gov.tigray.rpis.realtime.DomainEvent;
 import et.gov.tigray.rpis.security.CurrentUser;
@@ -146,6 +147,17 @@ public class NotificationService {
                     "/evidence", actor, data("inspectionId", inspectionId, "subject", r.get("subject"), "visitedOn", r.get("visited_on")));
             }
             default -> { }
+        }
+    }
+
+    /** Damage assessment workflow: the workflow has already chosen the recipients (assessor, verifier, coordinator, endorsers). */
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void onAssessmentNotice(AssessmentNotice n) {
+        try {
+            notify(n.userIds(), n.actorUserId(), n.type(), n.severity(), n.link(), n.actorName(), n.data());
+        } catch (RuntimeException ex) {
+            log.warn("Notification {} failed: {}", n.type(), ex.getMessage());
         }
     }
 

@@ -92,8 +92,17 @@ export interface FacilityRef { id: number; code: string; name: string; sector: S
 export interface AssessmentSummary {
   id: number; facility: FacilityRef; assessedOn: string; assessorName: string; severity: DamageSeverity; structuralImpactScore: number; inventoryLossPct: number | null; functionalCapacityPct: number | null;
   estimatedRepairCostEtb: number | null; estimatedReplacementCostEtb: number | null; source: DataSource; syncedAt: string | null; createdAt: string; photoCount: number;
+  status: AssessmentStatus; campaignId: number | null; campaignCode: string | null; taskId: number | null; recommendedIntervention: Intervention | null;
+  interventionPriority: NeedPriority | null; beneficiariesAffected: number | null; submittedAt: string | null; verifiedAt: string | null; projectId: number | null;
 }
-export interface AssessmentDetail { summary: AssessmentSummary; notes: string | null; audioNoteUrl: string | null; location: GeoPoint | null; photos: { id: number; url: string; caption: string | null; takenAt: string | null }[] }
+export interface AssessmentDetail {
+  summary: AssessmentSummary; notes: string | null; audioNoteUrl: string | null; location: GeoPoint | null; photos: { id: number; url: string; caption: string | null; takenAt: string | null }[];
+  revision: number; accessStatus: AccessStatus | null; currentUse: CurrentUse | null; uxoSuspected: boolean; damageCauses: DamageCause[]; equipmentLossEtb: number | null;
+  components: AssessmentComponent[]; componentRepairTotalEtb: number; submittedByName: string | null; verifiedByName: string | null; reviewNote: string | null;
+  campaign: { id: number; code: string; name: string } | null; project: { id: number; code: string; name: string } | null;
+  history: { kind: string; occurredAt: string; actorName: string | null; note: string | null }[];
+  permissions: { canReview: boolean; cannotReviewReason: string | null; canRevise: boolean; canCreateProject: boolean };
+}
 export interface LinkedProject { id: number; code: string; name: string; status: ProjectStatus; health: ProjectHealth; physicalProgressPct: number; plannedEnd: string }
 export interface FacilityDetail { facility: FacilitySummary; latestAssessment: AssessmentSummary | null; assessmentHistory: AssessmentSummary[]; projects: LinkedProject[] }
 
@@ -203,6 +212,7 @@ export interface CreateProjectRequest {
   registrationNote?: string | null; organizations: OrganizationAssignment[]; milestones: { name: string; plannedDate: string; weightPct: number }[];
   budgetLines: { category: BudgetCategory; allocatedEtb: number }[]; tranches: { plannedDate: string; amountEtb: number; fundingSource?: FundingSource | null }[];
   facilityIds: number[]; risks: { title: string; category: string; likelihood: Level; impact: Level; mitigation?: string | null; owner?: string | null }[];
+  assessmentIds?: number[];
 }
 export interface FieldIssue { field: string; message: string }
 export interface RegistrationValidation { valid: boolean; suggestedCode: string | null; errors: FieldIssue[]; warnings: FieldIssue[] }
@@ -300,3 +310,68 @@ export type NotificationSeverity = 'INFO' | 'SUCCESS' | 'WARNING' | 'CRITICAL';
 export interface AppNotification { id: number; type: string; severity: NotificationSeverity; link: string | null; actorName: string | null; data: Record<string, unknown>; createdAt: string; readAt: string | null }
 export interface NotificationPage { items: AppNotification[]; hasMore: boolean; unread: number }
 export interface NotificationFrame { type: 'NEW' | 'READ'; notification: AppNotification | null; unread: number }
+
+// ── V7 · damage assessment campaigns ───────────────────────────────────────
+export type CampaignStatus = 'PLANNING' | 'ACTIVE' | 'REVIEW' | 'COMPLETED' | 'CANCELLED';
+export type CampaignRole = 'TEAM_LEAD' | 'ASSESSOR' | 'ENGINEER' | 'VERIFIER';
+export type TaskStatus = 'PLANNED' | 'ASSIGNED' | 'IN_PROGRESS' | 'SUBMITTED' | 'RETURNED' | 'VERIFIED' | 'INACCESSIBLE' | 'CANCELLED';
+export type AssessmentStatus = 'SUBMITTED' | 'RETURNED' | 'VERIFIED' | 'REJECTED';
+export type ReviewDecision = 'VERIFY' | 'RETURN' | 'REJECT';
+export type AccessStatus = 'ACCESSIBLE' | 'PARTIAL' | 'INACCESSIBLE';
+export type CurrentUse = 'NORMAL_USE' | 'PARTIAL_USE' | 'IDP_SHELTER' | 'MILITARY_USE' | 'ABANDONED' | 'OTHER';
+export type DamageCause = 'SHELLING' | 'AIRSTRIKE' | 'LOOTING' | 'FIRE' | 'VANDALISM' | 'OCCUPATION' | 'NEGLECT' | 'FLOOD' | 'OTHER';
+export type Intervention = 'NO_ACTION' | 'MINOR_REPAIR' | 'REHABILITATION' | 'RECONSTRUCTION' | 'RELOCATION';
+export type NeedPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+export interface AssessmentComponent { component: string; condition: DamageSeverity; repairCostEtb: number | null; note: string | null }
+export interface CreateAssessmentRequest {
+  facilityId: number; clientReference?: string | null; assessedOn: string; assessorName: string; severity: DamageSeverity; structuralImpactScore: number;
+  inventoryLossPct?: number | null; functionalCapacityPct?: number | null; estimatedRepairCostEtb?: number | null; estimatedReplacementCostEtb?: number | null;
+  notes?: string | null; location?: GeoPoint | null; photos?: { url: string; caption?: string | null; takenAt?: string | null; location?: GeoPoint | null }[] | null;
+  taskId?: number | null; accessStatus?: AccessStatus | null; currentUse?: CurrentUse | null; uxoSuspected?: boolean; damageCauses?: DamageCause[];
+  recommendedIntervention?: Intervention | null; interventionPriority?: NeedPriority | null; beneficiariesAffected?: number | null; equipmentLossEtb?: number | null;
+  components?: AssessmentComponent[];
+}
+export interface Need { assessment: AssessmentSummary; campaignName: string | null; estimateEtb: number | null; ageDays: number }
+export interface NeedsResponse { summary: { count: number; totalEstimateEtb: number; urgent: number; beneficiaries: number }; items: Need[] }
+
+export interface CampaignProgress { total: number; planned: number; assigned: number; inProgress: number; submitted: number; returned: number; verified: number; inaccessible: number; cancelled: number; overdue: number; completionPct: number }
+export interface CampaignSummary {
+  id: number; code: string; name: string; sector: Sector | null; status: CampaignStatus; plannedStart: string; plannedEnd: string; coordinatorName: string | null;
+  weredaCount: number; memberCount: number; progress: CampaignProgress; verifiedEstimateEtb: number; endorsedAt: string | null; endorsementReference: string | null; daysLeft: number | null;
+}
+export interface CampaignMember {
+  id: number; agentId: number; agentCode: string; fullName: string; agentType: AgentType; role: CampaignRole; phone: string | null; hasLogin: boolean; coversScope: boolean;
+  openTasks: number; verifiedTasks: number; pendingReviews: number; active: boolean; addedAt: string; addedByName: string | null; releasedAt: string | null; releaseReason: string | null;
+}
+export interface CampaignPermissions { canManage: boolean; canStart: boolean; cannotStartReason: string | null; canCloseFieldwork: boolean; cannotCloseReason: string | null; canEndorse: boolean; cannotEndorseReason: string | null; canCancel: boolean }
+export interface CampaignDetail {
+  summary: CampaignSummary; objective: string | null; methodology: string | null; weredas: WeredaRef[]; coordinatorUserId: number | null; createdByName: string | null; createdAt: string;
+  startedAt: string | null; fieldworkClosedAt: string | null; endorsedByName: string | null; endorsementNote: string | null; cancelReason: string | null;
+  members: CampaignMember[]; permissions: CampaignPermissions;
+}
+export interface CampaignRequest { name: string; sector: Sector | null; objective?: string | null; methodology?: string | null; plannedStart: string; plannedEnd: string; coordinatorUserId?: number | null; weredaIds: number[] }
+export interface MemberCandidate { agentId: number; code: string; fullName: string; agentType: AgentType; sectors: Sector[]; hasLogin: boolean; coveredWeredas: number; openTasks: number; currentRoles: CampaignRole[]; eligible: boolean; ineligibleReason: string | null }
+export interface TaskPerson { agentId: number; fullName: string; userId: number | null }
+export interface AssessmentTask {
+  id: number; campaignId: number; campaignCode: string; campaignName: string; campaignStatus: CampaignStatus; facility: FacilityRef; status: TaskStatus; priority: AssignmentPriority;
+  assessor: TaskPerson | null; verifier: TaskPerson | null; dueOn: string | null; overdue: boolean; instructions: string | null; statusNote: string | null;
+  assessmentId: number | null; assessmentStatus: AssessmentStatus | null; severity: DamageSeverity | null; replacementEstimateEtb: number | null;
+  previousSeverity: DamageSeverity | null; previousAssessedOn: string | null; assignedAt: string | null; submittedAt: string | null; verifiedAt: string | null;
+  latitude: number | null; longitude: number | null;
+}
+export interface SiteCandidate { facilityId: number; code: string; name: string; sector: Sector; facilityType: string; wereda: WeredaRef; latestSeverity: DamageSeverity | null; lastAssessedOn: string | null; beneficiaries: number | null; inOtherCampaign: string | null }
+export interface NewFacilityRequest { name: string; facilityType: string; weredaId: number; kebele?: string | null; latitude?: number | null; longitude?: number | null; preCrisisCapacity?: number | null; capacityUnit?: string | null; beneficiaries?: number | null; priority?: AssignmentPriority }
+export interface AssignSitesRequest { taskIds: number[]; assessorAgentId?: number | null; verifierAgentId?: number | null; dueOn?: string | null; priority?: AssignmentPriority | null; instructions?: string | null }
+export interface BulkResult { updated: number; skipped: string[] }
+export interface ResultBucket { key: string; sites: number; estimateEtb: number; beneficiaries: number }
+export interface CampaignResults {
+  progress: CampaignProgress; assessed: number; repairEstimateEtb: number; replacementEstimateEtb: number; equipmentLossEtb: number; beneficiariesAffected: number; uxoSites: number; idpShelterSites: number;
+  bySeverity: ResultBucket[]; byIntervention: ResultBucket[]; byPriority: ResultBucket[]; byWereda: ResultBucket[]; byFacilityType: ResultBucket[]; byCause: ResultBucket[]; componentsDamaged: ResultBucket[];
+  needsLinkedToProjects: number;
+}
+export interface CampaignActivity { id: number; kind: string; occurredAt: string; actorName: string | null; note: string | null; taskId: number | null; assessmentId: number | null; facilityName: string | null; data: Record<string, unknown> | null }
+export interface DamageOverview {
+  campaignsPlanning: number; campaignsActive: number; campaignsInReview: number; campaignsCompleted: number; sitesTotal: number; sitesVerified: number; sitesOutstanding: number; sitesInaccessible: number;
+  awaitingReview: number; oldestAwaitingDays: number | null; returned: number; facilitiesBySeverity: Record<DamageSeverity, number>; facilitiesAssessed: number; facilitiesNeverAssessed: number;
+  verifiedReplacementEtb: number; needsAwaitingProject: number; needsEstimateEtb: number; mine: { toAssess: number; returned: number; toReview: number };
+}

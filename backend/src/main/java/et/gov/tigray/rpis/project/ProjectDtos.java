@@ -95,7 +95,9 @@ public final class ProjectDtos {
         @Valid @Size(max = 10) List<BudgetLineInput> budgetLines,
         @Valid @Size(max = 24) List<TrancheInput> tranches,
         @Size(max = 30) List<Long> facilityIds,
-        @Valid @Size(max = 30) List<RiskInput> risks) {}
+        @Valid @Size(max = 30) List<RiskInput> risks,
+        /** Verified damage assessments the project responds to; their facilities are linked automatically. */
+        @Size(max = 30) List<Long> assessmentIds) {}
 
     /** Either an existing organisation (organizationId) or a new one (newName + newType). */
     public record OrganizationAssignment(@NotNull OrganizationRole role, Long organizationId, @Size(max = 200) String newName, OrganizationType newType, @Size(max = 200) String newContact) {}

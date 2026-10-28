@@ -6,6 +6,7 @@ import et.gov.tigray.rpis.common.Enums.OperationalStatus;
 import et.gov.tigray.rpis.common.GeoPoint;
 import et.gov.tigray.rpis.common.NotFoundException;
 import et.gov.tigray.rpis.common.Sector;
+import et.gov.tigray.rpis.common.Enums.AssessmentStatus;
 import et.gov.tigray.rpis.damage.DamageDtos;
 import et.gov.tigray.rpis.damage.DamageService;
 import et.gov.tigray.rpis.project.ProjectRepositories;
@@ -56,7 +57,8 @@ public class FacilityService {
     public FacilityDtos.FacilityDetail detail(Long id) {
         Facility f = facilities.findWithWeredaById(id).orElseThrow(() -> new NotFoundException("Facility", id));
         List<DamageDtos.AssessmentSummary> history = damage.forFacility(id);
-        DamageDtos.AssessmentSummary latest = history.isEmpty() ? null : history.get(0);
+        // The register reflects verified findings only; submissions awaiting review stay in the history.
+        DamageDtos.AssessmentSummary latest = history.stream().filter(a -> a.status() == AssessmentStatus.VERIFIED).findFirst().orElse(null);
         List<FacilityDtos.LinkedProject> projects = projectFacilities.findByFacilityId(id).stream().map(pf -> pf.getProject()).map(p ->
             new FacilityDtos.LinkedProject(p.getId(), p.getCode(), p.getName(), p.getStatus().name(), p.getHealth().name(), p.getPhysicalProgressPct(), p.getPlannedEnd())).toList();
         return new FacilityDtos.FacilityDetail(summary(f, latest, projects.size()), latest, history, projects);
@@ -64,7 +66,7 @@ public class FacilityService {
 
     private Map<Long, DamageDtos.AssessmentSummary> latestFor(List<Facility> list) {
         return list.stream().filter(f -> f.getLatestAssessmentId() != null)
-            .collect(Collectors.toMap(Facility::getId, f -> damage.forFacility(f.getId()).stream().findFirst().orElse(null), (a, b) -> a))
+            .collect(Collectors.toMap(Facility::getId, f -> damage.forFacility(f.getId()).stream().filter(a -> a.status() == AssessmentStatus.VERIFIED).findFirst().orElse(null), (a, b) -> a))
             .entrySet().stream().filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

@@ -10,7 +10,7 @@
     "geography": "ጂኦግራፊ",
     "projects": "ፕሮጀክቶች",
     "facilities": "ተቋማት እና ጉዳት",
-    "damage": "የጉዳት ግምገማዎች",
+    "damage": "የጉዳት ግምገማ",
     "finance": "ፋይናንስ",
     "alerts": "የውሳኔ ወረፋ",
     "briefing": "ዕለታዊ ማጠቃለያ",
@@ -217,7 +217,11 @@
   },
   "facilities": {
     "title": "ተቋማት እና ጉዳት",
-    "subtitle": "በሁሉም ዘርፎች የጉዳት መዝገብ"
+    "subtitle": "በሁሉም ዘርፎች የጉዳት መዝገብ",
+    "detail": {
+      "review": "ገምግም",
+      "recordAssessment": "ግምገማ መዝግብ"
+    }
   },
   "alerts": {
     "title": "የውሳኔ ወረፋ",
@@ -310,6 +314,101 @@
       "DEVELOPMENT_LOAN": "የልማት ብድር",
       "DIASPORA_FUND": "የዲያስፖራ ፈንድ",
       "PRIVATE_INVESTMENT": "የግል ኢንቨስትመንት"
+    },
+    "campaignStatus": {
+      "PLANNING": "በዕቅድ ላይ",
+      "ACTIVE": "የመስክ ሥራ",
+      "REVIEW": "ማጽደቅ በመጠባበቅ ላይ",
+      "COMPLETED": "የተጠናቀቀ",
+      "CANCELLED": "የተሰረዘ"
+    },
+    "campaignRole": {
+      "TEAM_LEAD": "የቡድን መሪ",
+      "ASSESSOR": "ገምጋሚ",
+      "ENGINEER": "መሐንዲስ",
+      "VERIFIER": "አረጋጋጭ"
+    },
+    "taskStatus": {
+      "PLANNED": "ያልተመደበ",
+      "ASSIGNED": "የተመደበ",
+      "IN_PROGRESS": "ጉብኝት በሂደት ላይ",
+      "SUBMITTED": "ማረጋገጫ በመጠባበቅ ላይ",
+      "RETURNED": "የተመለሰ",
+      "VERIFIED": "የተረጋገጠ",
+      "INACCESSIBLE": "የማይደረስበት",
+      "CANCELLED": "የተወገደ"
+    },
+    "assessmentStatus": {
+      "SUBMITTED": "ማረጋገጫ በመጠባበቅ ላይ",
+      "RETURNED": "ለማሻሻያ የተመለሰ",
+      "VERIFIED": "የተረጋገጠ",
+      "REJECTED": "ውድቅ የተደረገ"
+    },
+    "needPriority": {
+      "URGENT": "አስቸኳይ",
+      "HIGH": "ከፍተኛ",
+      "MEDIUM": "መካከለኛ",
+      "LOW": "ዝቅተኛ"
+    },
+    "intervention": {
+      "NO_ACTION": "እርምጃ አያስፈልግም",
+      "MINOR_REPAIR": "ቀላል ጥገና",
+      "REHABILITATION": "መልሶ ማቋቋም",
+      "RECONSTRUCTION": "መልሶ ግንባታ",
+      "RELOCATION": "ማዛወር"
+    },
+    "access": {
+      "ACCESSIBLE": "የሚደረስበት",
+      "PARTIAL": "በከፊል የሚደረስበት",
+      "INACCESSIBLE": "የማይደረስበት"
+    },
+    "currentUse": {
+      "NORMAL_USE": "በመደበኛ አገልግሎት ላይ",
+      "PARTIAL_USE": "በከፊል አገልግሎት ላይ",
+      "IDP_SHELTER": "ተፈናቃዮችን እያስጠለለ",
+      "MILITARY_USE": "ወታደራዊ አገልግሎት",
+      "ABANDONED": "የተተወ",
+      "OTHER": "ሌላ"
+    },
+    "damageCause": {
+      "SHELLING": "የከባድ መሣሪያ ድብደባ",
+      "AIRSTRIKE": "የአየር ጥቃት",
+      "LOOTING": "ዝርፊያ",
+      "FIRE": "እሳት",
+      "VANDALISM": "ሆን ተብሎ ማውደም",
+      "OCCUPATION": "ወረራ",
+      "NEGLECT": "ቸልተኝነት",
+      "FLOOD": "ጎርፍ",
+      "OTHER": "ሌላ"
+    },
+    "component": {
+      "STRUCTURE": "መዋቅር (መሠረት፣ ምሰሶዎች፣ ምሰሶ አግዳሚዎች)",
+      "ROOF": "ጣሪያ",
+      "WALLS": "ግድግዳዎች",
+      "DOORS_WINDOWS": "በሮች እና መስኮቶች",
+      "FLOORS": "ወለሎች",
+      "CLASSROOMS": "የመማሪያ ክፍሎች",
+      "LIBRARY_LAB": "ቤተ መጻሕፍት እና ቤተ ሙከራዎች",
+      "ELECTRICAL": "የኤሌክትሪክ ዝርጋታ",
+      "WATER_SUPPLY": "የውሃ አቅርቦት",
+      "SANITATION": "መጸዳጃ ቤቶች እና ንጽህና",
+      "FURNITURE": "የቤት ዕቃዎች",
+      "TEACHING_MATERIALS": "የማስተማሪያ ቁሳቁሶች",
+      "FENCE_COMPOUND": "አጥር እና ግቢ",
+      "MEDICAL_EQUIPMENT": "የሕክምና መሣሪያዎች",
+      "COLD_CHAIN": "የቀዝቃዛ ሰንሰለት",
+      "PHARMACY_STOCK": "ፋርማሲ እና ክምችት",
+      "MATERNITY_WARD": "የወሊድ ክፍል",
+      "LABORATORY": "ቤተ ሙከራ",
+      "MACHINERY": "ማሽነሪ",
+      "PRODUCTION_LINE": "የምርት መስመር",
+      "POWER_SUPPLY": "የኃይል አቅርቦት",
+      "STORAGE": "መጋዘን",
+      "OFFICE_EQUIPMENT": "የቢሮ መሣሪያዎች",
+      "CANALS_STRUCTURES": "ቦዮች እና የውሃ መቀልበሻዎች",
+      "PUMPS_MOTORS": "ፓምፖች እና ሞተሮች",
+      "EQUIPMENT": "መሣሪያዎች",
+      "LIVESTOCK_FACILITIES": "የእንስሳት ተቋማት"
     }
   },
   "intelligence": {
@@ -344,7 +443,8 @@
       "reports": "የተመደቡ የመንግሥት ሪፖርቶች ከአፈጻጸም ታሪክ፣ CSV/PDF ወደ ውጭ መላክ እና ከፌዴራል PMO ትስስር ጋር።",
       "users": "መለያዎች፣ ሚናዎች እና የዘርፍ ወሰን ምደባዎች ለሁሉም የመድረክ ተጠቃሚዎች።",
       "audit": "የማረጋገጫ ክስተቶች፣ ውሳኔዎች እና የመረጃ ለውጦች የማይሰረዝ መዝገብ።",
-      "messages": "ቀጥታ መልዕክቶች፣ የቡድን ውይይቶች እና በፕሮጀክቶች፣ ማጽደቆች፣ ማንቂያዎች እና የመስክ ሠራተኞች ላይ የሚደረጉ ውይይቶች።"
+      "messages": "ቀጥታ መልዕክቶች፣ የቡድን ውይይቶች እና በፕሮጀክቶች፣ ማጽደቆች፣ ማንቂያዎች እና የመስክ ሠራተኞች ላይ የሚደረጉ ውይይቶች።",
+      "damage": "የግምገማ ዘመቻዎች፣ የቡድን ሚናዎች እና የቦታ ምደባዎች፣ የግኝቶች ማረጋገጫ እና ፕሮጀክቶች የሚጀምሩባቸው የተረጋገጡ ፍላጎቶች።"
     },
     "stat": {
       "activeProjects": "ንቁ ፕሮጀክቶች",
@@ -369,7 +469,11 @@
       "ofBudget": "ከ{budget} በጀት {pct}",
       "latestProgress": "የቅርብ ጊዜ የዕድገት ሪፖርት",
       "unreadMessages": "ያልተነበቡ መልዕክቶች",
-      "messagesDetail": "{conversations} ውይይቶች · {mentions} ጥቅሶች"
+      "messagesDetail": "{conversations} ውይይቶች · {mentions} ጥቅሶች",
+      "awaitingVerification": "ማረጋገጫ የሚጠብቁ",
+      "damageDetail": "{active} ዘመቻዎች በመስክ ሥራ ላይ · {needs} ፕሮጀክት የሌላቸው የተረጋገጡ ፍላጎቶች",
+      "sitesToAssess": "የሚገመገሙ ቦታዎች",
+      "mySitesDetail": "{returned} ወደ እርስዎ የተመለሱ · {review} የሚረጋገጡ"
     },
     "context": {
       "scope": "ወሰን",
@@ -395,7 +499,10 @@
     }
   },
   "approvals": {
-    "title": "የፕሮጀክት ማጽደቂያ"
+    "title": "የፕሮጀክት ማጽደቂያ",
+    "check": {
+      "DAMAGE_ASSESSED": "ጉዳቱ በግምገማ ተረጋግጧል"
+    }
   },
   "fieldTeam": {
     "title": "የመስክ ቡድን"
@@ -573,7 +680,8 @@
       "approvals": "ማጽደቆች",
       "alerts": "ማንቂያዎች",
       "assignments": "የመስክ ምደባዎች",
-      "inspections": "የምርመራ ግምገማዎች"
+      "inspections": "የምርመራ ግምገማዎች",
+      "assessments": "የጉዳት ግምገማዎች"
     },
     "categoryHints": {
       "messages": "አዲስ ቀጥታ፣ የቡድን እና የውይይት መልዕክቶች",
@@ -581,7 +689,8 @@
       "approvals": "ውሳኔዎን የሚጠብቁ ፕሮጀክቶች እና ባቀረቧቸው ፕሮጀክቶች ላይ የተሰጡ ውሳኔዎች",
       "alerts": "በእርስዎ ወሰን ውስጥ ያሉ አሳሳቢ ማንቂያዎች እና ለእርስዎ የተመደቡ ማንቂያዎች",
       "assignments": "ለአንድ ፕሮጀክት ሲመደቡ",
-      "inspections": "የመዘገቡት ምርመራ ሲረጋገጥ፣ ሲከራከር ወይም ውድቅ ሲደረግ"
+      "inspections": "የመዘገቡት ምርመራ ሲረጋገጥ፣ ሲከራከር ወይም ውድቅ ሲደረግ",
+      "assessments": "የተመደቡልዎ ቦታዎች፣ የሚረጋገጡ ማቅረቢያዎች፣ የግምገማ ውጤቶች እና የዘመቻ ማጽደቂያዎች"
     },
     "chat": {
       "inConversation": "{name} በ{conversation}",
@@ -686,7 +795,623 @@
       "CHAT_MESSAGE": {
         "title": "{actor}",
         "body": "{excerpt}"
+      },
+      "ASSESSMENT_TASKS": {
+        "title": "{count, plural, one {የሚገመገም አዲስ ቦታ} other {የሚገመገሙ # አዳዲስ ቦታዎች}}",
+        "body": "{actor} በ{code} · {name} ውስጥ {subject} መድበውልዎታል"
+      },
+      "ASSESSMENT_SUBMITTED": {
+        "title": "የሚረጋገጥ ግምገማ",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_RESUBMITTED": {
+        "title": "የሚረጋገጥ የተሻሻለ ግምገማ",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_VERIFIED": {
+        "title": "ግምገማ ተረጋግጧል",
+        "body": "{actor} የ{name} ግምገማዎን አረጋግጠዋል"
+      },
+      "ASSESSMENT_RETURNED": {
+        "title": "ግምገማ ለማሻሻያ ተመልሷል",
+        "body": "{name}፦ {excerpt}"
+      },
+      "ASSESSMENT_REJECTED": {
+        "title": "ግምገማ ውድቅ ተደርጓል",
+        "body": "{name}፦ {excerpt}"
+      },
+      "ASSESSMENT_INACCESSIBLE": {
+        "title": "ቦታው ሊደረስበት አይችልም",
+        "body": "{subject} ({code})፦ {excerpt}"
+      },
+      "CAMPAIGN_STARTED": {
+        "title": "የመስክ ሥራ ተጀምሯል",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_MEMBER": {
+        "title": "የግምገማ ዘመቻን ተቀላቅለዋል",
+        "body": "{name} ({code}) እንደ {role}"
+      },
+      "CAMPAIGN_REVIEW": {
+        "title": "የሚጸድቁ የዘመቻ ግኝቶች",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_ENDORSED": {
+        "title": "የዘመቻ ግኝቶች ጸድቀዋል",
+        "body": "{code} · {name} — {reference}"
+      },
+      "CAMPAIGN_RETURNED": {
+        "title": "ዘመቻ ወደ መስክ ሥራ ተመልሷል",
+        "body": "{code}፦ {excerpt}"
       }
+    }
+  },
+  "damage": {
+    "title": "የጉዳት ግምገማ",
+    "subtitle": "የግምገማ ዘመቻዎችን ያቅዱ፣ የመስክ ቡድኖችን ይመድቡ፣ ግኝቶችን ያረጋግጡ እና የተረጋገጡ ፍላጎቶችን ለፕሮጀክት ምዝገባ ያስተላልፉ",
+    "noAccess": "የጉዳት ግምገማ ለክትትል፣ ለዕቅድ እና ለመስክ ቡድን ሚናዎች ብቻ ይገኛል",
+    "newCampaign": "አዲስ ዘመቻ",
+    "adHoc": "ያልታቀደ ጉብኝት",
+    "photos": "{count, plural, one {# ፎቶ} other {# ፎቶዎች}}",
+    "reasonMin": "ቢያንስ {n} ፊደላት",
+    "reviewHint": "የቀረቡ ግምገማዎች ካዘጋጃቸው ሰው ሌላ የሆነ ሰው እስኪያረጋግጣቸው፣ እስኪመልሳቸው ወይም ውድቅ እስኪያደርጋቸው ድረስ እዚህ ይጠብቃሉ። የቆዩት ቀድመው ይታያሉ።",
+    "reviewEmpty": "ማረጋገጫ የሚጠብቅ ምንም ነገር የለም",
+    "registerEmpty": "ከእነዚህ ማጣሪያዎች ጋር የሚዛመድ ግምገማ የለም",
+    "views": {
+      "overview": "አጠቃላይ እይታ",
+      "campaigns": "ዘመቻዎች",
+      "review": "የማረጋገጫ ወረፋ",
+      "register": "የግምገማ መዝገብ",
+      "needs": "የተረጋገጡ ፍላጎቶች"
+    },
+    "filters": {
+      "sector": "ዘርፍ",
+      "allSectors": "ሁሉም ዘርፎች",
+      "allStatuses": "ሁሉም ሁኔታዎች",
+      "all": "ሁሉም",
+      "allPriorities": "ሁሉም ቅድሚያዎች"
+    },
+    "columns": {
+      "date": "የተገመገመበት",
+      "submitted": "የቀረበበት",
+      "facility": "ተቋም",
+      "status": "ሁኔታ",
+      "severity": "ክብደት",
+      "impact": "ተጽዕኖ",
+      "assessor": "ገምጋሚ",
+      "replacement": "የመተኪያ ግምት",
+      "source": "ምንጭ",
+      "intervention": "የተመከረ ምላሽ",
+      "campaign": "ዘመቻ",
+      "priority": "ቅድሚያ",
+      "estimate": "ግምት",
+      "beneficiaries": "የተጎዱ ሰዎች"
+    },
+    "queue": {
+      "title": "የእርስዎ ወረፋ",
+      "toReview": "{count, plural, one {የሚረጋገጥ # ግምገማ} other {የሚረጋገጡ # ግምገማዎች}}",
+      "toAssess": "{count, plural, one {የሚገመገም # ቦታ} other {የሚገመገሙ # ቦታዎች}}",
+      "returned": "{count, plural, one {# ለማሻሻያ ተመልሷል} other {# ለማሻሻያ ተመልሰዋል}}"
+    },
+    "kpi": {
+      "campaigns": "በመስክ ሥራ ላይ ያሉ ዘመቻዎች",
+      "campaignsHint": "{planning} በዕቅድ ላይ · {review} ማጽደቅ የሚጠብቁ · {completed} የተጠናቀቁ",
+      "sites": "የተረጋገጡ ቦታዎች",
+      "sitesHint": "{outstanding} ገና ክፍት · {inaccessible} የማይደረስባቸው",
+      "review": "ማረጋገጫ በመጠባበቅ ላይ",
+      "reviewHint": "ረጅሙ {days} ቀናት · {returned} ለማሻሻያ ተመልሰዋል",
+      "needs": "ፕሮጀክት የሌላቸው የተረጋገጡ ፍላጎቶች",
+      "needsHint": "ግምት {estimate}"
+    },
+    "picture": {
+      "title": "የተቋማት የጉዳት ገጽታ",
+      "hint": "ለእያንዳንዱ የተመዘገበ ተቋም የቅርብ ጊዜ የተረጋገጠ ግኝት",
+      "never": "ተገምግሞ የማያውቅ",
+      "replacement": "ከመካከለኛ እስከ ሙሉ በሙሉ ለተጎዱ ተቋማት የመተኪያ ግምት፦ {amount}"
+    },
+    "live": {
+      "title": "በሂደት ላይ ያሉ ዘመቻዎች",
+      "all": "ሁሉም ዘመቻዎች",
+      "none": "በዕቅድ ወይም በሂደት ላይ ያለ ዘመቻ የለም።",
+      "progress": "{pct}% ተጠናቋል · ከ{total} ቦታዎች {verified} ተረጋግጠዋል"
+    },
+    "campaign": {
+      "columns": {
+        "campaign": "ዘመቻ",
+        "status": "ሁኔታ",
+        "dates": "ቀናት",
+        "progress": "ዕድገት",
+        "team": "ቡድን",
+        "weredas": "ወረዳዎች",
+        "estimate": "የተረጋገጠ ግምት"
+      },
+      "multiSector": "ባለብዙ ዘርፍ",
+      "overdueBy": "ከማብቂያ ቀኑ {days} ቀናት አልፏል",
+      "daysLeft": "{days} ቀናት ቀርተዋል",
+      "empty": "እስካሁን ዘመቻ የለም",
+      "emptyHint": "ዘመቻ በተወሰኑ ወረዳዎች ላይ የሚካሄድ የግምገማ ዙርን ያቅዳል፦ ቡድኑን፣ ቦታዎቹን እና የጊዜ ገደቡን።",
+      "coordinatedBy": "አስተባባሪ፦ {name}",
+      "edit": "አስተካክል",
+      "cancel": "ዘመቻውን ሰርዝ",
+      "start": "የመስክ ሥራ ጀምር",
+      "closeFieldwork": "የመስክ ሥራ ዝጋ",
+      "toStart": "የመስክ ሥራ ከመጀመሩ በፊት፦",
+      "toClose": "የመስክ ሥራ ከመዘጋቱ በፊት፦",
+      "cancelled": "ተሰርዟል፦",
+      "views": {
+        "overview": "አጠቃላይ እይታ",
+        "sites": "ቦታዎች",
+        "team": "ቡድን",
+        "results": "ውጤቶች",
+        "activity": "እንቅስቃሴ"
+      },
+      "progress": "ዕድገት",
+      "overdueSites": "{count, plural, one {# ቦታ ጊዜው አልፏል} other {# ቦታዎች ጊዜያቸው አልፏል}}",
+      "purpose": "ዓላማ እና ዘዴ",
+      "facts": "ቁልፍ መረጃዎች",
+      "createdBy": "ያቀደው",
+      "started": "የመስክ ሥራ የተጀመረበት",
+      "fieldworkClosed": "የመስክ ሥራ የተዘጋበት",
+      "endorsement": "ማጽደቅ",
+      "scope": "ወሰን · {count, plural, one {# ወረዳ} other {# ወረዳዎች}}",
+      "lifecycle": "የዘመቻ ደረጃዎች",
+      "stageHint": {
+        "PLANNING": "ወሰን፣ ቡድን፣ ቦታዎች",
+        "ACTIVE": "መመዝገብ እና ማረጋገጥ",
+        "REVIEW": "ማጽደቅ",
+        "COMPLETED": "ግኝቶች ጸድቀዋል"
+      },
+      "cancelTitle": "ይህ ዘመቻ ይሰረዝ?",
+      "cancelHint": "ክፍት ቦታዎች ይሰረዛሉ። የተረጋገጡ ግምገማዎች በመዝገቡ ውስጥ ይቆያሉ።",
+      "cancelReason": "የመሰረዝ ምክንያት"
+    },
+    "campaignForm": {
+      "subtitle": "ዙሩን ይሰይሙ፣ ቀናቱን እና አስተባባሪውን ይወስኑ፣ የሚሸፍናቸውንም ወረዳዎች ይምረጡ። ቦታዎች እና ቡድን ቀጥሎ ይመጣሉ።",
+      "editTitle": "ዘመቻ አስተካክል",
+      "notEditable": "ይህ ዘመቻ ከአሁን በኋላ ሊስተካከል አይችልም",
+      "basics": "ዘመቻ",
+      "basicsHint": "ዙሩ ለምን እንደሆነ እና መቼ እንደሚካሄድ።",
+      "name": "ስም",
+      "nameHint": "ለምሳሌ፦ ከግጭት በኋላ የጤና ተቋማት የጉዳት ግምገማ — ማዕከላዊ ዞን",
+      "sector": "ዘርፍ",
+      "sectorHint": "የዘርፍ ዘመቻ የዚያን ዘርፍ ተቋማት ብቻ ይይዛል እና በዘርፉ ኃላፊ ይጸድቃል፤ ባለብዙ ዘርፍ ዘመቻ በዋና ሥራ አስፈፃሚው ይጸድቃል።",
+      "multi": "ባለብዙ ዘርፍ",
+      "start": "የታቀደ መጀመሪያ",
+      "end": "የታቀደ ማብቂያ",
+      "coordinator": "አስተባባሪ",
+      "coordinatorHint": "ዘመቻውን በየዕለቱ ይመራል እና ወደ ላይ የሚተላለፉ ጉዳዮችን ይቀበላል",
+      "coordinatorPick": "አስተባባሪ ይምረጡ",
+      "objective": "ዓላማ",
+      "objectiveHint": "ግኝቶቹ የትኞቹን ውሳኔዎች እንደሚያግዙ",
+      "methodology": "ዘዴ",
+      "methodologyHint": "ጥቅም ላይ የዋለው የማመሳከሪያ ዝርዝር፣ በየቦታው ያለው የቡድን አወቃቀር፣ የናሙና አወሳሰድ እና የማረጋገጫ ዘዴ",
+      "scope": "የሚሸፈኑ ወረዳዎች",
+      "scopeHint": "ቦታዎች ሊጨመሩ የሚችሉት ከእነዚህ ወረዳዎች ብቻ ነው። እነዚህን የሚሸፍኑ የመስክ ቡድን አባላት መጀመሪያ ይጠቆማሉ።",
+      "selected": "{count} ተመርጠዋል",
+      "searchWereda": "ወረዳ ፈልግ",
+      "wholeZone": "ሙሉ ዞን",
+      "clearZone": "ዞኑን አጽዳ",
+      "save": "ለውጦችን አስቀምጥ",
+      "create": "ዘመቻ ፍጠር",
+      "v": {
+        "name": "ቢያንስ 5 ፊደላት ይጠቀሙ",
+        "required": "ያስፈልጋል",
+        "endAfterStart": "ከመጀመሪያው ቀን ጋር እኩል ወይም ከዚያ በኋላ መሆን አለበት",
+        "endPast": "ዘመቻው ባለፈ ቀን ሊያበቃ አይችልም",
+        "scope": "ቢያንስ አንድ ወረዳ ይምረጡ"
+      }
+    },
+    "team": {
+      "title": "የዘመቻ ቡድን",
+      "hint": "በዘመቻ ሚናዎች ላይ ያሉ የመስክ ቡድን አባላት። አንድ ሰው ከአንድ በላይ ሚና ሊይዝ ይችላል፣ ነገር ግን የገመገመውን ቦታ በፍጹም አያረጋግጥም።",
+      "add": "አባል አክል",
+      "addTitle": "የቡድን አባል አክል",
+      "addHint": "የዘመቻውን ወረዳዎች የሚሸፍኑ እና ጥቂት ክፍት ቦታዎች ያላቸው አባላት መጀመሪያ ይዘረዘራሉ።",
+      "columns": {
+        "member": "አባል",
+        "role": "ሚና",
+        "area": "አካባቢ",
+        "open": "ክፍት ቦታዎች",
+        "verified": "የተረጋገጡ",
+        "reviews": "የሚገመገሙ",
+        "login": "የመስክ መግቢያ",
+        "phone": "ስልክ"
+      },
+      "covers": "ወሰኑን ይሸፍናል",
+      "outsideArea": "ከተለመደው አካባቢ ውጪ",
+      "hasLogin": "አዎ",
+      "noLogin": "መግቢያ የለም",
+      "loginWarning": "የመስክ መግቢያ የሌላቸው አባላት ቦታዎችን ራሳቸው መመዝገብም ሆነ ማረጋገጥ አይችሉም፤ ቅጾቻቸውን ተንታኝ ማስገባት አለበት። መግቢያዎችን ከመስክ ቡድን ገጽ ይፍጠሩ።",
+      "empty": "እስካሁን በቡድኑ ውስጥ ማንም የለም።",
+      "release": "አሰናብት",
+      "releaseTitle": "{name} ከ{role} ሚና ይሰናበቱ?",
+      "releaseHint": "በዚህ ሚና ያሉ ክፍት ቦታዎች መጀመሪያ እንደገና መመደብ አለባቸው።",
+      "releaseReason": "ምክንያት",
+      "releasedNote": "ተሰናብቷል፦ {reason}",
+      "past": "የቀድሞ አባላት",
+      "roles": {
+        "title": "እያንዳንዱ ሚና ምን ይሠራል",
+        "TEAM_LEAD": "ቡድኑን በመስክ ይቆጣጠራል፤ ማንኛውንም ቦታ መመዝገብ ወይም ማረጋገጥ ይችላል፣ ቦታዎች ሲታገዱም ይነገረዋል።",
+        "ASSESSOR": "የተመደቡለትን ቦታዎች ይጎበኛል እና ግምገማውን ከፎቶዎች እና ከGPS ጋር ይመዘግባል።",
+        "ENGINEER": "የመዋቅር ውሳኔ እና የወጪ ግምት የሚያስፈልጋቸውን ቦታዎች ይመዘግባል (ሆስፒታሎች፣ ፋብሪካዎች፣ የመስኖ ፕሮጀክቶች)።",
+        "VERIFIER": "የቀረቡ ግምገማዎችን ከማስረጃ ጋር ያመሳክራል፣ ያረጋግጣል፣ ይመልሳል ወይም ውድቅ ያደርጋል። የመስክ ተንታኝ ወይም ተቆጣጣሪ መሆን አለበት።"
+      },
+      "noCandidates": "ንቁ የመስክ ቡድን አባላት የሉም።",
+      "coveredWeredas": "{count, plural, =0 {በወሰኑ ውስጥ ወረዳ የለም} one {በወሰኑ ውስጥ # ወረዳ} other {በወሰኑ ውስጥ # ወረዳዎች}}",
+      "openSites": "{count, plural, =0 {ክፍት ቦታ የለም} one {# ክፍት ቦታ} other {# ክፍት ቦታዎች}}",
+      "alreadyAs": "አስቀድሞ፦ {roles}",
+      "addAs": "እንደ {role} አክል",
+      "addedList": "ተጨምረዋል፦ {list}",
+      "done": "ተጠናቋል",
+      "ineligible": {
+        "ALREADY_IN_ROLE": "ይህን ሚና አስቀድሞ ይዟል",
+        "ROLE_NEEDS_ANALYST_OR_SUPERVISOR": "የቡድን መሪዎች እና አረጋጋጮች የመስክ ተንታኞች ወይም ተቆጣጣሪዎች መሆን አለባቸው"
+      }
+    },
+    "sites": {
+      "title": "ቦታዎች",
+      "hint": "እያንዳንዱ ቦታ አንድ ተቋም ነው፦ ገምጋሚው ይመዘግበዋል፣ አረጋጋጩ ያረጋግጠዋል።",
+      "add": "ቦታዎችን አክል",
+      "registerNew": "አዲስ ተቋም መዝግብ",
+      "search": "ቦታዎችን ፈልግ",
+      "allStatuses": "ሁሉም ሁኔታዎች",
+      "allWeredas": "ሁሉም ወረዳዎች",
+      "allAssessors": "ሁሉም ገምጋሚዎች",
+      "count": "{count, plural, one {# ቦታ} other {# ቦታዎች}}",
+      "selected": "{count} ተመርጠዋል",
+      "assign": "መድብ",
+      "clear": "ምርጫውን አጽዳ",
+      "selectAll": "ሁሉንም ክፍት ቦታዎች ምረጥ",
+      "selectSite": "{name}ን ምረጥ",
+      "empty": "እስካሁን ቦታ የለም",
+      "emptyHint": "ከመዝገቡ ተቋማትን ያክሉ፣ ወይም በመስክ የተገኘን ተቋም ይመዝግቡ።",
+      "columns": {
+        "facility": "ቦታ",
+        "status": "ሁኔታ",
+        "assessor": "ገምጋሚ",
+        "verifier": "አረጋጋጭ",
+        "due": "የማብቂያ ቀን",
+        "finding": "ግኝት",
+        "estimate": "መተኪያ"
+      },
+      "unassigned": "ያልተመደበ",
+      "anyVerifier": "ማንኛውም አረጋጋጭ",
+      "overdue": "ጊዜው ያለፈ",
+      "previously": "ከዚህ በፊት፦",
+      "open": "ክፈት",
+      "record": "መዝግብ",
+      "actions": "ለ{name} እርምጃዎች",
+      "markInaccessible": "የማይደረስበት ብለህ ምልክት አድርግ",
+      "removeSite": "ቦታውን አስወግድ",
+      "reopen": "እንደገና ክፈት",
+      "reopenTitle": "{name} እንደገና ይከፈት?",
+      "inaccessibleTitle": "{name} ሊደረስበት አይችልም",
+      "inaccessibleHint": "አስተባባሪው ይነገረዋል። መዳረሻ ሲመለስ ቦታው እንደገና ሊከፈት ይችላል።",
+      "cancelTitle": "{name} ከዘመቻው ይወገድ?",
+      "cancelHint": "ቦታው በተቋማት መዝገብ ውስጥ ይቆያል።",
+      "note": "ማስታወሻ",
+      "assignTitle": "{count, plural, one {# ቦታ መድብ} other {# ቦታዎችን መድብ}}",
+      "assignHint": "የአሁኑን ዋጋ ለመጠበቅ መስኩን እንዳለ ይተዉት። ገምጋሚው ስለ አዲስ ቦታዎች ይነገረዋል።",
+      "keep": "የአሁኑን ጠብቅ",
+      "verifierHint": "ማንኛውም የዘመቻ አረጋጋጭ ወይም የቡድን መሪ እንዲገመግም 'የአሁኑን ጠብቅ' ላይ ይተዉት",
+      "samePerson": "ገምጋሚው እና አረጋጋጩ የተለያዩ ሰዎች መሆን አለባቸው",
+      "priority": "ቅድሚያ",
+      "instructions": "ለቡድኑ መመሪያዎች",
+      "instructionsHint": "የመዳረሻ መንገድ፣ የሚገናኙት ሰው፣ በተለይ መፈተሽ ያለበት",
+      "noAssessors": "መጀመሪያ ገምጋሚዎችን ወደ ቡድኑ ያክሉ።",
+      "apply": "ተግብር",
+      "skipped": "{count, plural, one {# ቦታ ታልፏል፦} other {# ቦታዎች ታልፈዋል፦}}",
+      "done": "ተጠናቋል",
+      "openSites": "{count, plural, =0 {ክፍት ቦታ የለም} one {# ክፍት} other {# ክፍት}}",
+      "addTitle": "ከተቋማት መዝገብ ቦታዎችን አክል",
+      "addHint": "በዘመቻው ወረዳዎች (እና ዘርፍ) ውስጥ ያሉ እና ገና ቦታ ያልሆኑ ተቋማት። ተገምግመው የማያውቁ ተቋማት መጀመሪያ።",
+      "lastSeverity": "የመጨረሻ ክብደት",
+      "anySeverity": "ማንኛውም ክብደት",
+      "neverAssessed": "ተገምግመው የማያውቁ ብቻ",
+      "selectAllShown": "የሚታዩትን ሁሉንም {count} ምረጥ",
+      "noCandidates": "በወሰኑ ውስጥ ተጨማሪ ተቋማት የሉም።",
+      "lastAssessed": "ለመጨረሻ ጊዜ የተገመገመው {date}",
+      "neverAssessedShort": "ተገምግሞ የማያውቅ",
+      "inOther": "በ{code} ውስጥም አለ",
+      "addCount": "{count, plural, =0 {ቦታዎችን አክል} one {# ቦታ አክል} other {# ቦታዎችን አክል}}",
+      "registerTitle": "በመስክ የተገኘን ተቋም መዝግብ",
+      "registerHint": "ወደ ተቋማት መዝገብ እና ወደዚህ ዘመቻ እንደ ቦታ ይጨመራል።",
+      "registerAction": "መዝግብ እና አክል",
+      "nf": {
+        "name": "የተቋሙ ስም",
+        "type": "ዓይነት",
+        "wereda": "ወረዳ",
+        "kebele": "ቀበሌ",
+        "beneficiaries": "የሚገለገሉ ሰዎች",
+        "lat": "ኬክሮስ",
+        "lng": "ኬንትሮስ",
+        "capacity": "ከቀውሱ በፊት የነበረ አቅም",
+        "unit": "የአቅም መለኪያ",
+        "unitHint": "ተማሪዎች፣ አልጋዎች፣ ሄክታሮች…"
+      }
+    },
+    "results": {
+      "progress": "የመስክ ሥራ ዕድገት",
+      "export": "ቦታዎችን ላክ (CSV)",
+      "progressHint": "ከ{total} ቦታዎች {assessed} የተረጋገጠ ግምገማ አላቸው፤ ከዚህ በታች የሚቆጠሩት የተረጋገጡ ግኝቶች ብቻ ናቸው።",
+      "repair": "የጥገና ግምት",
+      "equipment": "የመሣሪያ ኪሳራ {amount}",
+      "replacement": "የመተኪያ ግምት",
+      "people": "የተጎዱ ሰዎች",
+      "flags": "ያልፈነዳ ተተኳሽ ይጠረጠራል",
+      "flagsHint": "{idp} እንደ መጠለያ የሚያገለግሉ · {linked} አስቀድሞ በፕሮጀክቶች ውስጥ",
+      "none": "እስካሁን የተረጋገጡ ግኝቶች የሉም።",
+      "bySeverity": "በክብደት",
+      "byIntervention": "በተመከረው ምላሽ",
+      "byPriority": "በቅድሚያ",
+      "byWereda": "በወረዳ",
+      "byType": "በተቋም ዓይነት",
+      "byCause": "የተዘገቡ መንስኤዎች",
+      "components": "በጽኑ የተጎዱ ወይም የወደሙ ክፍሎች",
+      "componentsHint": "ክፍሉ በጽኑ የተጎዳ ወይም የወደመባቸው ቦታዎች፣ ከጥገና ግምቱ ጋር",
+      "unspecified": "ያልተገለጸ",
+      "noData": "መረጃ የለም",
+      "sitesN": "{count, plural, one {# ቦታ} other {# ቦታዎች}}"
+    },
+    "endorse": {
+      "title": "ግኝቶቹን አጽድቅ",
+      "hint": "የመስክ ሥራ ተዘግቷል እና እያንዳንዱ ቦታ ተረጋግጧል፣ የማይደረስበት ሆኗል ወይም ተወግዷል። የጸደቁ ግኝቶች የመልሶ ግንባታ ፕሮጀክቶች መሠረት ይሆናሉ።",
+      "waiting": "ማጽደቅ በመጠባበቅ ላይ።",
+      "options": {
+        "APPROVE": "ግኝቶቹን አጽድቅ",
+        "RETURN": "ወደ መስክ ሥራ መልስ"
+      },
+      "effects": {
+        "APPROVE": "ዘመቻው በቁጥር የተመዘገበ ማጽደቂያ ይጠናቀቃል፤ አስተባባሪው ይነገረዋል።",
+        "RETURN": "የመስክ ሥራ እንደገና ይከፈታል፤ አስተባባሪው አስተያየትዎን ይቀበላል።"
+      },
+      "note": "ማስታወሻ (አማራጭ)",
+      "noteRequired": "ከማጽደቁ በፊት መከናወን ያለበት *",
+      "noteHint": "መከናወን ያለበትን ቢያንስ በ10 ፊደላት ያብራሩ",
+      "confirm": {
+        "APPROVE": "ግኝቶችን አጽድቅ",
+        "RETURN": "ወደ መስክ ሥራ መልስ"
+      }
+    },
+    "review": {
+      "title": "ይህን ግምገማ አረጋግጥ",
+      "hint": "ግኝቶቹን ከፎቶዎቹ፣ ከቦታው አቀማመጥ እና ስለ ቦታው ከሚያውቁት ጋር ያመሳክሩ።",
+      "cannot": "ይህን ግምገማ መገምገም አይችሉም",
+      "options": {
+        "VERIFY": "አረጋግጥ",
+        "RETURN": "ለማሻሻያ መልስ",
+        "REJECT": "ውድቅ አድርግ"
+      },
+      "effects": {
+        "VERIFY": "ግኝቱ የተቋማት መዝገብን ያዘምናል እና ፕሮጀክት ሊሆን ይችላል።",
+        "RETURN": "ገምጋሚው ያሻሽለዋል እና እንደገና ያቀርበዋል።",
+        "REJECT": "መዝገቡ ዋጋ የለውም፤ ቦታው ለአዲስ ጉብኝት ወደ ገምጋሚው ይመለሳል።"
+      },
+      "note": "ምክንያት",
+      "noteOptional": "አስተያየት (አማራጭ)",
+      "notePlaceholder": "ምን እንደተሳሳተ ወይም እንደጎደለ፣ ለማስተካከል በሚያስችል ግልጽነት",
+      "noteHint": "ገምጋሚው እርምጃ እንዲወስድበት ቢያንስ 10 ፊደላት",
+      "verifyHint": "ከማረጋገጫው ጋር ይቀመጣል",
+      "confirm": {
+        "VERIFY": "ግምገማውን አረጋግጥ",
+        "RETURN": "ወደ ገምጋሚው መልስ",
+        "REJECT": "ግምገማውን ውድቅ አድርግ"
+      }
+    },
+    "needs": {
+      "count": "ፕሮጀክት የሌላቸው ፍላጎቶች",
+      "estimate": "የተገመተ ወጪ",
+      "urgent": "አስቸኳይ",
+      "people": "የተጎዱ ሰዎች",
+      "hint": "እስካሁን በማንኛውም ንቁ ፕሮጀክት ያልተሸፈነ የእያንዳንዱ የተጎዳ ተቋም የቅርብ ጊዜ የተረጋገጠ ግኝት። ማስረጃውን ለማስተላለፍ ከፍላጎት ላይ ፕሮጀክት ይመዝግቡ።",
+      "unspecified": "ያልተገለጸ",
+      "verifiedAgo": "{days, plural, =0 {ዛሬ የተገመገመ} one {ከ# ቀን በፊት የተገመገመ} other {ከ# ቀናት በፊት የተገመገመ}}",
+      "register": "ፕሮጀክት መዝግብ",
+      "empty": "እያንዳንዱ የተረጋገጠ ፍላጎት በፕሮጀክት ተሸፍኗል",
+      "emptyHint": "ግምገማዎች ሲረጋገጡ አዳዲስ ፍላጎቶች እዚህ ይታያሉ።"
+    },
+    "mine": {
+      "title": "የእኔ የግምገማ ቦታዎች",
+      "subtitle": "እንዲገመግሙ ወይም እንዲያረጋግጡ የተመደቡልዎ ቦታዎች",
+      "empty": "የተመደበልዎ ቦታ የለም",
+      "emptyHint": "አስተባባሪዎ ዘመቻ ሲታቀድ ቦታዎችን ይመድባል።",
+      "notField": "ይህ ዝርዝር ለመስክ ቡድን አባላት ነው",
+      "notFieldHint": "ቦታዎቹን ለማየት ዘመቻ ይክፈቱ።",
+      "groups": {
+        "fix": "ወደ እርስዎ የተመለሱ",
+        "record": "የሚገመገሙ",
+        "verify": "የሚረጋገጡ",
+        "waiting": "ማረጋገጫ የሚጠብቁ",
+        "done": "የተዘጉ"
+      },
+      "groupHints": {
+        "fix": "እነዚህን መጀመሪያ አሻሽለው እንደገና ያቅርቡ።",
+        "record": "ይጎብኙ፣ ይመዝግቡ እና ያቅርቡ።",
+        "verify": "በሥራ ባልደረቦች የቀረቡ፤ የራስዎን ማረጋገጥ አይችሉም።",
+        "waiting": "",
+        "done": ""
+      },
+      "campaign": "ዘመቻ",
+      "due": "የማብቂያ ቀን",
+      "overdue": "ጊዜው ያለፈ",
+      "priority": "ቅድሚያ",
+      "last": "የመጨረሻ ግኝት",
+      "neverAssessed": "ተገምግሞ የማያውቅ",
+      "returnedNote": "ተመልሷል",
+      "note": "ማስታወሻ",
+      "start": "ጀምር",
+      "record": "ግምገማ መዝግብ",
+      "revise": "አሻሽል",
+      "review": "ገምግም",
+      "open": "ክፈት",
+      "inaccessible": "ቦታው ላይ መድረስ አልተቻለም",
+      "notLive": "ዘመቻው {status} ነው",
+      "inaccessibleTitle": "{name} ሊደረስበት እንደማይችል ሪፖርት አድርግ",
+      "inaccessibleHint": "አስተባባሪዎ ይነገረዋል እና ቦታውን በኋላ እንደገና ሊከፍት ይችላል።",
+      "inaccessibleReason": "መድረስን የሚከለክለው ምንድነው",
+      "inaccessibleConfirm": "ሪፖርት አድርግ"
+    },
+    "form": {
+      "newTitle": "የጉዳት ግምገማ መዝግብ",
+      "reviseTitle": "ግምገማውን አሻሽል",
+      "forTask": "{code} · {name}",
+      "adHoc": "ከዘመቻ ውጪ ያልታቀደ ግምገማ",
+      "noFacility": "ከዘመቻ ቦታ ወይም ከመዝገቡ ተቋም ይምረጡ",
+      "cannotRevise": "ይህ ግምገማ አሁን ሊሻሻል አይችልም",
+      "revision": "ማሻሻያ {n}",
+      "returnedBecause": "ለማሻሻያ ተመልሷል፦",
+      "visit": {
+        "title": "ጉብኝት እና ደህንነት",
+        "hint": "ቦታው መቼ እና በማን እንደተጎበኘ፣ እንዲሁም ለመግባት ደህንነቱ የተጠበቀ እንደነበር።",
+        "date": "የጉብኝት ቀን",
+        "assessor": "ገምጋሚ",
+        "assessorHint": "ቦታውን የጎበኘው ሰው",
+        "access": "መዳረሻ",
+        "use": "የአሁኑ አጠቃቀም",
+        "useHint": "ለተፈናቀሉ ቤተሰቦች መጠለያነት እና ወታደራዊ አጠቃቀም ለዕቅድ ወሳኝ ናቸው",
+        "uxo": "ያልፈነዳ ተተኳሽ ይጠረጠራል",
+        "uxoWarning": "ወደ ተጠረጠሩ ቦታዎች አይግቡ። ግምገማው ለአስተባባሪው እና ለፈንጂ ማስወገድ አስተባባሪ ምልክት ይደረግበታል።"
+      },
+      "damage": {
+        "title": "አጠቃላይ ጉዳት",
+        "hint": "መጀመሪያ መዋቅሩን ነጥብ ይስጡ፤ ክብደቱ ከነጥቡ ይጠቆማል እና ሊስተካከል ይችላል።",
+        "score": "የመዋቅር ተጽዕኖ ነጥብ (0–100)",
+        "scoreHint": "0 ያልተነካ · 30 መካከለኛ · 55 ከባድ · 80+ የወደመ",
+        "suggests": "የሚጠቆመው፦ {severity}",
+        "capacity": "የአገልግሎት አቅም %",
+        "capacityHint": "ተቋሙ ዛሬ ሊሰጥ የሚችለው የመደበኛ አገልግሎት ድርሻ",
+        "inventory": "የንብረት ኪሳራ %",
+        "severity": "ክብደት",
+        "causes": "የጉዳቱ መንስኤዎች",
+        "causesHint": "የሚመለከቱትን ሁሉ ይምረጡ"
+      },
+      "components": {
+        "title": "የሕንጻ ክፍሎች እና መሣሪያዎች",
+        "hint": "ለእያንዳንዱ የተቃኘ ክፍል ሁኔታ እና የጥገና ግምት። መመርመር ያልቻሏቸውን ክፍሎች እንዳልተቃኙ ይተዉ።",
+        "element": "ክፍል",
+        "condition": "ሁኔታ",
+        "cost": "የጥገና ግምት",
+        "note": "ማስታወሻ",
+        "notSurveyed": "ያልተቃኘ",
+        "total": "የክፍሎች ግምት ድምር፦ {amount}"
+      },
+      "needs": {
+        "title": "ወጪዎች እና የተመከረ ምላሽ",
+        "hint": "አገልግሎቱን ለመመለስ ምን እንደሚያስፈልግ እና በምን ያህል አስቸኳይነት።",
+        "repair": "የጥገና ግምት",
+        "repairHint": "የክፍሎቹን ድምር ({amount}) ለመጠቀም ባዶ ይተዉት",
+        "replacement": "የመተኪያ ግምት",
+        "equipment": "የጠፉ መሣሪያዎች እና ክምችት",
+        "intervention": "የተመከረ ምላሽ",
+        "priority": "ቅድሚያ",
+        "priorityHint": "አስቸኳይ፦ ሕይወት አድን አገልግሎት ወይም አማራጭ የሌለው ብዙ ሕዝብ",
+        "beneficiaries": "የተጎዱ ሰዎች",
+        "beneficiariesHint": "በተቋሙ በመደበኛነት የሚገለገሉ ሰዎች"
+      },
+      "evidence": {
+        "title": "ማስታወሻዎች፣ አቀማመጥ እና ፎቶዎች",
+        "hint": "የእያንዳንዱ ብሎክ እና የዋናው ጉዳት ፎቶዎች ማረጋገጥን ያስችላሉ።",
+        "notes": "ምልከታዎች",
+        "lat": "ኬክሮስ",
+        "lng": "ኬንትሮስ",
+        "gps": "አካባቢዬን ተጠቀም",
+        "addPhotos": "ፎቶዎችን አክል",
+        "photosHint": "JPEG፣ PNG ወይም WebP፤ በአንድ ጊዜ እስከ 12",
+        "photo": "ፎቶ {n}",
+        "caption": "መግለጫ",
+        "remove": "ፎቶውን አስወግድ"
+      },
+      "v": {
+        "required": "ያስፈልጋል",
+        "future": "ጉብኝቱ ወደፊት ሊሆን አይችልም",
+        "score": "ከ0 እስከ 100 ያለ ነጥብ ያስገቡ",
+        "pct": "0–100 ያስገቡ",
+        "coords": "ኬክሮስ እና ኬንትሮስን ሁለቱንም ያስገቡ፣ ወይም አንዱንም አያስገቡ"
+      },
+      "fixErrors": "{count, plural, one {# መስክ ትኩረት ይፈልጋል} other {# መስኮች ትኩረት ይፈልጋሉ}}",
+      "gpsUnavailable": "ይህ መሣሪያ አካባቢ መስጠት አይችልም",
+      "gpsDenied": "የአካባቢ ፈቃድ ተከልክሏል፤ መጋጠሚያዎቹን በእጅ ያስገቡ",
+      "uploadFailed": "አንድ ፎቶ መጫን አልተቻለም",
+      "submitHint": "ግምገማው ወደ አረጋጋጭ ይሄዳል፤ የሚቆጠረው ከተረጋገጠ በኋላ ነው።",
+      "submit": "ለማረጋገጫ አቅርብ",
+      "resubmit": "ለማረጋገጫ እንደገና አቅርብ"
+    },
+    "detail": {
+      "assessedBy": "{date} በ{name} የተገመገመ",
+      "facility": "ተቋም",
+      "revise": "አሻሽል",
+      "saved": "ተቀምጧል።",
+      "savedSubmitted": "ቀርቧል። አረጋጋጩ ተነግሮታል።",
+      "returned": "ለማሻሻያ ተመልሷል፦",
+      "rejected": "ውድቅ ተደርጓል፦",
+      "uxo": "በዚህ ቦታ ያልፈነዳ ተተኳሽ ይጠረጠራል።",
+      "impact": "የመዋቅር ተጽዕኖ",
+      "capacity": "የአገልግሎት አቅም",
+      "repair": "የጥገና ግምት",
+      "replacement": "የመተኪያ ግምት",
+      "equipment": "የመሣሪያ ኪሳራ",
+      "people": "የተጎዱ ሰዎች",
+      "findings": "ግኝቶች",
+      "intervention": "የተመከረ ምላሽ",
+      "priority": "ቅድሚያ",
+      "inventory": "የንብረት ኪሳራ",
+      "access": "መዳረሻ",
+      "use": "የአሁኑ አጠቃቀም",
+      "causes": "መንስኤዎች",
+      "components": "የሕንጻ ክፍሎች እና መሣሪያዎች",
+      "componentsTotal": "የክፍሎች ግምት ድምር {amount}",
+      "noComponents": "ምንም ክፍል በተናጠል አልተቃኘም።",
+      "photos": "{count, plural, =0 {ፎቶዎች} one {# ፎቶ} other {# ፎቶዎች}}",
+      "noPhotos": "ምንም ፎቶ አልተያያዘም።",
+      "workflow": "የሥራ ሂደት",
+      "campaign": "ዘመቻ",
+      "submittedBy": "ያቀረበው",
+      "revisionN": "ማሻሻያ {n}",
+      "verifiedBy": "ያረጋገጠው",
+      "notYet": "ገና አልተረጋገጠም",
+      "source": "ምንጭ",
+      "project": "ፕሮጀክት",
+      "noProject": "እስካሁን ፕሮጀክት የለም",
+      "history": "ታሪክ",
+      "noHistory": "እስካሁን የተመዘገበ እንቅስቃሴ የለም።"
+    },
+    "events": {
+      "CREATED": "ዘመቻ ታቅዷል",
+      "UPDATED": "የዘመቻ ዝርዝሮች ተቀይረዋል",
+      "STARTED": "የመስክ ሥራ ተጀምሯል",
+      "FIELDWORK_CLOSED": "የመስክ ሥራ ተዘግቶ ለማጽደቅ ተልኳል",
+      "ENDORSED": "ግኝቶች ጸድቀዋል",
+      "RETURNED_TO_FIELDWORK": "ወደ መስክ ሥራ ተመልሷል",
+      "CANCELLED": "ዘመቻ ተሰርዟል",
+      "MEMBER_ADDED": "የቡድን አባል ተጨምሯል",
+      "MEMBER_RELEASED": "የቡድን አባል ተሰናብቷል",
+      "SITES_ADDED": "ቦታዎች ተጨምረዋል",
+      "FACILITY_REGISTERED": "አዲስ ተቋም ተመዝግቧል",
+      "ASSIGNED": "ቦታ ተመድቧል",
+      "TASK_UPDATED": "የቦታ ዝርዝሮች ተዘምነዋል",
+      "TASK_IN_PROGRESS": "የቦታ ጉብኝት ተጀምሯል",
+      "TASK_INACCESSIBLE": "ቦታው የማይደረስበት እንደሆነ ሪፖርት ተደርጓል",
+      "TASK_CANCELLED": "ቦታ ተወግዷል",
+      "TASK_PLANNED": "ቦታ እንደገና ተከፍቷል",
+      "TASK_ASSIGNED": "ቦታ እንደገና ተከፍቷል",
+      "SUBMITTED": "ግምገማ ቀርቧል",
+      "RESUBMITTED": "ተሻሽሎ እንደገና ቀርቧል",
+      "REVISED": "ከግምገማ በፊት ተሻሽሏል",
+      "VERIFIED": "ተረጋግጧል",
+      "RETURNED": "ለማሻሻያ ተመልሷል",
+      "REJECTED": "ውድቅ ተደርጓል",
+      "PROJECT_REGISTERED": "የፕሮጀክት መሠረት ሆኖ ተመዝግቧል"
+    }
+  },
+  "register": {
+    "fromAssessment": {
+      "name": "የ{facility} {action}",
+      "description": "የ{facility} የተረጋገጠ የጉዳት ግምገማ ({source}፣ በ{date} የተጎበኘ) {severity} ጉዳት አግኝቷል እና በ{priority} ቅድሚያ {action} ይመክራል።\n\n{notes}",
+      "adHoc": "ያልታቀደ ጉብኝት",
+      "note": "ከተረጋገጠ የጉዳት ግምገማ #{id} የተመዘገበ",
+      "banner": "ከ{facility} የተረጋገጠ የጉዳት ግምገማ በመነሳት፦ ተቋሙ፣ አቀማመጡ፣ የተጎዱ ሰዎች እና የወጪ ግምቱ ተሞልተዋል፣ ግምገማውም ለዚህ ፕሮጀክት ማስረጃ ይሆናል።",
+      "view": "ግምገማውን ተመልከት",
+      "unlink": "አታገናኝ"
     }
   }
 }

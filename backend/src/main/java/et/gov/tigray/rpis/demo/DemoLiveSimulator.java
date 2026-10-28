@@ -40,6 +40,7 @@ public class DemoLiveSimulator {
     private final FacilityRepository facilities;
     private final DamageService damageService;
     private final FieldDeviceRepository devices;
+    private final org.springframework.jdbc.core.JdbcTemplate jdbc;
     private final Random rnd = new Random();
 
     @Scheduled(initialDelayString = "PT40S", fixedDelayString = "${rpis.demo.live-simulator.interval-seconds:25}000")
@@ -64,14 +65,16 @@ public class DemoLiveSimulator {
     }
 
     private void simulateAssessment() {
-        List<Facility> all = facilities.findAll();
-        if (all.isEmpty()) return;
-        Facility f = all.get(rnd.nextInt(all.size()));
+        // Follow-up visits leave facilities whose current picture comes from a campaign alone.
+        List<Long> ids = jdbc.queryForList("SELECT f.id FROM facility f LEFT JOIN damage_assessment a ON a.id = f.latest_assessment_id WHERE a.campaign_id IS NULL", Long.class);
+        if (ids.isEmpty()) return;
+        Facility f = facilities.findById(ids.get(rnd.nextInt(ids.size()))).orElse(null);
+        if (f == null) return;
         var dev = devices.findByDeviceUid("demo-tablet-01").orElse(null);
         DamageSeverity sev = f.getLatestSeverity() == null ? DamageSeverity.MODERATE : f.getLatestSeverity();
         int score = switch (sev) { case NONE -> 5; case MINOR -> 18; case MODERATE -> 42; case SEVERE -> 66; case DESTROYED -> 88; } + rnd.nextInt(8);
-        damageService.create(new DamageDtos.CreateAssessmentRequest(f.getId(), "sim-" + System.currentTimeMillis(), LocalDate.now(ZoneOffset.UTC),
+        damageService.create(DamageDtos.CreateAssessmentRequest.basic(f.getId(), "sim-" + System.currentTimeMillis(), LocalDate.now(ZoneOffset.UTC),
             "Field team (simulated)", sev, Math.min(100, score), Math.min(100, score + 5), Math.max(0, 100 - score), null, f.getReplacementEstimateEtb(),
-            "Follow-up verification visit (simulated field sync).", null, GeoPoint.of(f.getLocation()), null), DataSource.FIELD_APP, dev, null);
+            "Follow-up verification visit (simulated field sync).", GeoPoint.of(f.getLocation())), DataSource.FIELD_APP, dev, null);
     }
 }

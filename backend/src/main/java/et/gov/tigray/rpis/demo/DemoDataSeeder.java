@@ -170,6 +170,7 @@ public class DemoDataSeeder implements ApplicationRunner {
         a.setLocation(f.getLocation()); a.setSource(DataSource.FIELD_APP);
         Instant synced = date.plusDays(1 + rnd.nextInt(9)).atStartOfDay().toInstant(ZoneOffset.UTC);
         a.setSyncedAt(synced.isAfter(Instant.now()) ? Instant.now().minusSeconds(3600L * (1 + rnd.nextInt(20))) : synced);
+        a.setSubmittedAt(a.getSyncedAt()); a.setVerifiedAt(a.getSyncedAt()); a.setVerifiedByName("Recorded before verification workflow");
         return assessments.save(a);
     }
 

@@ -12,12 +12,14 @@ import * as React from 'react';
 import { useBreadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHeader, Section, Stat } from '@/components/common/page-header';
 import { DataState } from '@/components/common/data-state';
-import { HealthBadge, OperationalBadge, SectorLabel, SeverityBadge, StatusBadge, ToneBadge } from '@/components/common/badges';
-import { Link } from '@/i18n/navigation';
+import { AssessmentStatusBadge, HealthBadge, OperationalBadge, SectorLabel, SeverityBadge, StatusBadge, ToneBadge } from '@/components/common/badges';
+import { Link, useRouter } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { useUser } from '@/providers/session';
 import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fmtDate, fmtDateTime, localizedName, money, num, pct } from '@/lib/format';
-import { sectorSlug, toneVar, severityTone } from '@/lib/domain';
+import { canManageCampaigns, sectorSlug, toneVar, severityTone } from '@/lib/domain';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DataState as DS } from '@/components/common/data-state';
 
@@ -38,6 +40,8 @@ export default function FacilityPage() {
   const { data: inspections, isLoading: il, error: ie, refetch: ir } = useInspections({ facilityId: fid, size: 20, sort: 'visitedOn,desc' });
   const { data: siteFacilities } = useFacilitiesGeo({ weredaId: f?.wereda.id }, Boolean(f));
   const { data: siteEvidence } = useEvidenceGeo({ facilityId: fid }, Boolean(f));
+  const router = useRouter();
+  const user = useUser();
   useBreadcrumbs(f ? [{ href: `/sectors/${sectorSlug[f.sector]}`, label: te(`sector.${f.sector}`) }, { href: `/weredas/${f.wereda.id}`, label: localizedName(f.wereda.name, locale) }, { label: f.name }] : [{ label: t('title') }]);
   return (
     <DataState isLoading={isLoading} error={error} onRetry={refetch} skeleton={<div className="space-y-4"><Skeleton className="h-16" /><Skeleton className="h-28" /><Skeleton className="h-96" /></div>}>
@@ -63,9 +67,9 @@ export default function FacilityPage() {
                   </div>
                 )}
               </Section>
-              <Section title={t('detail.history')}>
-                <Table><TableHeader><TableRow><TableHead>{t('columns.assessed')}</TableHead><TableHead>{t('columns.severity')}</TableHead><TableHead className="text-right">{t('columns.impact')}</TableHead><TableHead className="text-right">{t('detail.functional')}</TableHead><TableHead className="text-right">{t('detail.replacementCost')}</TableHead><TableHead>{t('detail.assessor')}</TableHead></TableRow></TableHeader>
-                  <TableBody>{data.assessmentHistory.map((h) => <TableRow key={h.id}><TableCell className="tabular">{fmtDate(h.assessedOn, locale, 'short')}</TableCell><TableCell><SeverityBadge value={h.severity} /></TableCell><TableCell className="text-right tabular">{h.structuralImpactScore}</TableCell><TableCell className="text-right tabular">{pct(h.functionalCapacityPct)}</TableCell><TableCell className="text-right tabular">{money(h.estimatedReplacementCostEtb, locale)}</TableCell><TableCell className="text-xs">{h.assessorName} <span className="text-muted-foreground">· {te(`source.${h.source}`)}</span></TableCell></TableRow>)}</TableBody></Table>
+              <Section title={t('detail.history')} actions={canManageCampaigns(user.roles) && <Button size="sm" variant="outline" asChild><Link href={`/damage/assessments/new?facilityId=${f.id}`}>{t('detail.recordAssessment')}</Link></Button>}>
+                <Table><TableHeader><TableRow><TableHead>{t('columns.assessed')}</TableHead><TableHead>{t('columns.severity')}</TableHead><TableHead className="text-right">{t('columns.impact')}</TableHead><TableHead className="text-right">{t('detail.functional')}</TableHead><TableHead className="text-right">{t('detail.replacementCost')}</TableHead><TableHead>{t('detail.assessor')}</TableHead><TableHead>{t('detail.review')}</TableHead></TableRow></TableHeader>
+                  <TableBody>{data.assessmentHistory.map((h) => <TableRow key={h.id} className="cursor-pointer" onClick={() => router.push(`/damage/assessments/${h.id}`)}><TableCell className="tabular"><Link href={`/damage/assessments/${h.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{fmtDate(h.assessedOn, locale, 'short')}</Link></TableCell><TableCell><SeverityBadge value={h.severity} /></TableCell><TableCell className="text-right tabular">{h.structuralImpactScore}</TableCell><TableCell className="text-right tabular">{pct(h.functionalCapacityPct)}</TableCell><TableCell className="text-right tabular">{money(h.estimatedReplacementCostEtb, locale)}</TableCell><TableCell className="text-xs">{h.assessorName} <span className="text-muted-foreground">· {te(`source.${h.source}`)}</span></TableCell><TableCell><AssessmentStatusBadge value={h.status} /></TableCell></TableRow>)}</TableBody></Table>
               </Section>
             </div>
             <div className="desktop:col-span-5 space-y-5">

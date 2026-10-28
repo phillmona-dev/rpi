@@ -1,11 +1,11 @@
 'use client';
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { BarChart3, Bell, BrainCircuit, Building2, Camera, ChevronLeft, ChevronRight, FileBarChart2, FileText, FolderKanban, Globe2, LayoutDashboard, Layers, Map, ScrollText, Users, Wallet } from 'lucide-react';
+import { BarChart3, Bell, BrainCircuit, Building2, Camera, ChevronLeft, ChevronRight, ClipboardCheck, FileBarChart2, FileText, FolderKanban, Globe2, LayoutDashboard, Layers, Map, ScrollText, Users, Wallet } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/session';
-import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeIntelligence, canSeeReports, sectorSlug } from '@/lib/domain';
+import { canAdmin, canSeeAudit, canSeeBrief, canSeeDamage, canSeeFinance, canSeeIntelligence, canSeeReports, isFieldTeam, sectorSlug } from '@/lib/domain';
 import { SECTORS } from '@/lib/api/types';
 import { SectorDot } from '@/components/common/badges';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -32,6 +32,7 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
     { href: '/geography', label: t('geography'), icon: Map },
     { href: '/projects', label: t('projects'), icon: FolderKanban },
     { href: '/facilities', label: t('facilities'), icon: Building2 },
+    ...(canSeeDamage(roles) || isFieldTeam(roles) ? [{ href: canSeeDamage(roles) ? '/damage' : '/damage/my-tasks', label: t('damage'), icon: ClipboardCheck }] : []),
     { href: '/evidence', label: t('evidence'), icon: Camera },
     ...(canSeeFinance(roles) ? [{ href: '/finance', label: t('finance'), icon: Wallet }] : []),
   ];

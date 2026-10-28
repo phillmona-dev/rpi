@@ -1,13 +1,14 @@
 package et.gov.tigray.rpis.damage;
 
-import et.gov.tigray.rpis.common.Enums.DamageSeverity;
-import et.gov.tigray.rpis.common.Enums.DataSource;
+import et.gov.tigray.rpis.common.Enums.*;
 import et.gov.tigray.rpis.facility.Facility;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
 import java.math.BigDecimal;
@@ -39,4 +40,28 @@ public class DamageAssessment {
     @Column(name = "synced_at") private Instant syncedAt;
     @CreationTimestamp @Column(name = "created_at", updatable = false) private Instant createdAt;
     @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL, orphanRemoval = true) private List<AssessmentPhoto> photos = new ArrayList<>();
+
+    // ── V7 · campaign workflow, needs and components ────────────────────────
+    @Column(name = "campaign_id") private Long campaignId;
+    @Column(name = "task_id") private Long taskId;
+    @Enumerated(EnumType.STRING) @Column(nullable = false, length = 12) private AssessmentStatus status = AssessmentStatus.VERIFIED;  // seeders and imports; workflow submissions set SUBMITTED
+    @Column(nullable = false) private short revision = 1;
+    @Enumerated(EnumType.STRING) @Column(name = "access_status", length = 12) private AccessStatus accessStatus;
+    @Enumerated(EnumType.STRING) @Column(name = "current_use", length = 16) private CurrentUse currentUse;
+    @Column(name = "uxo_suspected", nullable = false) private boolean uxoSuspected;
+    @JdbcTypeCode(SqlTypes.JSON) @Column(name = "damage_causes", columnDefinition = "jsonb", nullable = false) private List<String> damageCauses = new ArrayList<>();
+    @Enumerated(EnumType.STRING) @Column(name = "recommended_intervention", length = 16) private Intervention recommendedIntervention;
+    @Enumerated(EnumType.STRING) @Column(name = "intervention_priority", length = 8) private NeedPriority interventionPriority;
+    @Column(name = "beneficiaries_affected") private Integer beneficiariesAffected;
+    @Column(name = "equipment_loss_etb", precision = 18, scale = 2) private BigDecimal equipmentLossEtb;
+    @Column(name = "submitted_by_user_id") private Long submittedByUserId;
+    @Column(name = "submitted_by_name", length = 160) private String submittedByName;
+    @Column(name = "submitted_at") private Instant submittedAt;
+    @Column(name = "verified_by_user_id") private Long verifiedByUserId;
+    @Column(name = "verified_by_name", length = 160) private String verifiedByName;
+    @Column(name = "verified_at") private Instant verifiedAt;
+    @Column(name = "review_note", columnDefinition = "text") private String reviewNote;
+    @Column(name = "project_id") private Long projectId;
+    @Column(name = "project_linked_at") private Instant projectLinkedAt;
+    @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL, orphanRemoval = true) @OrderBy("id") private List<AssessmentComponent> components = new ArrayList<>();
 }

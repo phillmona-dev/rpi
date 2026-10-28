@@ -60,4 +60,17 @@ public final class Enums {
     public enum AssignmentRole { LEAD, DATA_COLLECTOR, FIELD_ANALYST, VERIFIER }
     public enum AssignmentStatus { ACTIVE, COMPLETED, RELEASED }
     public enum AssignmentPriority { NORMAL, HIGH, URGENT }
+
+    // ── V7 · damage assessment campaigns ────────────────────────────────────
+    public enum CampaignStatus { PLANNING, ACTIVE, REVIEW, COMPLETED, CANCELLED }
+    public enum CampaignRole { TEAM_LEAD, ASSESSOR, ENGINEER, VERIFIER }
+    public enum TaskStatus { PLANNED, ASSIGNED, IN_PROGRESS, SUBMITTED, RETURNED, VERIFIED, INACCESSIBLE, CANCELLED }
+    /** Review state of an assessment. Only VERIFIED assessments update the facility register and can become projects. */
+    public enum AssessmentStatus { SUBMITTED, RETURNED, VERIFIED, REJECTED }
+    public enum ReviewDecision { VERIFY, RETURN, REJECT }
+    public enum AccessStatus { ACCESSIBLE, PARTIAL, INACCESSIBLE }
+    public enum CurrentUse { NORMAL_USE, PARTIAL_USE, IDP_SHELTER, MILITARY_USE, ABANDONED, OTHER }
+    public enum DamageCause { SHELLING, AIRSTRIKE, LOOTING, FIRE, VANDALISM, OCCUPATION, NEGLECT, FLOOD, OTHER }
+    public enum Intervention { NO_ACTION, MINOR_REPAIR, REHABILITATION, RECONSTRUCTION, RELOCATION }
+    public enum NeedPriority { LOW, MEDIUM, HIGH, URGENT }
 }

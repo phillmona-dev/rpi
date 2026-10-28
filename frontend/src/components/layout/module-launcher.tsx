@@ -5,15 +5,16 @@ import {
   LayoutDashboard, BrainCircuit, Globe2, Bell,
   Layers, Map, FolderKanban, Building2, Camera,
   Wallet, FileText, FileBarChart2, Users, ScrollText,
-  ChevronRight, Radio, ShieldCheck, Target, Search, X, History, Stamp, UsersRound, MessagesSquare,
+  ChevronRight, Radio, ShieldCheck, Target, Search, X, History, Stamp, UsersRound, MessagesSquare, ClipboardCheck,
   type LucideIcon,
 } from 'lucide-react';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
-import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, canSeeIntelligence, canSeeApprovals, canSeeFieldTeam } from '@/lib/domain';
+import { canAdmin, canSeeAudit, canSeeBrief, canSeeFinance, canSeeReports, canSeeIntelligence, canSeeApprovals, canSeeFieldTeam, canSeeDamage, isFieldTeam } from '@/lib/domain';
 import { useApprovalCounts, useFieldSummary, useOverview } from '@/lib/api/hooks';
 import { useChatUnread } from '@/lib/api/messaging';
-import type { ApprovalCounts, ChatUnread, Overview, TeamSummary } from '@/lib/api/types';
+import { useDamageOverview } from '@/lib/api/damage';
+import type { ApprovalCounts, ChatUnread, DamageOverview, Overview, TeamSummary } from '@/lib/api/types';
 import { money, num, pct, relTime } from '@/lib/format';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -45,7 +46,7 @@ interface ModuleCard {
 const CATEGORIES: Category[] = ['command', 'operations', 'analysis', 'records', 'administration'];
 
 /* ─── Module definitions ───────────────────────────────────────────── */
-function useModules(roles: string[], ov: Overview | undefined, locale: string, ap?: ApprovalCounts, ft?: TeamSummary, chat?: ChatUnread): ModuleCard[] {
+function useModules(roles: string[], ov: Overview | undefined, locale: string, ap?: ApprovalCounts, ft?: TeamSummary, chat?: ChatUnread, da?: DamageOverview): ModuleCard[] {
   const t = useTranslations('launcher.stat');
   const k = ov?.kpis;
   const a = ov?.alertCounts;
@@ -98,6 +99,18 @@ function useModules(roles: string[], ov: Overview | undefined, locale: string, a
       } : undefined,
     },
     /* ── Field operations ─────────────────────────────── */
+    ...(canSeeDamage(roles) || isFieldTeam(roles) ? [{
+      href: canSeeDamage(roles) ? '/damage' : '/damage/my-tasks', key: 'damage', icon: ClipboardCheck, category: 'operations',
+      stat: da ? (canSeeDamage(roles) ? {
+        value: n(da.awaitingReview), label: t('awaitingVerification'),
+        detail: t('damageDetail', { active: n(da.campaignsActive), needs: n(da.needsAwaitingProject) }),
+        accent: da.awaitingReview > 0 ? 'var(--status-warning)' : undefined,
+      } : {
+        value: n(da.mine.toAssess + da.mine.returned), label: t('sitesToAssess'),
+        detail: t('mySitesDetail', { returned: n(da.mine.returned), review: n(da.mine.toReview) }),
+        accent: da.mine.returned > 0 ? 'var(--status-serious)' : undefined,
+      }) : undefined,
+    } as ModuleCard] : []),
     ...(canSeeApprovals(roles) ? [{
       href: '/approvals', key: 'approvals', icon: Stamp, category: 'operations',
       stat: ap ? {
@@ -224,7 +237,8 @@ export function ModuleLauncher() {
   const { data: ap } = useApprovalCounts(canSeeApprovals(user.roles));
   const { data: ft } = useFieldSummary(user.sectorScope, canSeeFieldTeam(user.roles));
   const { data: chat } = useChatUnread();
-  const modules = useModules(user.roles, ov, locale, ap, ft, chat);
+  const { data: da } = useDamageOverview(user.sectorScope, canSeeDamage(user.roles) || isFieldTeam(user.roles));
+  const modules = useModules(user.roles, ov, locale, ap, ft, chat, da);
   const { usage, record, forget, clear } = useModuleUsage(user.id);
 
   /* ── Search ── */

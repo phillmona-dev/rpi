@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { AtSign, BadgeCheck, Bell, ClipboardList, FileWarning, MessageCircle, ShieldAlert, Siren, Stamp, Undo2, XOctagon, type LucideIcon } from 'lucide-react';
+import { AtSign, BadgeCheck, Ban, Bell, ClipboardCheck, ClipboardList, FileWarning, HardHat, MessageCircle, ShieldAlert, Siren, Stamp, Undo2, XOctagon, type LucideIcon } from 'lucide-react';
 import type { AppNotification, NotificationSeverity } from '@/lib/api/types';
 import type { NotifyCategory } from '@/lib/notify/prefs';
 import type { ToneKind } from '@/lib/notify/sound';
@@ -12,11 +12,15 @@ const ICONS: Record<string, LucideIcon> = {
   ALERT_CRITICAL: Siren, ALERT_ASSIGNED: ShieldAlert, ASSIGNMENT_NEW: ClipboardList,
   INSPECTION_VERIFIED: BadgeCheck, INSPECTION_DISPUTED: FileWarning, INSPECTION_REJECTED: XOctagon, INSPECTION_UNVERIFIED: FileWarning,
   CHAT_MENTION: AtSign, CHAT_MESSAGE: MessageCircle,
+  ASSESSMENT_TASKS: ClipboardList, ASSESSMENT_SUBMITTED: ClipboardCheck, ASSESSMENT_RESUBMITTED: ClipboardCheck, ASSESSMENT_VERIFIED: BadgeCheck,
+  ASSESSMENT_RETURNED: Undo2, ASSESSMENT_REJECTED: XOctagon, ASSESSMENT_INACCESSIBLE: Ban,
+  CAMPAIGN_STARTED: HardHat, CAMPAIGN_MEMBER: HardHat, CAMPAIGN_REVIEW: Stamp, CAMPAIGN_ENDORSED: BadgeCheck, CAMPAIGN_RETURNED: Undo2,
 };
 
 export const categoryOf = (type: string): NotifyCategory =>
   type.startsWith('APPROVAL_') ? 'approvals' : type.startsWith('ALERT_') ? 'alerts' : type.startsWith('ASSIGNMENT_') ? 'assignments'
-    : type.startsWith('INSPECTION_') ? 'inspections' : type === 'CHAT_MENTION' ? 'mentions' : 'messages';
+    : type.startsWith('INSPECTION_') ? 'inspections' : type.startsWith('ASSESSMENT_') || type.startsWith('CAMPAIGN_') ? 'assessments'
+    : type === 'CHAT_MENTION' ? 'mentions' : 'messages';
 
 export const toneOf = (severity: NotificationSeverity, category: NotifyCategory): ToneKind =>
   severity === 'CRITICAL' ? 'critical' : severity === 'WARNING' ? 'warning' : severity === 'SUCCESS' ? 'success' : category === 'messages' ? 'message' : 'info';
@@ -29,13 +33,14 @@ export const severityColor: Record<NotificationSeverity, string> = {
 export function useRenderNotification() {
   const t = useTranslations('notifications.types');
   const tr = useTranslations('enums.assignmentRole');
+  const tcr = useTranslations('enums.campaignRole');
   return (n: AppNotification): Rendered => {
     const d = n.data ?? {};
     const s = (k: string) => (d[k] === undefined || d[k] === null ? '' : String(d[k]));
-    const role = s('role') ? safe(() => tr(s('role') as 'LEAD'), s('role')) : '';
+    const role = !s('role') ? '' : n.type.startsWith('CAMPAIGN_') ? safe(() => tcr(s('role') as 'ASSESSOR'), s('role')) : safe(() => tr(s('role') as 'LEAD'), s('role'));
     const params = {
       actor: n.actorName ?? t('someone'), code: s('code'), name: s('name'), title: s('title'), reference: s('reference'), role,
-      subject: s('subject') || t('aSite'), conversation: s('conversation'), excerpt: s('excerpt'), wereda: s('wereda'),
+      subject: s('subject') || t('aSite'), conversation: s('conversation'), excerpt: s('excerpt'), wereda: s('wereda'), count: Number(d.count ?? 1),
     };
     const known = Object.prototype.hasOwnProperty.call(ICONS, n.type);
     const title = known ? t(`${n.type}.title` as 'ASSIGNMENT_NEW.title', params) : n.type;

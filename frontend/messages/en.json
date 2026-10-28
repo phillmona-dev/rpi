@@ -11,7 +11,7 @@
     "geography": "Geography",
     "projects": "Projects",
     "facilities": "Facilities & Damage",
-    "damage": "Damage Assessments",
+    "damage": "Damage Assessment",
     "finance": "Finance",
     "alerts": "Alerts",
     "briefing": "Daily Brief",
@@ -543,7 +543,9 @@
       "synced": "Synced {time}",
       "kebele": "Kebele",
       "evidence": "Field evidence",
-      "siteMap": "Site map"
+      "siteMap": "Site map",
+      "review": "Review",
+      "recordAssessment": "Record assessment"
     },
     "filters": {
       "search": "Search facilities",
@@ -553,16 +555,560 @@
     }
   },
   "damage": {
-    "title": "Damage Assessments",
-    "subtitle": "Incoming field assessments, newest first",
+    "title": "Damage Assessment",
+    "subtitle": "Plan assessment campaigns, assign field teams, verify findings and hand verified needs to project registration",
+    "noAccess": "Damage assessment is available to oversight, planning and field team roles",
+    "newCampaign": "New campaign",
+    "adHoc": "Ad hoc visit",
+    "photos": "{count, plural, one {# photo} other {# photos}}",
+    "reasonMin": "At least {n} characters",
+    "reviewHint": "Submitted assessments wait here until someone other than their author verifies, returns or rejects them. Oldest first.",
+    "reviewEmpty": "Nothing is waiting for verification",
+    "registerEmpty": "No assessments match these filters",
+    "views": {
+      "overview": "Overview",
+      "campaigns": "Campaigns",
+      "review": "Review queue",
+      "register": "Assessment register",
+      "needs": "Verified needs"
+    },
+    "filters": {
+      "sector": "Sector",
+      "allSectors": "All sectors",
+      "allStatuses": "All statuses",
+      "all": "All",
+      "allPriorities": "All priorities"
+    },
     "columns": {
       "date": "Assessed",
+      "submitted": "Submitted",
       "facility": "Facility",
+      "status": "Status",
       "severity": "Severity",
       "impact": "Impact",
       "assessor": "Assessor",
       "replacement": "Replacement estimate",
-      "source": "Source"
+      "source": "Source",
+      "intervention": "Recommended response",
+      "campaign": "Campaign",
+      "priority": "Priority",
+      "estimate": "Estimate",
+      "beneficiaries": "People affected"
+    },
+    "queue": {
+      "title": "Your queue",
+      "toReview": "{count, plural, one {# assessment to verify} other {# assessments to verify}}",
+      "toAssess": "{count, plural, one {# site to assess} other {# sites to assess}}",
+      "returned": "{count, plural, one {# returned for revision} other {# returned for revision}}"
+    },
+    "kpi": {
+      "campaigns": "Campaigns in fieldwork",
+      "campaignsHint": "{planning} planning · {review} awaiting endorsement · {completed} completed",
+      "sites": "Sites verified",
+      "sitesHint": "{outstanding} still open · {inaccessible} inaccessible",
+      "review": "Awaiting verification",
+      "reviewHint": "Oldest {days} days · {returned} returned for revision",
+      "needs": "Verified needs without a project",
+      "needsHint": "Estimated {estimate}"
+    },
+    "picture": {
+      "title": "Facility damage picture",
+      "hint": "Latest verified finding for every registered facility",
+      "never": "Never assessed",
+      "replacement": "Replacement estimate for moderately to fully damaged facilities: {amount}"
+    },
+    "live": {
+      "title": "Campaigns under way",
+      "all": "All campaigns",
+      "none": "No campaign is being planned or run.",
+      "progress": "{pct}% complete · {verified} of {total} sites verified"
+    },
+    "campaign": {
+      "columns": {
+        "campaign": "Campaign",
+        "status": "Status",
+        "dates": "Dates",
+        "progress": "Progress",
+        "team": "Team",
+        "weredas": "Weredas",
+        "estimate": "Verified estimate"
+      },
+      "multiSector": "Multi-sector",
+      "overdueBy": "{days} days past end date",
+      "daysLeft": "{days} days left",
+      "empty": "No campaigns yet",
+      "emptyHint": "A campaign plans an assessment round over a set of weredas: its team, its sites and its deadline.",
+      "coordinatedBy": "Coordinated by {name}",
+      "edit": "Edit",
+      "cancel": "Cancel campaign",
+      "start": "Start fieldwork",
+      "closeFieldwork": "Close fieldwork",
+      "toStart": "Before fieldwork can start:",
+      "toClose": "Before fieldwork can close:",
+      "cancelled": "Cancelled:",
+      "views": {
+        "overview": "Overview",
+        "sites": "Sites",
+        "team": "Team",
+        "results": "Results",
+        "activity": "Activity"
+      },
+      "progress": "Progress",
+      "overdueSites": "{count, plural, one {# site overdue} other {# sites overdue}}",
+      "purpose": "Purpose and method",
+      "facts": "Key facts",
+      "createdBy": "Planned by",
+      "started": "Fieldwork started",
+      "fieldworkClosed": "Fieldwork closed",
+      "endorsement": "Endorsement",
+      "scope": "Scope · {count, plural, one {# wereda} other {# weredas}}",
+      "lifecycle": "Campaign stages",
+      "stageHint": {
+        "PLANNING": "Scope, team, sites",
+        "ACTIVE": "Record and verify",
+        "REVIEW": "Endorsement",
+        "COMPLETED": "Findings endorsed"
+      },
+      "cancelTitle": "Cancel this campaign?",
+      "cancelHint": "Open sites are cancelled. Verified assessments stay in the register.",
+      "cancelReason": "Reason for cancelling"
+    },
+    "campaignForm": {
+      "subtitle": "Name the round, set its dates and coordinator, and choose the weredas it covers. Sites and team come next.",
+      "editTitle": "Edit campaign",
+      "notEditable": "This campaign can no longer be edited",
+      "basics": "Campaign",
+      "basicsHint": "What the round is for and when it runs.",
+      "name": "Name",
+      "nameHint": "For example: Post-conflict health facility damage assessment — Central zone",
+      "sector": "Sector",
+      "sectorHint": "A sector campaign only takes facilities of that sector and is endorsed by its sector head; a multi-sector campaign is endorsed by the Chief Executive.",
+      "multi": "Multi-sector",
+      "start": "Planned start",
+      "end": "Planned end",
+      "coordinator": "Coordinator",
+      "coordinatorHint": "Runs the campaign day to day and receives escalations",
+      "coordinatorPick": "Choose a coordinator",
+      "objective": "Objective",
+      "objectiveHint": "What decisions the findings will inform",
+      "methodology": "Method",
+      "methodologyHint": "Checklist used, team composition per site, sampling and verification approach",
+      "scope": "Weredas covered",
+      "scopeHint": "Sites can only be added from these weredas. Field team members covering them are suggested first.",
+      "selected": "{count} selected",
+      "searchWereda": "Find a wereda",
+      "wholeZone": "Whole zone",
+      "clearZone": "Clear zone",
+      "save": "Save changes",
+      "create": "Create campaign",
+      "v": {
+        "name": "Use at least 5 characters",
+        "required": "Required",
+        "endAfterStart": "Must be on or after the start date",
+        "endPast": "The campaign cannot end in the past",
+        "scope": "Choose at least one wereda"
+      }
+    },
+    "team": {
+      "title": "Campaign team",
+      "hint": "Field team members in campaign roles. A person can hold more than one role, but never verifies a site they assessed.",
+      "add": "Add member",
+      "addTitle": "Add a team member",
+      "addHint": "Members covering the campaign's weredas and with fewer open sites are listed first.",
+      "columns": {
+        "member": "Member",
+        "role": "Role",
+        "area": "Area",
+        "open": "Open sites",
+        "verified": "Verified",
+        "reviews": "To review",
+        "login": "Field login",
+        "phone": "Phone"
+      },
+      "covers": "Covers the scope",
+      "outsideArea": "Outside usual area",
+      "hasLogin": "Yes",
+      "noLogin": "No login",
+      "loginWarning": "Members without a field login cannot record or verify sites themselves; an analyst must enter their forms. Create logins from the Field Team page.",
+      "empty": "Nobody is on the team yet.",
+      "release": "Release",
+      "releaseTitle": "Release {name} as {role}?",
+      "releaseHint": "Open sites in this role must be reassigned first.",
+      "releaseReason": "Reason",
+      "releasedNote": "Released: {reason}",
+      "past": "Former members",
+      "roles": {
+        "title": "What each role does",
+        "TEAM_LEAD": "Supervises the team on the ground; may record or verify any site, and is told when sites are blocked.",
+        "ASSESSOR": "Visits assigned sites and records the assessment with photos and GPS.",
+        "ENGINEER": "Records sites needing structural judgement and cost estimates (hospitals, factories, schemes).",
+        "VERIFIER": "Checks submitted assessments against evidence and verifies, returns or rejects them. Must be a field analyst or supervisor."
+      },
+      "noCandidates": "No active field team members.",
+      "coveredWeredas": "{count, plural, =0 {No weredas in scope} one {# wereda in scope} other {# weredas in scope}}",
+      "openSites": "{count, plural, =0 {no open sites} one {# open site} other {# open sites}}",
+      "alreadyAs": "Already: {roles}",
+      "addAs": "Add as {role}",
+      "addedList": "Added: {list}",
+      "done": "Done",
+      "ineligible": {
+        "ALREADY_IN_ROLE": "Already holds this role",
+        "ROLE_NEEDS_ANALYST_OR_SUPERVISOR": "Team leads and verifiers must be field analysts or supervisors"
+      }
+    },
+    "sites": {
+      "title": "Sites",
+      "hint": "Each site is one facility: its assessor records it, its verifier checks it.",
+      "add": "Add sites",
+      "registerNew": "Register a new facility",
+      "search": "Search sites",
+      "allStatuses": "All statuses",
+      "allWeredas": "All weredas",
+      "allAssessors": "All assessors",
+      "count": "{count, plural, one {# site} other {# sites}}",
+      "selected": "{count} selected",
+      "assign": "Assign",
+      "clear": "Clear selection",
+      "selectAll": "Select all open sites",
+      "selectSite": "Select {name}",
+      "empty": "No sites yet",
+      "emptyHint": "Add facilities from the register, or register one found in the field.",
+      "columns": {
+        "facility": "Site",
+        "status": "Status",
+        "assessor": "Assessor",
+        "verifier": "Verifier",
+        "due": "Due",
+        "finding": "Finding",
+        "estimate": "Replacement"
+      },
+      "unassigned": "Unassigned",
+      "anyVerifier": "Any verifier",
+      "overdue": "Overdue",
+      "previously": "Before:",
+      "open": "Open",
+      "record": "Record",
+      "actions": "Actions for {name}",
+      "markInaccessible": "Mark inaccessible",
+      "removeSite": "Remove site",
+      "reopen": "Reopen",
+      "reopenTitle": "Reopen {name}?",
+      "inaccessibleTitle": "{name} cannot be reached",
+      "inaccessibleHint": "The coordinator is told. The site can be reopened when access returns.",
+      "cancelTitle": "Remove {name} from the campaign?",
+      "cancelHint": "The site stays in the facility register.",
+      "note": "Note",
+      "assignTitle": "{count, plural, one {Assign # site} other {Assign # sites}}",
+      "assignHint": "Leave a field as it is to keep the current value. The assessor is notified of new sites.",
+      "keep": "Keep current",
+      "verifierHint": "Leave on 'keep current' to let any campaign verifier or team lead review",
+      "samePerson": "The assessor and the verifier must be different people",
+      "priority": "Priority",
+      "instructions": "Instructions for the team",
+      "instructionsHint": "Access route, contact person, what to check in particular",
+      "noAssessors": "Add assessors to the team first.",
+      "apply": "Apply",
+      "skipped": "{count, plural, one {# site was skipped:} other {# sites were skipped:}}",
+      "done": "Done",
+      "openSites": "{count, plural, =0 {no open sites} one {# open} other {# open}}",
+      "addTitle": "Add sites from the facility register",
+      "addHint": "Facilities in the campaign's weredas (and sector) that are not yet sites. Never-assessed facilities first.",
+      "lastSeverity": "Last severity",
+      "anySeverity": "Any severity",
+      "neverAssessed": "Never assessed only",
+      "selectAllShown": "Select all {count} shown",
+      "noCandidates": "No more facilities in scope.",
+      "lastAssessed": "Last assessed {date}",
+      "neverAssessedShort": "Never assessed",
+      "inOther": "also in {code}",
+      "addCount": "{count, plural, =0 {Add sites} one {Add # site} other {Add # sites}}",
+      "registerTitle": "Register a facility found in the field",
+      "registerHint": "It is added to the facility register and to this campaign as a site.",
+      "registerAction": "Register and add",
+      "nf": {
+        "name": "Facility name",
+        "type": "Type",
+        "wereda": "Wereda",
+        "kebele": "Kebele",
+        "beneficiaries": "People served",
+        "lat": "Latitude",
+        "lng": "Longitude",
+        "capacity": "Pre-crisis capacity",
+        "unit": "Capacity unit",
+        "unitHint": "students, beds, hectares…"
+      }
+    },
+    "results": {
+      "progress": "Fieldwork progress",
+      "export": "Export sites (CSV)",
+      "progressHint": "{assessed} of {total} sites have a verified assessment; only verified findings are counted below.",
+      "repair": "Repair estimate",
+      "equipment": "Equipment loss {amount}",
+      "replacement": "Replacement estimate",
+      "people": "People affected",
+      "flags": "Suspected unexploded ordnance",
+      "flagsHint": "{idp} used as shelters · {linked} already in projects",
+      "none": "No verified findings yet.",
+      "bySeverity": "By severity",
+      "byIntervention": "By recommended response",
+      "byPriority": "By priority",
+      "byWereda": "By wereda",
+      "byType": "By facility type",
+      "byCause": "Causes reported",
+      "components": "Elements severely damaged or destroyed",
+      "componentsHint": "Sites where the element is severe or destroyed, with its repair estimate",
+      "unspecified": "Not specified",
+      "noData": "No data",
+      "sitesN": "{count, plural, one {# site} other {# sites}}"
+    },
+    "endorse": {
+      "title": "Endorse the findings",
+      "hint": "Fieldwork is closed and every site is verified, inaccessible or removed. Endorsed findings become the basis for reconstruction projects.",
+      "waiting": "Awaiting endorsement.",
+      "options": {
+        "APPROVE": "Endorse the findings",
+        "RETURN": "Return to fieldwork"
+      },
+      "effects": {
+        "APPROVE": "The campaign completes with a numbered endorsement; the coordinator is told.",
+        "RETURN": "Fieldwork reopens; the coordinator receives your comments."
+      },
+      "note": "Note (optional)",
+      "noteRequired": "What must be done before endorsement *",
+      "noteHint": "Explain what must be done in at least 10 characters",
+      "confirm": {
+        "APPROVE": "Endorse findings",
+        "RETURN": "Return to fieldwork"
+      }
+    },
+    "review": {
+      "title": "Verify this assessment",
+      "hint": "Check the findings against the photos, the location and what you know of the site.",
+      "cannot": "You cannot review this assessment",
+      "options": {
+        "VERIFY": "Verify",
+        "RETURN": "Return for revision",
+        "REJECT": "Reject"
+      },
+      "effects": {
+        "VERIFY": "The finding updates the facility register and can become a project.",
+        "RETURN": "The assessor revises and resubmits it.",
+        "REJECT": "The record is void; the site goes back to the assessor for a fresh visit."
+      },
+      "note": "Reason",
+      "noteOptional": "Comment (optional)",
+      "notePlaceholder": "What is wrong or missing, precisely enough to fix",
+      "noteHint": "At least 10 characters, so the assessor can act on it",
+      "verifyHint": "Saved with the verification",
+      "confirm": {
+        "VERIFY": "Verify assessment",
+        "RETURN": "Return to assessor",
+        "REJECT": "Reject assessment"
+      }
+    },
+    "needs": {
+      "count": "Needs without a project",
+      "estimate": "Estimated cost",
+      "urgent": "Urgent",
+      "people": "People affected",
+      "hint": "Latest verified finding of each damaged facility that no live project covers yet. Register a project from a need to carry its evidence across.",
+      "unspecified": "Not specified",
+      "verifiedAgo": "{days, plural, =0 {Assessed today} one {Assessed # day ago} other {Assessed # days ago}}",
+      "register": "Register project",
+      "empty": "Every verified need is covered by a project",
+      "emptyHint": "New needs appear here as assessments are verified."
+    },
+    "mine": {
+      "title": "My assessment sites",
+      "subtitle": "Sites assigned to you to assess or verify",
+      "empty": "No sites are assigned to you",
+      "emptyHint": "Your coordinator assigns sites when a campaign is planned.",
+      "notField": "This list is for field team members",
+      "notFieldHint": "Open a campaign to see its sites.",
+      "groups": {
+        "fix": "Returned to you",
+        "record": "To assess",
+        "verify": "To verify",
+        "waiting": "Waiting for verification",
+        "done": "Closed"
+      },
+      "groupHints": {
+        "fix": "Revise and resubmit these first.",
+        "record": "Visit, record and submit.",
+        "verify": "Submitted by colleagues; you cannot verify your own.",
+        "waiting": "",
+        "done": ""
+      },
+      "campaign": "Campaign",
+      "due": "Due",
+      "overdue": "overdue",
+      "priority": "Priority",
+      "last": "Last finding",
+      "neverAssessed": "Never assessed",
+      "returnedNote": "Returned",
+      "note": "Note",
+      "start": "Start",
+      "record": "Record assessment",
+      "revise": "Revise",
+      "review": "Review",
+      "open": "Open",
+      "inaccessible": "Can't reach site",
+      "notLive": "Campaign is {status}",
+      "inaccessibleTitle": "Report that {name} cannot be reached",
+      "inaccessibleHint": "Your coordinator is told and can reopen the site later.",
+      "inaccessibleReason": "What prevents access",
+      "inaccessibleConfirm": "Report"
+    },
+    "form": {
+      "newTitle": "Record a damage assessment",
+      "reviseTitle": "Revise assessment",
+      "forTask": "{code} · {name}",
+      "adHoc": "Ad hoc assessment outside a campaign",
+      "noFacility": "Choose a site from a campaign or a facility from the register",
+      "cannotRevise": "This assessment cannot be revised now",
+      "revision": "Revision {n}",
+      "returnedBecause": "Returned for revision:",
+      "visit": {
+        "title": "Visit and safety",
+        "hint": "When the site was visited, by whom, and whether it was safe to enter.",
+        "date": "Date of visit",
+        "assessor": "Assessor",
+        "assessorHint": "The person who visited the site",
+        "access": "Access",
+        "use": "Current use",
+        "useHint": "Shelters for displaced families and military use matter for planning",
+        "uxo": "Unexploded ordnance suspected",
+        "uxoWarning": "Do not enter suspected areas. The assessment is flagged for the coordinator and the mine-action focal point."
+      },
+      "damage": {
+        "title": "Overall damage",
+        "hint": "Score the structure first; the severity is suggested from the score and can be adjusted.",
+        "score": "Structural impact score (0–100)",
+        "scoreHint": "0 intact · 30 moderate · 55 severe · 80+ destroyed",
+        "suggests": "Suggests: {severity}",
+        "capacity": "Functional capacity %",
+        "capacityHint": "Share of normal service the facility can provide today",
+        "inventory": "Inventory loss %",
+        "severity": "Severity",
+        "causes": "Causes of damage",
+        "causesHint": "Select all that apply"
+      },
+      "components": {
+        "title": "Building elements and equipment",
+        "hint": "Condition and repair estimate for each element surveyed. Leave elements you could not inspect as not surveyed.",
+        "element": "Element",
+        "condition": "Condition",
+        "cost": "Repair estimate",
+        "note": "Note",
+        "notSurveyed": "Not surveyed",
+        "total": "Total of element estimates: {amount}"
+      },
+      "needs": {
+        "title": "Costs and recommended response",
+        "hint": "What it will take to restore the service, and how urgently.",
+        "repair": "Repair estimate",
+        "repairHint": "Leave blank to use the element total ({amount})",
+        "replacement": "Replacement estimate",
+        "equipment": "Equipment and stock lost",
+        "intervention": "Recommended response",
+        "priority": "Priority",
+        "priorityHint": "Urgent: life-saving service or large population without alternative",
+        "beneficiaries": "People affected",
+        "beneficiariesHint": "People normally served by the facility"
+      },
+      "evidence": {
+        "title": "Notes, location and photos",
+        "hint": "Photos of every block and of the main damage make verification possible.",
+        "notes": "Observations",
+        "lat": "Latitude",
+        "lng": "Longitude",
+        "gps": "Use my location",
+        "addPhotos": "Add photos",
+        "photosHint": "JPEG, PNG or WebP; up to 12 at a time",
+        "photo": "Photo {n}",
+        "caption": "Caption",
+        "remove": "Remove photo"
+      },
+      "v": {
+        "required": "Required",
+        "future": "The visit cannot be in the future",
+        "score": "Enter a score from 0 to 100",
+        "pct": "Enter 0–100",
+        "coords": "Enter both latitude and longitude, or neither"
+      },
+      "fixErrors": "{count, plural, one {# field needs attention} other {# fields need attention}}",
+      "gpsUnavailable": "This device cannot provide a location",
+      "gpsDenied": "Location permission was refused; enter the coordinates by hand",
+      "uploadFailed": "A photo could not be uploaded",
+      "submitHint": "The assessment goes to a verifier; it counts once verified.",
+      "submit": "Submit for verification",
+      "resubmit": "Resubmit for verification"
+    },
+    "detail": {
+      "assessedBy": "Assessed {date} by {name}",
+      "facility": "Facility",
+      "revise": "Revise",
+      "saved": "Saved.",
+      "savedSubmitted": "Submitted. The verifier has been notified.",
+      "returned": "Returned for revision:",
+      "rejected": "Rejected:",
+      "uxo": "Unexploded ordnance suspected at this site.",
+      "impact": "Structural impact",
+      "capacity": "Functional capacity",
+      "repair": "Repair estimate",
+      "replacement": "Replacement estimate",
+      "equipment": "Equipment loss",
+      "people": "People affected",
+      "findings": "Findings",
+      "intervention": "Recommended response",
+      "priority": "Priority",
+      "inventory": "Inventory loss",
+      "access": "Access",
+      "use": "Current use",
+      "causes": "Causes",
+      "components": "Building elements and equipment",
+      "componentsTotal": "Element estimates total {amount}",
+      "noComponents": "No elements were surveyed individually.",
+      "photos": "{count, plural, =0 {Photos} one {# photo} other {# photos}}",
+      "noPhotos": "No photos attached.",
+      "workflow": "Workflow",
+      "campaign": "Campaign",
+      "submittedBy": "Submitted by",
+      "revisionN": "revision {n}",
+      "verifiedBy": "Verified by",
+      "notYet": "Not yet verified",
+      "source": "Source",
+      "project": "Project",
+      "noProject": "No project yet",
+      "history": "History",
+      "noHistory": "No activity recorded yet."
+    },
+    "events": {
+      "CREATED": "Campaign planned",
+      "UPDATED": "Campaign details changed",
+      "STARTED": "Fieldwork started",
+      "FIELDWORK_CLOSED": "Fieldwork closed, sent for endorsement",
+      "ENDORSED": "Findings endorsed",
+      "RETURNED_TO_FIELDWORK": "Returned to fieldwork",
+      "CANCELLED": "Campaign cancelled",
+      "MEMBER_ADDED": "Team member added",
+      "MEMBER_RELEASED": "Team member released",
+      "SITES_ADDED": "Sites added",
+      "FACILITY_REGISTERED": "New facility registered",
+      "ASSIGNED": "Site assigned",
+      "TASK_UPDATED": "Site details updated",
+      "TASK_IN_PROGRESS": "Site visit started",
+      "TASK_INACCESSIBLE": "Site reported inaccessible",
+      "TASK_CANCELLED": "Site removed",
+      "TASK_PLANNED": "Site reopened",
+      "TASK_ASSIGNED": "Site reopened",
+      "SUBMITTED": "Assessment submitted",
+      "RESUBMITTED": "Revised and resubmitted",
+      "REVISED": "Revised before review",
+      "VERIFIED": "Verified",
+      "RETURNED": "Returned for revision",
+      "REJECTED": "Rejected",
+      "PROJECT_REGISTERED": "Registered as the basis of a project"
     }
   },
   "alerts": {
@@ -981,6 +1527,101 @@
       "NO_VERIFIER": "No verifier",
       "NOT_STARTED": "Works not started",
       "OK": "Covered"
+    },
+    "campaignStatus": {
+      "PLANNING": "Planning",
+      "ACTIVE": "Fieldwork",
+      "REVIEW": "Awaiting endorsement",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "campaignRole": {
+      "TEAM_LEAD": "Team lead",
+      "ASSESSOR": "Assessor",
+      "ENGINEER": "Engineer",
+      "VERIFIER": "Verifier"
+    },
+    "taskStatus": {
+      "PLANNED": "Not assigned",
+      "ASSIGNED": "Assigned",
+      "IN_PROGRESS": "Visit under way",
+      "SUBMITTED": "Awaiting verification",
+      "RETURNED": "Returned",
+      "VERIFIED": "Verified",
+      "INACCESSIBLE": "Inaccessible",
+      "CANCELLED": "Removed"
+    },
+    "assessmentStatus": {
+      "SUBMITTED": "Awaiting verification",
+      "RETURNED": "Returned for revision",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected"
+    },
+    "needPriority": {
+      "URGENT": "Urgent",
+      "HIGH": "High",
+      "MEDIUM": "Medium",
+      "LOW": "Low"
+    },
+    "intervention": {
+      "NO_ACTION": "No action",
+      "MINOR_REPAIR": "Minor repair",
+      "REHABILITATION": "Rehabilitation",
+      "RECONSTRUCTION": "Reconstruction",
+      "RELOCATION": "Relocation"
+    },
+    "access": {
+      "ACCESSIBLE": "Accessible",
+      "PARTIAL": "Partly accessible",
+      "INACCESSIBLE": "Inaccessible"
+    },
+    "currentUse": {
+      "NORMAL_USE": "In normal use",
+      "PARTIAL_USE": "Partly in use",
+      "IDP_SHELTER": "Sheltering displaced people",
+      "MILITARY_USE": "Military use",
+      "ABANDONED": "Abandoned",
+      "OTHER": "Other"
+    },
+    "damageCause": {
+      "SHELLING": "Shelling",
+      "AIRSTRIKE": "Airstrike",
+      "LOOTING": "Looting",
+      "FIRE": "Fire",
+      "VANDALISM": "Vandalism",
+      "OCCUPATION": "Occupation",
+      "NEGLECT": "Neglect",
+      "FLOOD": "Flood",
+      "OTHER": "Other"
+    },
+    "component": {
+      "STRUCTURE": "Structure (foundation, columns, beams)",
+      "ROOF": "Roof",
+      "WALLS": "Walls",
+      "DOORS_WINDOWS": "Doors and windows",
+      "FLOORS": "Floors",
+      "CLASSROOMS": "Classrooms",
+      "LIBRARY_LAB": "Library and laboratories",
+      "ELECTRICAL": "Electrical installation",
+      "WATER_SUPPLY": "Water supply",
+      "SANITATION": "Latrines and sanitation",
+      "FURNITURE": "Furniture",
+      "TEACHING_MATERIALS": "Teaching materials",
+      "FENCE_COMPOUND": "Fence and compound",
+      "MEDICAL_EQUIPMENT": "Medical equipment",
+      "COLD_CHAIN": "Cold chain",
+      "PHARMACY_STOCK": "Pharmacy and stock",
+      "MATERNITY_WARD": "Maternity ward",
+      "LABORATORY": "Laboratory",
+      "MACHINERY": "Machinery",
+      "PRODUCTION_LINE": "Production line",
+      "POWER_SUPPLY": "Power supply",
+      "STORAGE": "Storage",
+      "OFFICE_EQUIPMENT": "Office equipment",
+      "CANALS_STRUCTURES": "Canals and headworks",
+      "PUMPS_MOTORS": "Pumps and motors",
+      "EQUIPMENT": "Equipment",
+      "LIVESTOCK_FACILITIES": "Livestock facilities"
     }
   },
   "intelligence": {
@@ -1344,7 +1985,8 @@
       "audit": "Append-only record of authentication events, decisions and data changes.",
       "approvals": "Registered projects awaiting the Chief Executive's decision, with readiness checks and the full decision trail.",
       "fieldTeam": "Data collectors, field analysts and supervisors: registration, onboarding, assignments, coverage and visit cadence.",
-      "messages": "Direct messages, group conversations and the discussions on projects, approvals, alerts and field staff."
+      "messages": "Direct messages, group conversations and the discussions on projects, approvals, alerts and field staff.",
+      "damage": "Assessment campaigns, team roles and site assignments, verification of findings, and the verified needs that projects start from."
     },
     "stat": {
       "activeProjects": "active projects",
@@ -1373,7 +2015,11 @@
       "membersActive": "active team members",
       "fieldDetail": "{coverage} coverage · {overdue} overdue visits",
       "unreadMessages": "unread messages",
-      "messagesDetail": "{conversations} conversations · {mentions} mentions"
+      "messagesDetail": "{conversations} conversations · {mentions} mentions",
+      "awaitingVerification": "awaiting verification",
+      "damageDetail": "{active} campaigns in fieldwork · {needs} verified needs without a project",
+      "sitesToAssess": "sites to assess",
+      "mySitesDetail": "{returned} returned to you · {review} to verify"
     },
     "context": {
       "scope": "Scope",
@@ -1730,6 +2376,15 @@
       "afterApproval": "Must be on or after the approval date",
       "afterFunding": "Must be on or after the funding date",
       "contractExceeds": "Cannot exceed the total budget"
+    },
+    "fromAssessment": {
+      "name": "{action} of {facility}",
+      "description": "The verified damage assessment of {facility} ({source}, visited {date}) found {severity} damage and recommends {action} with {priority} priority.\n\n{notes}",
+      "adHoc": "ad hoc visit",
+      "note": "Registered from verified damage assessment #{id}",
+      "banner": "Starting from the verified damage assessment of {facility}: facility, location, people affected and the cost estimate are filled in, and the assessment becomes the evidence for this project.",
+      "view": "View assessment",
+      "unlink": "Do not link"
     }
   },
   "approvals": {
@@ -1824,6 +2479,7 @@
       "MILESTONES": "At least two milestones",
       "RISKS": "Risks registered",
       "FACILITY_LINKED": "Linked to a damaged facility",
+      "DAMAGE_ASSESSED": "Damage verified by assessment",
       "NO_DUPLICATES": "No similar projects"
     },
     "decision": {
@@ -2352,7 +3008,8 @@
       "approvals": "Approvals",
       "alerts": "Alerts",
       "assignments": "Field assignments",
-      "inspections": "Inspection reviews"
+      "inspections": "Inspection reviews",
+      "assessments": "Damage assessments"
     },
     "categoryHints": {
       "messages": "New direct, group and discussion messages",
@@ -2360,7 +3017,8 @@
       "approvals": "Projects awaiting your decision, and decisions on projects you submitted",
       "alerts": "Critical alerts in your scope, and alerts assigned to you",
       "assignments": "When you are assigned to a project",
-      "inspections": "When an inspection you recorded is verified, disputed or rejected"
+      "inspections": "When an inspection you recorded is verified, disputed or rejected",
+      "assessments": "Sites assigned to you, submissions to verify, review results and campaign endorsements"
     },
     "chat": {
       "inConversation": "{name} in {conversation}",
@@ -2465,6 +3123,54 @@
       "CHAT_MESSAGE": {
         "title": "{actor}",
         "body": "{excerpt}"
+      },
+      "ASSESSMENT_TASKS": {
+        "title": "{count, plural, one {New site to assess} other {# new sites to assess}}",
+        "body": "{actor} assigned you {subject} in {code} · {name}"
+      },
+      "ASSESSMENT_SUBMITTED": {
+        "title": "Assessment to verify",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_RESUBMITTED": {
+        "title": "Revised assessment to verify",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_VERIFIED": {
+        "title": "Assessment verified",
+        "body": "{actor} verified your assessment of {name}"
+      },
+      "ASSESSMENT_RETURNED": {
+        "title": "Assessment returned for revision",
+        "body": "{name}: {excerpt}"
+      },
+      "ASSESSMENT_REJECTED": {
+        "title": "Assessment rejected",
+        "body": "{name}: {excerpt}"
+      },
+      "ASSESSMENT_INACCESSIBLE": {
+        "title": "Site cannot be reached",
+        "body": "{subject} ({code}): {excerpt}"
+      },
+      "CAMPAIGN_STARTED": {
+        "title": "Fieldwork has started",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_MEMBER": {
+        "title": "You joined an assessment campaign",
+        "body": "{name} ({code}) as {role}"
+      },
+      "CAMPAIGN_REVIEW": {
+        "title": "Campaign findings to endorse",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_ENDORSED": {
+        "title": "Campaign findings endorsed",
+        "body": "{code} · {name} — {reference}"
+      },
+      "CAMPAIGN_RETURNED": {
+        "title": "Campaign returned to fieldwork",
+        "body": "{code}: {excerpt}"
       }
     }
   }

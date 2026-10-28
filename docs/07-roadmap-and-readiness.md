@@ -16,7 +16,18 @@ rule-based predictive insights with human review, typed reports with CSV export 
 versioned federal summary, two new alert rules (field verification overdue, reported-vs-observed
 discrepancy), offline banner, grouped navigation.
 
+## Increment 3 (28 Oct 2026) — Damage assessment campaigns
+Delivered (see `10-damage-assessment.md`): assessment campaigns over a wereda scope with coordinator and
+dates; campaign team in roles (team lead, assessor, engineer, verifier) drawn from the field team; site
+assignment with assessor/verifier separation, due dates and priorities; detailed assessment form
+(access and UXO, current use, causes, per-element condition and cost, recommended response and priority,
+photos, GPS); verify / return / reject review by someone other than the author; endorsement of findings by
+the sector head or Chief Executive; campaign results; verified-needs register; project registration from a
+verified need, with verified assessments required for linked facilities; field officers' own site list.
+
 ## Review items before Phase 2 sign-off
+- [ ] Review the component catalogue, severity score bands and need-priority definitions with the sector bureaus.
+- [ ] Decide whether reconstruction projects without any linked facility should also be blocked (today: warning).
 - [ ] Review composite-risk weights (`rpis.analytics.weight-*`), the inflation assumption and anomaly thresholds with the executive office; they are configuration, not code.
 - [ ] Agree the evidence verification SLA (`rpis.media.evidence-stale-days`) and who may verify.
 - [ ] Decide the production `MediaStorage` (S3-compatible object store) and retention for field media.

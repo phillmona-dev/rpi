@@ -1,4 +1,4 @@
-import type { AgentStatus, ApprovalStatus, AssignmentStatus, CoverageGap, AlertSeverity, DamageSeverity, LifecycleStage, OperationalStatus, ProjectHealth, ProjectStatus, RiskBand, Sector, VerificationStatus } from './api/types';
+import type { AgentStatus, ApprovalStatus, AssessmentStatus, AssignmentStatus, CampaignStatus, CoverageGap, AlertSeverity, DamageSeverity, LifecycleStage, NeedPriority, OperationalStatus, ProjectHealth, ProjectStatus, RiskBand, Sector, TaskStatus, VerificationStatus } from './api/types';
 
 /** Semantic mapping of domain states to the reserved status palette. Always paired with a label/icon in UI. */
 export type Tone = 'good' | 'warning' | 'serious' | 'critical' | 'neutral' | 'info';
@@ -15,6 +15,10 @@ export const approvalTone: Record<ApprovalStatus, Tone> = { PENDING: 'warning', 
 export const agentStatusTone: Record<AgentStatus, Tone> = { PENDING_ONBOARDING: 'warning', ACTIVE: 'good', ON_LEAVE: 'info', SUSPENDED: 'critical', DEACTIVATED: 'neutral' };
 export const assignmentStatusTone: Record<AssignmentStatus, Tone> = { ACTIVE: 'info', COMPLETED: 'good', RELEASED: 'neutral' };
 export const coverageGapTone: Record<CoverageGap, Tone> = { NO_TEAM: 'critical', NO_LEAD: 'serious', OVERDUE: 'warning', NO_VERIFIER: 'warning', NOT_STARTED: 'neutral', OK: 'good' };
+export const campaignStatusTone: Record<CampaignStatus, Tone> = { PLANNING: 'neutral', ACTIVE: 'info', REVIEW: 'warning', COMPLETED: 'good', CANCELLED: 'neutral' };
+export const taskStatusTone: Record<TaskStatus, Tone> = { PLANNED: 'neutral', ASSIGNED: 'neutral', IN_PROGRESS: 'info', SUBMITTED: 'warning', RETURNED: 'serious', VERIFIED: 'good', INACCESSIBLE: 'critical', CANCELLED: 'neutral' };
+export const assessmentStatusTone: Record<AssessmentStatus, Tone> = { SUBMITTED: 'warning', RETURNED: 'serious', VERIFIED: 'good', REJECTED: 'critical' };
+export const needPriorityTone: Record<NeedPriority, Tone> = { URGENT: 'critical', HIGH: 'serious', MEDIUM: 'warning', LOW: 'neutral' };
 export const riskBand = (score: number | null | undefined): RiskBand | null => score === null || score === undefined ? null : score >= 75 ? 'CRITICAL' : score >= 50 ? 'HIGH' : score >= 25 ? 'MODERATE' : 'LOW';
 
 export const toneVar: Record<Tone, string> = {
@@ -49,6 +53,11 @@ export const canResubmitProjects = canCreateProject;
 /** Field team: oversight roles read; analysts and administrators register members and assign projects. */
 export const canSeeFieldTeam = canSeeApprovals;
 export const canManageFieldTeam = (roles: string[]) => roles.some((r) => ['ANALYST', 'ADMIN'].includes(r));
+/** Damage assessment: oversight roles read; analysts and administrators run campaigns; field team members work their own sites. */
+export const canSeeDamage = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'SECTOR_HEAD', 'ANALYST', 'PMO_FEDERAL', 'ADMIN'].includes(r));
+export const canManageCampaigns = (roles: string[]) => roles.some((r) => ['ANALYST', 'ADMIN'].includes(r));
+export const canRecordAssessments = (roles: string[]) => roles.some((r) => ['ANALYST', 'ADMIN', 'FIELD_OFFICER'].includes(r));
+export const isFieldTeam = (roles: string[]) => roles.includes('FIELD_OFFICER');
 export const canSeeReports = (roles: string[]) => roles.some((r) => ['EXECUTIVE', 'ANALYST', 'PMO_FEDERAL', 'ADMIN', 'SECTOR_HEAD'].includes(r));
 
 /** Media URLs: API-relative paths go through the BFF proxy (cookie auth); static demo assets and absolute URLs pass through. */

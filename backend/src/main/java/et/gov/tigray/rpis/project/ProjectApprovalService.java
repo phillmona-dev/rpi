@@ -223,18 +223,25 @@ public class ProjectApprovalService {
                    (SELECT coalesce(sum(amount_etb), 0) FROM disbursement WHERE project_id = :id) tranches,
                    (SELECT count(*) FROM milestone WHERE project_id = :id) milestones,
                    (SELECT count(*) FROM project_risk WHERE project_id = :id) risks,
-                   (SELECT count(*) FROM project_facility WHERE project_id = :id) facilities
-            """, new MapSqlParameterSource("id", p.getId()));
+                   (SELECT count(*) FROM project_facility WHERE project_id = :id) facilities,
+                   %s assessed
+            """.formatted(ASSESSED_SQL), new MapSqlParameterSource("id", p.getId()));
         return checks(p, (BigDecimal) r.get("lines"), (BigDecimal) r.get("tranches"), ((Number) r.get("milestones")).intValue(),
-            ((Number) r.get("risks")).intValue(), ((Number) r.get("facilities")).intValue(), -1);
+            ((Number) r.get("risks")).intValue(), ((Number) r.get("facilities")).intValue(), ((Number) r.get("assessed")).intValue(), -1);
     }
 
     private ApprovalDtos.Readiness readiness(Project p, ProjectDtos.ProjectDetail d, int similar) {
         return checks(p, d.finance().allocatedLinesEtb(), d.finance().disbursements().stream().map(ProjectDtos.DisbursementDto::amountEtb).reduce(BigDecimal.ZERO, BigDecimal::add),
-            d.milestones().size(), d.risks().size(), d.facilities().size(), similar);
+            d.milestones().size(), d.risks().size(), d.facilities().size(),
+            jdbc.queryForObject("SELECT " + ASSESSED_SQL, new MapSqlParameterSource("id", p.getId()), Integer.class), similar);
     }
 
-    private ApprovalDtos.Readiness checks(Project p, BigDecimal lines, BigDecimal tranches, int milestones, int risks, int facilities, int similar) {
+    /** Linked facilities whose damage has a verified assessment (the evidence base of a reconstruction project). */
+    private static final String ASSESSED_SQL = """
+        (SELECT count(*) FROM project_facility pf WHERE pf.project_id = :id
+           AND EXISTS (SELECT 1 FROM damage_assessment a WHERE a.facility_id = pf.facility_id AND a.status = 'VERIFIED'))""";
+
+    private ApprovalDtos.Readiness checks(Project p, BigDecimal lines, BigDecimal tranches, int milestones, int risks, int facilities, int assessed, int similar) {
         BigDecimal total = p.getTotalBudgetEtb();
         boolean pastProcurement = p.getLifecycleStage().ordinal() >= LifecycleStage.PROCUREMENT.ordinal();
         List<ApprovalDtos.ReadinessCheck> c = new ArrayList<>();
@@ -247,6 +254,7 @@ public class ProjectApprovalService {
         c.add(check("MILESTONES", milestones >= 2, "WARN", milestones + " milestone" + (milestones == 1 ? "" : "s")));
         c.add(check("RISKS", risks >= 1, "WARN", risks + " registered"));
         c.add(check("FACILITY_LINKED", facilities >= 1, "INFO", facilities + " linked"));
+        c.add(check("DAMAGE_ASSESSED", facilities >= 1 && assessed == facilities, "WARN", assessed + " of " + facilities + " with a verified damage assessment"));
         if (similar >= 0) c.add(check("NO_DUPLICATES", similar == 0, "WARN", similar == 0 ? "None found" : similar + " similar project" + (similar == 1 ? "" : "s")));
         int passed = (int) c.stream().filter(ApprovalDtos.ReadinessCheck::passed).count();
         int warnings = (int) c.stream().filter(x -> !x.passed() && x.severity().equals("WARN")).count();

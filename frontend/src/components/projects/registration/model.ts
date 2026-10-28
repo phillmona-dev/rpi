@@ -37,6 +37,8 @@ export interface FormState {
   totalBudgetEtb: string; fundingSource: FundingSource | ''; budgetLines: BudgetRow[]; tranches: TrancheRow[];
   organizations: OrgRow[]; procurementMethod: string; contractValueEtb: string; approvedOn: string; approvalReference: string; fundingSecuredOn: string; contractSignedOn: string;
   risks: RiskRow[];
+  /** Verified damage assessments the project responds to (set when registering from a need). */
+  assessmentIds: number[];
 }
 
 let seq = 0;
@@ -50,6 +52,7 @@ export const emptyForm = (): FormState => ({
   organizations: [{ key: rowKey(), role: 'IMPLEMENTING_AGENCY', mode: 'existing', organizationId: null, newName: '', newType: 'GOVERNMENT_BUREAU', newContact: '' }],
   procurementMethod: '', contractValueEtb: '', approvedOn: '', approvalReference: '', fundingSecuredOn: '', contractSignedOn: '',
   risks: [],
+  assessmentIds: [],
 });
 
 /* ─── Number & date helpers ───────────────────────────────────────────────── */
@@ -124,7 +127,7 @@ export const riskScore = (r: Pick<RiskRow, 'likelihood' | 'impact'>) => (LEVELS.
 export function stepOf(field: string): StepKey {
   const f = field.replace(/\[.*$/, '').replace(/\..*$/, '');
   if (['code', 'name', 'sector', 'description', 'beneficiaries', 'initialStage', 'registrationNote'].includes(f)) return 'basics';
-  if (['weredaId', 'zoneId', 'latitude', 'longitude', 'facilityIds'].includes(f)) return 'location';
+  if (['weredaId', 'zoneId', 'latitude', 'longitude', 'facilityIds', 'assessmentIds'].includes(f)) return 'location';
   if (['plannedStart', 'plannedEnd', 'actualStart', 'milestones'].includes(f)) return 'schedule';
   if (['totalBudgetEtb', 'fundingSource', 'budgetLines', 'tranches'].includes(f)) return 'budget';
   if (['organizations', 'procurementMethod', 'contractValueEtb', 'approvedOn', 'approvalReference', 'fundingSecuredOn', 'contractSignedOn'].includes(f)) return 'parties';
@@ -242,6 +245,7 @@ export function toRequest(s: FormState): CreateProjectRequest {
     budgetLines: s.budgetLines.filter((r) => r.category).map((r) => ({ category: r.category as BudgetCategory, allocatedEtb: toNum(r.allocatedEtb) ?? 0 })),
     tranches: s.tranches.map((r) => ({ plannedDate: r.plannedDate, amountEtb: toNum(r.amountEtb) ?? 0, fundingSource: (r.fundingSource || null) as FundingSource | null })),
     facilityIds: s.facilityIds,
+    assessmentIds: s.assessmentIds,
     risks: s.risks.map((r) => ({ title: r.title.trim(), category: r.category, likelihood: r.likelihood, impact: r.impact, mitigation: blank(r.mitigation), owner: blank(r.owner) })),
   };
 }

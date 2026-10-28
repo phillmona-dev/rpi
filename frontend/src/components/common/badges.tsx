@@ -1,8 +1,8 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { AlertOctagon, AlertTriangle, CheckCircle2, CircleDashed, Clock, PauseCircle, type LucideIcon } from 'lucide-react';
-import type { AgentStatus, ApprovalStatus, AssignmentStatus, CoverageGap, AlertSeverity, AlertStatus, DamageSeverity, OperationalStatus, ProjectHealth, ProjectStatus, Sector } from '@/lib/api/types';
-import { agentStatusTone, approvalTone, assignmentStatusTone, coverageGapTone, alertTone, healthTone, operationalTone, sectorVar, severityTone, statusTone, toneVar, type Tone } from '@/lib/domain';
+import type { AgentStatus, ApprovalStatus, AssessmentStatus, AssignmentStatus, CampaignStatus, CoverageGap, AlertSeverity, AlertStatus, DamageSeverity, NeedPriority, OperationalStatus, ProjectHealth, ProjectStatus, Sector, TaskStatus } from '@/lib/api/types';
+import { agentStatusTone, approvalTone, assessmentStatusTone, assignmentStatusTone, campaignStatusTone, coverageGapTone, alertTone, healthTone, needPriorityTone, operationalTone, sectorVar, severityTone, statusTone, taskStatusTone, toneVar, type Tone } from '@/lib/domain';
 import { cn } from '@/lib/utils';
 
 const toneIcon: Record<Tone, LucideIcon> = { good: CheckCircle2, warning: AlertTriangle, serious: Clock, critical: AlertOctagon, neutral: CircleDashed, info: PauseCircle };
@@ -43,3 +43,7 @@ export function ApprovalBadge({ value }: { value: ApprovalStatus }) { const t = 
 export function AgentStatusBadge({ value }: { value: AgentStatus }) { const t = useTranslations('enums.agentStatus'); return <ToneBadge tone={agentStatusTone[value]} label={t(value)} />; }
 export function AssignmentStatusBadge({ value }: { value: AssignmentStatus }) { const t = useTranslations('enums.assignmentStatus'); return <ToneBadge tone={assignmentStatusTone[value]} label={t(value)} />; }
 export function CoverageGapBadge({ value }: { value: CoverageGap }) { const t = useTranslations('enums.coverageGap'); return <ToneBadge tone={coverageGapTone[value]} label={t(value)} />; }
+export function CampaignStatusBadge({ value }: { value: CampaignStatus }) { const t = useTranslations('enums.campaignStatus'); return <ToneBadge tone={campaignStatusTone[value]} label={t(value)} />; }
+export function TaskStatusBadge({ value, compact }: { value: TaskStatus; compact?: boolean }) { const t = useTranslations('enums.taskStatus'); return <ToneBadge tone={taskStatusTone[value]} label={t(value)} compact={compact} />; }
+export function AssessmentStatusBadge({ value }: { value: AssessmentStatus }) { const t = useTranslations('enums.assessmentStatus'); return <ToneBadge tone={assessmentStatusTone[value]} label={t(value)} />; }
+export function NeedPriorityBadge({ value }: { value: NeedPriority | null }) { const t = useTranslations('enums.needPriority'); return value ? <ToneBadge tone={needPriorityTone[value]} label={t(value)} /> : <span className="text-muted-foreground">—</span>; }

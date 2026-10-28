@@ -217,7 +217,11 @@
   },
   "facilities": {
     "title": "ትካላትን ጉድኣትን",
-    "subtitle": "መዝገብ ጉድኣት ኣብ ኩሎም ዘርፍታት"
+    "subtitle": "መዝገብ ጉድኣት ኣብ ኩሎም ዘርፍታት",
+    "detail": {
+      "review": "ገምግም",
+      "recordAssessment": "ገምጋም መዝግብ"
+    }
   },
   "alerts": {
     "title": "መስርዕ ውሳነ",
@@ -310,6 +314,101 @@
       "DEVELOPMENT_LOAN": "ልቓሕ ልምዓት",
       "DIASPORA_FUND": "ፈንድ ዲያስፖራ",
       "PRIVATE_INVESTMENT": "ብሕታዊ ወፍሪ"
+    },
+    "campaignStatus": {
+      "PLANNING": "ኣብ መደብ",
+      "ACTIVE": "ስራሕ ዓውዲ",
+      "REVIEW": "ምጽዳቕ ዝጽበ",
+      "COMPLETED": "ዝተዛዘመ",
+      "CANCELLED": "ዝተሰረዘ"
+    },
+    "campaignRole": {
+      "TEAM_LEAD": "መራሒ ጉጅለ",
+      "ASSESSOR": "ገምጋሚ",
+      "ENGINEER": "መሃንድስ",
+      "VERIFIER": "ኣረጋጋጺ"
+    },
+    "taskStatus": {
+      "PLANNED": "ዘይተመደበ",
+      "ASSIGNED": "ዝተመደበ",
+      "IN_PROGRESS": "ምብጻሕ ኣብ መስርሕ",
+      "SUBMITTED": "መረጋገጺ ዝጽበ",
+      "RETURNED": "ዝተመለሰ",
+      "VERIFIED": "ዝተረጋገጸ",
+      "INACCESSIBLE": "ዘይብጻሕ",
+      "CANCELLED": "ዝወጸ"
+    },
+    "assessmentStatus": {
+      "SUBMITTED": "መረጋገጺ ዝጽበ",
+      "RETURNED": "ንምምሕያሽ ዝተመለሰ",
+      "VERIFIED": "ዝተረጋገጸ",
+      "REJECTED": "ዝተነጸገ"
+    },
+    "needPriority": {
+      "URGENT": "ህጹጽ",
+      "HIGH": "ልዑል",
+      "MEDIUM": "ማእከላይ",
+      "LOW": "ትሑት"
+    },
+    "intervention": {
+      "NO_ACTION": "ስጉምቲ ኣየድልን",
+      "MINOR_REPAIR": "ቀሊል ጽገና",
+      "REHABILITATION": "ምሕዳስ",
+      "RECONSTRUCTION": "ዳግመ-ህንጸት",
+      "RELOCATION": "ምስግጋር"
+    },
+    "access": {
+      "ACCESSIBLE": "ዝብጻሕ",
+      "PARTIAL": "ብኸፊል ዝብጻሕ",
+      "INACCESSIBLE": "ዘይብጻሕ"
+    },
+    "currentUse": {
+      "NORMAL_USE": "ኣብ ልሙድ ኣገልግሎት",
+      "PARTIAL_USE": "ብኸፊል ኣብ ኣገልግሎት",
+      "IDP_SHELTER": "ንተመዛበልቲ መዕቆቢ",
+      "MILITARY_USE": "ወተሃደራዊ ኣጠቓቕማ",
+      "ABANDONED": "ዝተገደፈ",
+      "OTHER": "ካልእ"
+    },
+    "damageCause": {
+      "SHELLING": "ድብደባ ከቢድ ብረት",
+      "AIRSTRIKE": "መጥቃዕቲ ኣየር",
+      "LOOTING": "ዝምታ",
+      "FIRE": "ሓዊ",
+      "VANDALISM": "ብፍላጥ ምዕናው",
+      "OCCUPATION": "ምቁጽጻር ብሓይሊ",
+      "NEGLECT": "ሸለልትነት",
+      "FLOOD": "ውሕጅ",
+      "OTHER": "ካልእ"
+    },
+    "component": {
+      "STRUCTURE": "ህንጻዊ ቅርጺ (መሰረት፣ ዓንድታት፣ ኣግዳሚ ዓንድታት)",
+      "ROOF": "ናሕሲ",
+      "WALLS": "መናድቕ",
+      "DOORS_WINDOWS": "ማዕጾታትን መሳኹቲን",
+      "FLOORS": "ባይታታት",
+      "CLASSROOMS": "ክፍልታት ትምህርቲ",
+      "LIBRARY_LAB": "ቤት መጻሕፍትን ቤተ-ፈተነታትን",
+      "ELECTRICAL": "ዝርጋሐ ኤሌክትሪክ",
+      "WATER_SUPPLY": "ኣቕርቦት ማይ",
+      "SANITATION": "ሽቓቕን ጽሬትን",
+      "FURNITURE": "ኣቑሑ",
+      "TEACHING_MATERIALS": "ናውቲ ምምሃር",
+      "FENCE_COMPOUND": "ሓጹርን ቀጽርን",
+      "MEDICAL_EQUIPMENT": "መሳርሒታት ሕክምና",
+      "COLD_CHAIN": "ሰንሰለት ዝሑል",
+      "PHARMACY_STOCK": "ፋርማሲን ክምችትን",
+      "MATERNITY_WARD": "ክፍሊ ሕርሲ",
+      "LABORATORY": "ቤተ-ፈተነ",
+      "MACHINERY": "ማሽነሪ",
+      "PRODUCTION_LINE": "መስመር ፍርያት",
+      "POWER_SUPPLY": "ኣቕርቦት ሓይሊ",
+      "STORAGE": "መኽዘን",
+      "OFFICE_EQUIPMENT": "መሳርሒታት ቤት ጽሕፈት",
+      "CANALS_STRUCTURES": "ካናላትን መቐየሪ ማይን",
+      "PUMPS_MOTORS": "ፓምፓትን ሞተራትን",
+      "EQUIPMENT": "መሳርሒታት",
+      "LIVESTOCK_FACILITIES": "ትካላት እንስሳ"
     }
   },
   "intelligence": {
@@ -344,7 +443,8 @@
       "reports": "ዝተመደቡ ጸብጻባት መንግስቲ ምስ ታሪኽ ኣፈጻጽማ፣ CSV/PDF ምውጻእን ምትእስሳር ፌደራል PMOን።",
       "users": "ሕሳባት፣ ተራታትን ምደባታት ወሰን ዘርፍን ንኹሎም ተጠቀምቲ መድረኽ።",
       "audit": "ዘይስረዝ መዝገብ ፍጻመታት መረጋገጺ፣ ውሳነታትን ለውጥታት ሓበሬታን።",
-      "messages": "ቀጥታዊ መልእኽትታት፣ ናይ ጉጅለ ዝርርባት ከምኡውን ኣብ ፕሮጀክትታት፣ ምጽዳቓት፣ መጠንቀቕታታትን ሰራሕተኛታት ዓውድን ዝግበሩ ዘተታት።"
+      "messages": "ቀጥታዊ መልእኽትታት፣ ናይ ጉጅለ ዝርርባት ከምኡውን ኣብ ፕሮጀክትታት፣ ምጽዳቓት፣ መጠንቀቕታታትን ሰራሕተኛታት ዓውድን ዝግበሩ ዘተታት።",
+      "damage": "ዘመቻታት ገምጋም፣ ተራታት ጉጅለን ምደባታት ቦታን፣ መረጋገጺ ርኽበታትን ፕሮጀክትታት ዝጅመሩሎም ዝተረጋገጹ ድሌታትን።"
     },
     "stat": {
       "activeProjects": "ንጡፋት ፕሮጀክትታት",
@@ -369,7 +469,11 @@
       "ofBudget": "ካብ {budget} ባጀት {pct}",
       "latestProgress": "ናይ ቀረባ እዋን ጸብጻብ ዕቤት",
       "unreadMessages": "ዘይተነበቡ መልእኽትታት",
-      "messagesDetail": "{conversations} ዝርርባት · {mentions} ምጥቃሳት"
+      "messagesDetail": "{conversations} ዝርርባት · {mentions} ምጥቃሳት",
+      "awaitingVerification": "መረጋገጺ ዝጽበዩ",
+      "damageDetail": "{active} ዘመቻታት ኣብ ስራሕ ዓውዲ · {needs} ፕሮጀክት ዘይብሎም ዝተረጋገጹ ድሌታት",
+      "sitesToAssess": "ዝግምገሙ ቦታታት",
+      "mySitesDetail": "{returned} ናባኹም ዝተመለሱ · {review} ዝረጋገጹ"
     },
     "context": {
       "scope": "ወሰን",
@@ -395,7 +499,10 @@
     }
   },
   "approvals": {
-    "title": "ምጽዳቕ ፕሮጀክትታት"
+    "title": "ምጽዳቕ ፕሮጀክትታት",
+    "check": {
+      "DAMAGE_ASSESSED": "ጉድኣት ብገምጋም ተረጋጊጹ"
+    }
   },
   "fieldTeam": {
     "title": "ጉጅለ ዓውዲ"
@@ -573,7 +680,8 @@
       "approvals": "ምጽዳቓት",
       "alerts": "መጠንቀቕታታት",
       "assignments": "ምደባታት ዓውዲ",
-      "inspections": "ገምጋም ምርመራ"
+      "inspections": "ገምጋም ምርመራ",
+      "assessments": "ገምጋማት ጉድኣት"
     },
     "categoryHints": {
       "messages": "ሓደስቲ ቀጥታዊ፣ ናይ ጉጅለን ናይ ዘተን መልእኽትታት",
@@ -581,7 +689,8 @@
       "approvals": "ውሳኔኹም ዝጽበዩ ፕሮጀክትታትን ኣብ ዘቕረብኩምዎም ፕሮጀክትታት ዝተዋህቡ ውሳኔታትን",
       "alerts": "ኣብ ወሰንኩም ዘለዉ ኣሰከፍቲ መጠንቀቕታታትን ንዓኹም ዝተመደቡ መጠንቀቕታታትን",
       "assignments": "ናብ ሓደ ፕሮጀክት ምስ እትምደቡ",
-      "inspections": "ዝመዝገብኩምዎ ምርመራ ምስ ዝረጋገጽ፣ ምስ ዝካታዕ ወይ ምስ ዝንጸግ"
+      "inspections": "ዝመዝገብኩምዎ ምርመራ ምስ ዝረጋገጽ፣ ምስ ዝካታዕ ወይ ምስ ዝንጸግ",
+      "assessments": "ዝተመደቡልኩም ቦታታት፣ ዝረጋገጹ ዝቐረቡ፣ ውጽኢታት ገምጋምን ምጽዳቓት ዘመቻን"
     },
     "chat": {
       "inConversation": "{name} ኣብ {conversation}",
@@ -686,7 +795,623 @@
       "CHAT_MESSAGE": {
         "title": "{actor}",
         "body": "{excerpt}"
+      },
+      "ASSESSMENT_TASKS": {
+        "title": "{count, plural, one {ዝግምገም ሓድሽ ቦታ} other {# ዝግምገሙ ሓደስቲ ቦታታት}}",
+        "body": "{actor} ኣብ {code} · {name} {subject} መዲቦምልኩም"
+      },
+      "ASSESSMENT_SUBMITTED": {
+        "title": "ዝረጋገጽ ገምጋም",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_RESUBMITTED": {
+        "title": "ዝረጋገጽ ዝተመሓየሸ ገምጋም",
+        "body": "{name} · {code}"
+      },
+      "ASSESSMENT_VERIFIED": {
+        "title": "ገምጋም ተረጋጊጹ",
+        "body": "{actor} ገምጋምኩም ናይ {name} ኣረጋጊጾም"
+      },
+      "ASSESSMENT_RETURNED": {
+        "title": "ገምጋም ንምምሕያሽ ተመሊሱ",
+        "body": "{name}፦ {excerpt}"
+      },
+      "ASSESSMENT_REJECTED": {
+        "title": "ገምጋም ተነጺጉ",
+        "body": "{name}፦ {excerpt}"
+      },
+      "ASSESSMENT_INACCESSIBLE": {
+        "title": "ቦታ ክብጻሕ ኣይክእልን",
+        "body": "{subject} ({code})፦ {excerpt}"
+      },
+      "CAMPAIGN_STARTED": {
+        "title": "ስራሕ ዓውዲ ተጀሚሩ",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_MEMBER": {
+        "title": "ኣብ ዘመቻ ገምጋም ተጸንቢርኩም",
+        "body": "{name} ({code}) ከም {role}"
+      },
+      "CAMPAIGN_REVIEW": {
+        "title": "ዝጸድቑ ርኽበታት ዘመቻ",
+        "body": "{code} · {name}"
+      },
+      "CAMPAIGN_ENDORSED": {
+        "title": "ርኽበታት ዘመቻ ጸዲቖም",
+        "body": "{code} · {name} — {reference}"
+      },
+      "CAMPAIGN_RETURNED": {
+        "title": "ዘመቻ ናብ ስራሕ ዓውዲ ተመሊሱ",
+        "body": "{code}፦ {excerpt}"
       }
+    }
+  },
+  "damage": {
+    "title": "ገምጋም ጉድኣት",
+    "subtitle": "ዘመቻታት ገምጋም ኣዳልዉ፣ ጉጅለታት ዓውዲ መድቡ፣ ርኽበታት ኣረጋግጹ፣ ዝተረጋገጹ ድሌታት ድማ ናብ ምዝገባ ፕሮጀክት ኣሕልፉ",
+    "noAccess": "ገምጋም ጉድኣት ንተራታት ክትትል፣ መደብን ጉጅለ ዓውድን ጥራይ ይርከብ",
+    "newCampaign": "ሓድሽ ዘመቻ",
+    "adHoc": "ዘይተመደበ ምብጻሕ",
+    "photos": "{count, plural, one {# ስእሊ} other {# ስእልታት}}",
+    "reasonMin": "እንተወሓደ {n} ፊደላት",
+    "reviewHint": "ዝቐረቡ ገምጋማት ካብ ዘዳለዎም ሰብ ዝተፈለየ ሰብ ክሳብ ዘረጋግጾም፣ ዝመልሶም ወይ ዝነጽጎም ኣብዚ ይጽበዩ። ዝቐደሙ ቅድም ይርኣዩ።",
+    "reviewEmpty": "መረጋገጺ ዝጽበ ዋላ ሓደ የለን",
+    "registerEmpty": "ምስዞም መጻረዪታት ዝሰማማዕ ገምጋም የለን",
+    "views": {
+      "overview": "ሓፈሻዊ ትርኢት",
+      "campaigns": "ዘመቻታት",
+      "review": "መስርዕ መረጋገጺ",
+      "register": "መዝገብ ገምጋም",
+      "needs": "ዝተረጋገጹ ድሌታት"
+    },
+    "filters": {
+      "sector": "ዘርፊ",
+      "allSectors": "ኩሎም ዘርፍታት",
+      "allStatuses": "ኩሎም ኩነታት",
+      "all": "ኩሉ",
+      "allPriorities": "ኩሎም ቀዳምነታት"
+    },
+    "columns": {
+      "date": "ዝተገምገመሉ",
+      "submitted": "ዝቐረበሉ",
+      "facility": "ትካል",
+      "status": "ኩነታት",
+      "severity": "ክብደት",
+      "impact": "ጽልዋ",
+      "assessor": "ገምጋሚ",
+      "replacement": "ግምት መተካእታ",
+      "source": "ምንጪ",
+      "intervention": "ዝተመኸረ ምላሽ",
+      "campaign": "ዘመቻ",
+      "priority": "ቀዳምነት",
+      "estimate": "ግምት",
+      "beneficiaries": "ዝተጎድኡ ሰባት"
+    },
+    "queue": {
+      "title": "መስርዕኹም",
+      "toReview": "{count, plural, one {# ዝረጋገጽ ገምጋም} other {# ዝረጋገጹ ገምጋማት}}",
+      "toAssess": "{count, plural, one {# ዝግምገም ቦታ} other {# ዝግምገሙ ቦታታት}}",
+      "returned": "{count, plural, one {# ንምምሕያሽ ተመሊሱ} other {# ንምምሕያሽ ተመሊሶም}}"
+    },
+    "kpi": {
+      "campaigns": "ኣብ ስራሕ ዓውዲ ዘለዉ ዘመቻታት",
+      "campaignsHint": "{planning} ኣብ መደብ · {review} ምጽዳቕ ዝጽበዩ · {completed} ዝተዛዘሙ",
+      "sites": "ዝተረጋገጹ ቦታታት",
+      "sitesHint": "{outstanding} ገና ክፉታት · {inaccessible} ዘይብጻሑ",
+      "review": "መረጋገጺ ዝጽበዩ",
+      "reviewHint": "ዝነውሐ {days} መዓልታት · {returned} ንምምሕያሽ ተመሊሶም",
+      "needs": "ፕሮጀክት ዘይብሎም ዝተረጋገጹ ድሌታት",
+      "needsHint": "ግምት {estimate}"
+    },
+    "picture": {
+      "title": "ስእሊ ጉድኣት ትካላት",
+      "hint": "ናይ ነፍሲ ወከፍ ዝተመዝገበ ትካል ናይ ቀረባ እዋን ዝተረጋገጸ ርኽበት",
+      "never": "ተገምጊሙ ዘይፈልጥ",
+      "replacement": "ንካብ ማእከላይ ክሳብ ምሉእ ብምሉእ ዝተጎድኡ ትካላት ግምት መተካእታ፦ {amount}"
+    },
+    "live": {
+      "title": "ኣብ መስርሕ ዘለዉ ዘመቻታት",
+      "all": "ኩሎም ዘመቻታት",
+      "none": "ኣብ መደብ ወይ ኣብ መስርሕ ዘሎ ዘመቻ የለን።",
+      "progress": "{pct}% ተዛዚሙ · ካብ {total} ቦታታት {verified} ተረጋጊጾም"
+    },
+    "campaign": {
+      "columns": {
+        "campaign": "ዘመቻ",
+        "status": "ኩነታት",
+        "dates": "ዕለታት",
+        "progress": "ዕቤት",
+        "team": "ጉጅለ",
+        "weredas": "ወረዳታት",
+        "estimate": "ዝተረጋገጸ ግምት"
+      },
+      "multiSector": "ብዙሕ-ዘርፋዊ",
+      "overdueBy": "ካብ ዕለት መወዳእታ {days} መዓልታት ሓሊፉ",
+      "daysLeft": "{days} መዓልታት ተሪፉ",
+      "empty": "ክሳብ ሕጂ ዘመቻ የለን",
+      "emptyHint": "ዘመቻ ኣብ ዝተወሰኑ ወረዳታት ዝካየድ ዙር ገምጋም ይውጥን፦ ጉጅለኡ፣ ቦታታቱን ናይ ግዜ ገደቡን።",
+      "coordinatedBy": "ኣወሃሃዲ፦ {name}",
+      "edit": "ኣመዓራሪ",
+      "cancel": "ዘመቻ ሰርዝ",
+      "start": "ስራሕ ዓውዲ ጀምር",
+      "closeFieldwork": "ስራሕ ዓውዲ ዕጸው",
+      "toStart": "ስራሕ ዓውዲ ቅድሚ ምጅማሩ፦",
+      "toClose": "ስራሕ ዓውዲ ቅድሚ ምዕጻዉ፦",
+      "cancelled": "ተሰሪዙ፦",
+      "views": {
+        "overview": "ሓፈሻዊ ትርኢት",
+        "sites": "ቦታታት",
+        "team": "ጉጅለ",
+        "results": "ውጽኢታት",
+        "activity": "ንጥፈታት"
+      },
+      "progress": "ዕቤት",
+      "overdueSites": "{count, plural, one {# ቦታ ግዜኡ ሓሊፉ} other {# ቦታታት ግዜኦም ሓሊፉ}}",
+      "purpose": "ዕላማን ኣገባብን",
+      "facts": "ቀንዲ ሓበሬታታት",
+      "createdBy": "ዝወጠኖ",
+      "started": "ስራሕ ዓውዲ ዝተጀመረሉ",
+      "fieldworkClosed": "ስራሕ ዓውዲ ዝተዓጽወሉ",
+      "endorsement": "ምጽዳቕ",
+      "scope": "ወሰን · {count, plural, one {# ወረዳ} other {# ወረዳታት}}",
+      "lifecycle": "ደረጃታት ዘመቻ",
+      "stageHint": {
+        "PLANNING": "ወሰን፣ ጉጅለ፣ ቦታታት",
+        "ACTIVE": "ምምዝጋብን ምርግጋጽን",
+        "REVIEW": "ምጽዳቕ",
+        "COMPLETED": "ርኽበታት ጸዲቖም"
+      },
+      "cancelTitle": "እዚ ዘመቻ ይሰረዝ ዶ?",
+      "cancelHint": "ክፉታት ቦታታት ክስረዙ እዮም። ዝተረጋገጹ ገምጋማት ኣብ መዝገብ ይጸንሑ።",
+      "cancelReason": "ምኽንያት ምስራዝ"
+    },
+    "campaignForm": {
+      "subtitle": "ነቲ ዙር ስም ሃቡ፣ ዕለታቱን ኣወሃሃዲኡን ወስኑ፣ ዝሽፍኖም ወረዳታት ድማ ምረጹ። ቦታታትን ጉጅለን ቀጺሎም ይመጹ።",
+      "editTitle": "ዘመቻ ኣመዓራሪ",
+      "notEditable": "እዚ ዘመቻ ካብ ሕጂ ንደሓር ክመዓራረ ኣይክእልን",
+      "basics": "ዘመቻ",
+      "basicsHint": "እቲ ዙር ንምንታይ ምዃኑን መዓስ ከም ዝካየድን።",
+      "name": "ስም",
+      "nameHint": "ንኣብነት፦ ድሕሪ ግጭት ገምጋም ጉድኣት ትካላት ጥዕና — ማእከላይ ዞባ",
+      "sector": "ዘርፊ",
+      "sectorHint": "ዘመቻ ዘርፊ ትካላት ናይቲ ዘርፊ ጥራይ ይሕዝ፣ ብሓላፊ ዘርፊ ድማ ይጸድቕ፤ ብዙሕ-ዘርፋዊ ዘመቻ ብዋና ፈጻሚ ስራሕ ይጸድቕ።",
+      "multi": "ብዙሕ-ዘርፋዊ",
+      "start": "ዝተወጠነ መጀመሪ",
+      "end": "ዝተወጠነ መወዳእታ",
+      "coordinator": "ኣወሃሃዲ",
+      "coordinatorHint": "ዘመቻ መዓልታዊ ይመርሕ፣ ዝለዓሉ ጉዳያት ድማ ይቕበል",
+      "coordinatorPick": "ኣወሃሃዲ ምረጹ",
+      "objective": "ዕላማ",
+      "objectiveHint": "ርኽበታት ንኣየኖት ውሳኔታት ከም ዝሕግዙ",
+      "methodology": "ኣገባብ",
+      "methodologyHint": "ዝተጠቕመሉ ዝርዝር መመርመሪ፣ ቅርጺ ጉጅለ ብቦታ፣ ኣገባብ ናሙናን መረጋገጽን",
+      "scope": "ዝሽፈኑ ወረዳታት",
+      "scopeHint": "ቦታታት ክውሰኹ ዝኽእሉ ካብዞም ወረዳታት ጥራይ እዩ። ነዚኦም ዝሽፍኑ ኣባላት ጉጅለ ዓውዲ ቅድም ይእመሙ።",
+      "selected": "{count} ተመሪጾም",
+      "searchWereda": "ወረዳ ድለ",
+      "wholeZone": "ምሉእ ዞባ",
+      "clearZone": "ዞባ ኣጽሪ",
+      "save": "ለውጥታት ዓቅብ",
+      "create": "ዘመቻ ፍጠር",
+      "v": {
+        "name": "እንተወሓደ 5 ፊደላት ተጠቐሙ",
+        "required": "የድሊ",
+        "endAfterStart": "ምስ ዕለት መጀመሪ ማዕረ ወይ ድሕሪኡ ክኸውን ኣለዎ",
+        "endPast": "ዘመቻ ኣብ ዝሓለፈ ዕለት ክውዳእ ኣይክእልን",
+        "scope": "እንተወሓደ ሓደ ወረዳ ምረጹ"
+      }
+    },
+    "team": {
+      "title": "ጉጅለ ዘመቻ",
+      "hint": "ኣብ ተራታት ዘመቻ ዘለዉ ኣባላት ጉጅለ ዓውዲ። ሓደ ሰብ ካብ ሓደ ንላዕሊ ተራ ክሕዝ ይኽእል፣ ዝገምገሞ ቦታ ግን ፈጺሙ ኣየረጋግጽን።",
+      "add": "ኣባል ወስኽ",
+      "addTitle": "ኣባል ጉጅለ ወስኽ",
+      "addHint": "ወረዳታት እቲ ዘመቻ ዝሽፍኑን ውሑዳት ክፉታት ቦታታት ዘለዉዎምን ኣባላት ቅድም ይዝርዘሩ።",
+      "columns": {
+        "member": "ኣባል",
+        "role": "ተራ",
+        "area": "ከባቢ",
+        "open": "ክፉታት ቦታታት",
+        "verified": "ዝተረጋገጹ",
+        "reviews": "ዝግምገሙ",
+        "login": "መእተዊ ዓውዲ",
+        "phone": "ተሌፎን"
+      },
+      "covers": "ወሰን ይሽፍን",
+      "outsideArea": "ካብ ልሙድ ከባቢ ወጻኢ",
+      "hasLogin": "እወ",
+      "noLogin": "መእተዊ የለን",
+      "loginWarning": "መእተዊ ዓውዲ ዘይብሎም ኣባላት ቦታታት ባዕሎም ክምዝግቡ ይኹን ከረጋግጹ ኣይክእሉን፤ ቅጥዕታቶም ተንታኒ ከእትዎ ኣለዎ። መእተዊታት ካብ ገጽ ጉጅለ ዓውዲ ፍጠሩ።",
+      "empty": "ክሳብ ሕጂ ኣብ ጉጅለ ዝኾነ ሰብ የለን።",
+      "release": "ኣፋንው",
+      "releaseTitle": "{name} ካብ ተራ {role} ይፋነዉ ዶ?",
+      "releaseHint": "ኣብዚ ተራ ዘለዉ ክፉታት ቦታታት ቅድም እንደገና ክምደቡ ኣለዎም።",
+      "releaseReason": "ምኽንያት",
+      "releasedNote": "ተፋንዩ፦ {reason}",
+      "past": "ናይ ቀደም ኣባላት",
+      "roles": {
+        "title": "ነፍሲ ወከፍ ተራ እንታይ ይሰርሕ",
+        "TEAM_LEAD": "ጉጅለ ኣብ ዓውዲ ይቆጻጸር፤ ዝኾነ ቦታ ክምዝግብ ወይ ከረጋግጽ ይኽእል፣ ቦታታት ምስ ዝዕገቱ ድማ ይሕበሮ።",
+        "ASSESSOR": "ዝተመደብሉ ቦታታት ይበጽሕ፣ ገምጋም ድማ ምስ ስእልታትን GPSን ይምዝግብ።",
+        "ENGINEER": "ውሳኔ ህንጻዊ ቅርጽን ግምት ወጻኢን ዘድልዮም ቦታታት ይምዝግብ (ሆስፒታላት፣ ፋብሪካታት፣ ፕሮጀክትታት መስኖ)።",
+        "VERIFIER": "ዝቐረቡ ገምጋማት ምስ መርትዖ የነጻጽር፣ የረጋግጽ፣ ይመልስ ወይ ይነጽግ። ተንታኒ ዓውዲ ወይ ተቖጻጻሪ ክኸውን ኣለዎ።"
+      },
+      "noCandidates": "ንጡፋት ኣባላት ጉጅለ ዓውዲ የለዉን።",
+      "coveredWeredas": "{count, plural, =0 {ኣብ ወሰን ወረዳ የለን} one {ኣብ ወሰን # ወረዳ} other {ኣብ ወሰን # ወረዳታት}}",
+      "openSites": "{count, plural, =0 {ክፉት ቦታ የለን} one {# ክፉት ቦታ} other {# ክፉታት ቦታታት}}",
+      "alreadyAs": "ድሮ፦ {roles}",
+      "addAs": "ከም {role} ወስኽ",
+      "addedList": "ተወሲኾም፦ {list}",
+      "done": "ተዛዚሙ",
+      "ineligible": {
+        "ALREADY_IN_ROLE": "ነዚ ተራ ድሮ ሒዙዎ ኣሎ",
+        "ROLE_NEEDS_ANALYST_OR_SUPERVISOR": "መራሕቲ ጉጅለን ኣረጋገጽትን ተንታንቲ ዓውዲ ወይ ተቖጻጸርቲ ክኾኑ ኣለዎም"
+      }
+    },
+    "sites": {
+      "title": "ቦታታት",
+      "hint": "ነፍሲ ወከፍ ቦታ ሓደ ትካል እዩ፦ ገምጋሚኡ ይምዝግቦ፣ ኣረጋጋጺኡ የረጋግጾ።",
+      "add": "ቦታታት ወስኽ",
+      "registerNew": "ሓድሽ ትካል መዝግብ",
+      "search": "ቦታታት ድለ",
+      "allStatuses": "ኩሎም ኩነታት",
+      "allWeredas": "ኩሎም ወረዳታት",
+      "allAssessors": "ኩሎም ገምገምቲ",
+      "count": "{count, plural, one {# ቦታ} other {# ቦታታት}}",
+      "selected": "{count} ተመሪጾም",
+      "assign": "መድብ",
+      "clear": "ምርጫ ኣጽሪ",
+      "selectAll": "ኩሎም ክፉታት ቦታታት ምረጽ",
+      "selectSite": "{name} ምረጽ",
+      "empty": "ክሳብ ሕጂ ቦታ የለን",
+      "emptyHint": "ካብ መዝገብ ትካላት ወስኹ፣ ወይ ኣብ ዓውዲ ዝተረኽበ ትካል መዝግቡ።",
+      "columns": {
+        "facility": "ቦታ",
+        "status": "ኩነታት",
+        "assessor": "ገምጋሚ",
+        "verifier": "ኣረጋጋጺ",
+        "due": "ዕለት ምውዳእ",
+        "finding": "ርኽበት",
+        "estimate": "መተካእታ"
+      },
+      "unassigned": "ዘይተመደበ",
+      "anyVerifier": "ዝኾነ ኣረጋጋጺ",
+      "overdue": "ግዜኡ ዝሓለፈ",
+      "previously": "ቅድሚ ሕጂ፦",
+      "open": "ክፈት",
+      "record": "መዝግብ",
+      "actions": "ስጉምትታት ን{name}",
+      "markInaccessible": "ዘይብጻሕ ኢልካ ምልክት ግበር",
+      "removeSite": "ቦታ ኣውጽእ",
+      "reopen": "እንደገና ክፈት",
+      "reopenTitle": "{name} እንደገና ይኽፈት ዶ?",
+      "inaccessibleTitle": "{name} ክብጻሕ ኣይክእልን",
+      "inaccessibleHint": "ኣወሃሃዲ ይሕበር። መእተዊ ምስ ተመልሰ ቦታ እንደገና ክኽፈት ይኽእል።",
+      "cancelTitle": "{name} ካብ ዘመቻ ይውጻእ ዶ?",
+      "cancelHint": "ቦታ ኣብ መዝገብ ትካላት ይጸንሕ።",
+      "note": "መዘኻኸሪ",
+      "assignTitle": "{count, plural, one {# ቦታ መድብ} other {# ቦታታት መድብ}}",
+      "assignHint": "ናይ ሕጂ ዋጋ ንምዕቃብ ነቲ መስክ ከም ዘለዎ ግደፉዎ። ገምጋሚ ብዛዕባ ሓደስቲ ቦታታት ይሕበር።",
+      "keep": "ናይ ሕጂ ዓቅብ",
+      "verifierHint": "ዝኾነ ኣረጋጋጺ ዘመቻ ወይ መራሒ ጉጅለ ክገምግም 'ናይ ሕጂ ዓቅብ' ኣብ ዝብል ግደፉዎ",
+      "samePerson": "ገምጋሚን ኣረጋጋጽን ዝተፈላለዩ ሰባት ክኾኑ ኣለዎም",
+      "priority": "ቀዳምነት",
+      "instructions": "መምርሒታት ንጉጅለ",
+      "instructionsHint": "መገዲ መእተዊ፣ ሰብ ርክብ፣ ብፍላይ ክረአ ዘለዎ",
+      "noAssessors": "ቅድም ገምገምቲ ናብ ጉጅለ ወስኹ።",
+      "apply": "ተግብር",
+      "skipped": "{count, plural, one {# ቦታ ተዘሊሉ፦} other {# ቦታታት ተዘሊሎም፦}}",
+      "done": "ተዛዚሙ",
+      "openSites": "{count, plural, =0 {ክፉት ቦታ የለን} one {# ክፉት} other {# ክፉታት}}",
+      "addTitle": "ካብ መዝገብ ትካላት ቦታታት ወስኽ",
+      "addHint": "ኣብ ወረዳታት (ከምኡውን ዘርፊ) እቲ ዘመቻ ዘለዉን ገና ቦታ ዘይኮኑን ትካላት። ተገምጊሞም ዘይፈልጡ ትካላት ቅድም።",
+      "lastSeverity": "ናይ መወዳእታ ክብደት",
+      "anySeverity": "ዝኾነ ክብደት",
+      "neverAssessed": "ተገምጊሞም ዘይፈልጡ ጥራይ",
+      "selectAllShown": "ኩሎም ዝርኣዩ {count} ምረጽ",
+      "noCandidates": "ኣብ ወሰን ተወሳኺ ትካላት የለዉን።",
+      "lastAssessed": "ንመወዳእታ ግዜ ዝተገምገመ {date}",
+      "neverAssessedShort": "ተገምጊሙ ዘይፈልጥ",
+      "inOther": "ኣብ {code}'ውን ኣሎ",
+      "addCount": "{count, plural, =0 {ቦታታት ወስኽ} one {# ቦታ ወስኽ} other {# ቦታታት ወስኽ}}",
+      "registerTitle": "ኣብ ዓውዲ ዝተረኽበ ትካል መዝግብ",
+      "registerHint": "ናብ መዝገብ ትካላትን ናብዚ ዘመቻ ከም ቦታን ይውሰኽ።",
+      "registerAction": "መዝግብን ወስኽን",
+      "nf": {
+        "name": "ስም ትካል",
+        "type": "ዓይነት",
+        "wereda": "ወረዳ",
+        "kebele": "ጣብያ",
+        "beneficiaries": "ዝገልገሉ ሰባት",
+        "lat": "ኬክሮስ",
+        "lng": "ኬንትሮስ",
+        "capacity": "ቅድሚ ቅልውላው ዝነበረ ዓቕሚ",
+        "unit": "መለክዒ ዓቕሚ",
+        "unitHint": "ተማሃሮ፣ ዓራውቲ፣ ሄክታራት…"
+      }
+    },
+    "results": {
+      "progress": "ዕቤት ስራሕ ዓውዲ",
+      "export": "ቦታታት ኣውጽእ (CSV)",
+      "progressHint": "ካብ {total} ቦታታት {assessed} ዝተረጋገጸ ገምጋም ኣለዎም፤ ኣብ ታሕቲ ዝቑጸሩ ዝተረጋገጹ ርኽበታት ጥራይ እዮም።",
+      "repair": "ግምት ጽገና",
+      "equipment": "ክሳራ መሳርሒታት {amount}",
+      "replacement": "ግምት መተካእታ",
+      "people": "ዝተጎድኡ ሰባት",
+      "flags": "ዘይተባረዐ ተተኳሲ ይጥርጠር",
+      "flagsHint": "{idp} ከም መዕቆቢ ዘገልግሉ · {linked} ድሮ ኣብ ፕሮጀክትታት",
+      "none": "ክሳብ ሕጂ ዝተረጋገጹ ርኽበታት የለዉን።",
+      "bySeverity": "ብክብደት",
+      "byIntervention": "ብዝተመኸረ ምላሽ",
+      "byPriority": "ብቀዳምነት",
+      "byWereda": "ብወረዳ",
+      "byType": "ብዓይነት ትካል",
+      "byCause": "ዝተጸብጸቡ ጠንቅታት",
+      "components": "ብኸቢድ ዝተጎድኡ ወይ ዝዓነዉ ክፋላት",
+      "componentsHint": "እቲ ክፋል ብኸቢድ ዝተጎድኣሉ ወይ ዝዓነወሉ ቦታታት፣ ምስ ግምት ጽገናኡ",
+      "unspecified": "ዘይተገልጸ",
+      "noData": "ሓበሬታ የለን",
+      "sitesN": "{count, plural, one {# ቦታ} other {# ቦታታት}}"
+    },
+    "endorse": {
+      "title": "ርኽበታት ኣጽድቕ",
+      "hint": "ስራሕ ዓውዲ ተዓጽዩ፣ ነፍሲ ወከፍ ቦታ ድማ ተረጋጊጹ፣ ዘይብጻሕ ኮይኑ ወይ ወጺኡ። ዝጸደቑ ርኽበታት መሰረት ፕሮጀክትታት ዳግመ-ህንጸት ይኾኑ።",
+      "waiting": "ምጽዳቕ ይጽበ ኣሎ።",
+      "options": {
+        "APPROVE": "ርኽበታት ኣጽድቕ",
+        "RETURN": "ናብ ስራሕ ዓውዲ መልስ"
+      },
+      "effects": {
+        "APPROVE": "ዘመቻ ብቑጽሪ ዝተመዝገበ ምጽዳቕ ይዛዘም፤ ኣወሃሃዲ ይሕበር።",
+        "RETURN": "ስራሕ ዓውዲ እንደገና ይኽፈት፤ ኣወሃሃዲ ርእይቶኹም ይቕበል።"
+      },
+      "note": "መዘኻኸሪ (ኣማራጺ)",
+      "noteRequired": "ቅድሚ ምጽዳቕ ክፍጸም ዘለዎ *",
+      "noteHint": "ክፍጸም ዘለዎ እንተወሓደ ብ10 ፊደላት ግለጹ",
+      "confirm": {
+        "APPROVE": "ርኽበታት ኣጽድቕ",
+        "RETURN": "ናብ ስራሕ ዓውዲ መልስ"
+      }
+    },
+    "review": {
+      "title": "ነዚ ገምጋም ኣረጋግጽ",
+      "hint": "ርኽበታት ምስ ስእልታት፣ ምስ ኣቀማምጣ ቦታን ብዛዕባ እቲ ቦታ ምስ እትፈልጥዎን ኣነጻጽሩ።",
+      "cannot": "ነዚ ገምጋም ክትገምግምዎ ኣይትኽእሉን",
+      "options": {
+        "VERIFY": "ኣረጋግጽ",
+        "RETURN": "ንምምሕያሽ መልስ",
+        "REJECT": "ንጸግ"
+      },
+      "effects": {
+        "VERIFY": "ርኽበት ንመዝገብ ትካላት የሐድስ፣ ፕሮጀክት ድማ ክኸውን ይኽእል።",
+        "RETURN": "ገምጋሚ የመሓይሾን እንደገና የቕርቦን።",
+        "REJECT": "እቲ መዝገብ ዋጋ የብሉን፤ ቦታ ንሓድሽ ምብጻሕ ናብ ገምጋሚ ይምለስ።"
+      },
+      "note": "ምኽንያት",
+      "noteOptional": "ርእይቶ (ኣማራጺ)",
+      "notePlaceholder": "እንታይ ከም ዝተጋገየ ወይ ከም ዝጎደለ፣ ንምእራሙ ብዘኽእል ንጽህና",
+      "noteHint": "ገምጋሚ ስጉምቲ ክወስደሉ እንተወሓደ 10 ፊደላት",
+      "verifyHint": "ምስ መረጋገጺ ይዕቀብ",
+      "confirm": {
+        "VERIFY": "ገምጋም ኣረጋግጽ",
+        "RETURN": "ናብ ገምጋሚ መልስ",
+        "REJECT": "ገምጋም ንጸግ"
+      }
+    },
+    "needs": {
+      "count": "ፕሮጀክት ዘይብሎም ድሌታት",
+      "estimate": "ዝተገመተ ወጻኢ",
+      "urgent": "ህጹጽ",
+      "people": "ዝተጎድኡ ሰባት",
+      "hint": "ክሳብ ሕጂ ብዝኾነ ንጡፍ ፕሮጀክት ዘይተሸፈነ ናይ ነፍሲ ወከፍ ዝተጎድአ ትካል ናይ ቀረባ እዋን ዝተረጋገጸ ርኽበት። መርትዖኡ ንምሕላፍ ካብ ድሌት ፕሮጀክት መዝግቡ።",
+      "unspecified": "ዘይተገልጸ",
+      "verifiedAgo": "{days, plural, =0 {ሎሚ ዝተገምገመ} one {ቅድሚ # መዓልቲ ዝተገምገመ} other {ቅድሚ # መዓልታት ዝተገምገመ}}",
+      "register": "ፕሮጀክት መዝግብ",
+      "empty": "ነፍሲ ወከፍ ዝተረጋገጸ ድሌት ብፕሮጀክት ተሸፊኑ ኣሎ",
+      "emptyHint": "ገምጋማት ምስ ተረጋገጹ ሓደስቲ ድሌታት ኣብዚ ይርኣዩ።"
+    },
+    "mine": {
+      "title": "ናተይ ቦታታት ገምጋም",
+      "subtitle": "ክትግምግምዎም ወይ ከተረጋግጽዎም ዝተመደቡልኩም ቦታታት",
+      "empty": "ዝተመደበልኩም ቦታ የለን",
+      "emptyHint": "ኣወሃሃዲኹም ዘመቻ ምስ ተወጠነ ቦታታት ይምድብ።",
+      "notField": "እዚ ዝርዝር ንኣባላት ጉጅለ ዓውዲ እዩ",
+      "notFieldHint": "ቦታታቱ ንምርኣይ ዘመቻ ክፈቱ።",
+      "groups": {
+        "fix": "ናባኹም ዝተመለሱ",
+        "record": "ዝግምገሙ",
+        "verify": "ዝረጋገጹ",
+        "waiting": "መረጋገጺ ዝጽበዩ",
+        "done": "ዝተዓጽዉ"
+      },
+      "groupHints": {
+        "fix": "ነዚኦም ቅድም ኣመሓይሽኩም እንደገና ኣቕርቡ።",
+        "record": "ብጽሑ፣ መዝግቡን ኣቕርቡን።",
+        "verify": "ብመሳርሕቲ ዝቐረቡ፤ ናይ ባዕልኹም ከተረጋግጹ ኣይትኽእሉን።",
+        "waiting": "",
+        "done": ""
+      },
+      "campaign": "ዘመቻ",
+      "due": "ዕለት ምውዳእ",
+      "overdue": "ግዜኡ ዝሓለፈ",
+      "priority": "ቀዳምነት",
+      "last": "ናይ መወዳእታ ርኽበት",
+      "neverAssessed": "ተገምጊሙ ዘይፈልጥ",
+      "returnedNote": "ተመሊሱ",
+      "note": "መዘኻኸሪ",
+      "start": "ጀምር",
+      "record": "ገምጋም መዝግብ",
+      "revise": "ኣመሓይሽ",
+      "review": "ገምግም",
+      "open": "ክፈት",
+      "inaccessible": "ናብ ቦታ ክብጻሕ ኣይተኻእለን",
+      "notLive": "ዘመቻ {status} እዩ",
+      "inaccessibleTitle": "{name} ክብጻሕ ከም ዘይክእል ሓብር",
+      "inaccessibleHint": "ኣወሃሃዲኹም ይሕበር፣ ቦታ ድማ ጸኒሑ እንደገና ክኸፍቶ ይኽእል።",
+      "inaccessibleReason": "ምብጻሕ ዝዓግት እንታይ እዩ",
+      "inaccessibleConfirm": "ሓብር"
+    },
+    "form": {
+      "newTitle": "ገምጋም ጉድኣት መዝግብ",
+      "reviseTitle": "ገምጋም ኣመሓይሽ",
+      "forTask": "{code} · {name}",
+      "adHoc": "ካብ ዘመቻ ወጻኢ ዘይተወጠነ ገምጋም",
+      "noFacility": "ካብ ዘመቻ ቦታ ወይ ካብ መዝገብ ትካል ምረጹ",
+      "cannotRevise": "እዚ ገምጋም ሕጂ ክመሓየሽ ኣይክእልን",
+      "revision": "ምምሕያሽ {n}",
+      "returnedBecause": "ንምምሕያሽ ተመሊሱ፦",
+      "visit": {
+        "title": "ምብጻሕን ድሕንነትን",
+        "hint": "ቦታ መዓስን ብመንን ከም ዝተበጽሐ፣ ንምእታው ድማ ውሑስ ምንባሩ።",
+        "date": "ዕለት ምብጻሕ",
+        "assessor": "ገምጋሚ",
+        "assessorHint": "ነቲ ቦታ ዝበጽሖ ሰብ",
+        "access": "ተበጻሕነት",
+        "use": "ናይ ሕጂ ኣጠቓቕማ",
+        "useHint": "ንዝተመዛበላ ስድራቤታት ከም መዕቆቢ ምግልጋልን ወተሃደራዊ ኣጠቓቕማን ንመደብ ወሰንቲ እዮም",
+        "uxo": "ዘይተባረዐ ተተኳሲ ይጥርጠር",
+        "uxoWarning": "ናብ ዝተጠርጠሩ ቦታታት ኣይትእተዉ። ገምጋም ንኣወሃሃድን ንኣወሃሃዲ ምእላይ ፈንጂን ምልክት ይግበረሉ።"
+      },
+      "damage": {
+        "title": "ሓፈሻዊ ጉድኣት",
+        "hint": "ቅድም ንህንጻዊ ቅርጺ ነጥቢ ሃቡ፤ ክብደት ካብቲ ነጥቢ ይእመም፣ ክመዓራረ ድማ ይኽእል።",
+        "score": "ነጥቢ ጽልዋ ህንጻዊ ቅርጺ (0–100)",
+        "scoreHint": "0 ዘይተተንከፈ · 30 ማእከላይ · 55 ከቢድ · 80+ ዝዓነወ",
+        "suggests": "ዝእመም፦ {severity}",
+        "capacity": "ዓቕሚ ኣገልግሎት %",
+        "capacityHint": "ትካል ሎሚ ክህቦ ዝኽእል ብጽሒት ልሙድ ኣገልግሎት",
+        "inventory": "ክሳራ ንብረት %",
+        "severity": "ክብደት",
+        "causes": "ጠንቅታት ጉድኣት",
+        "causesHint": "ዝምልከቱ ኩሎም ምረጹ"
+      },
+      "components": {
+        "title": "ክፋላት ህንጻን መሳርሒታትን",
+        "hint": "ኩነታትን ግምት ጽገናን ንነፍሲ ወከፍ ዝተዳህሰሰ ክፋል። ክትምርምርዎም ዘይከኣልኩም ክፋላት ከም ዘይተዳህሰሱ ግደፍዎም።",
+        "element": "ክፋል",
+        "condition": "ኩነታት",
+        "cost": "ግምት ጽገና",
+        "note": "መዘኻኸሪ",
+        "notSurveyed": "ዘይተዳህሰሰ",
+        "total": "ድምር ግምት ክፋላት፦ {amount}"
+      },
+      "needs": {
+        "title": "ወጻኢታትን ዝተመኸረ ምላሽን",
+        "hint": "ኣገልግሎት ንምምላስ እንታይ ከም ዘድሊ፣ ብኸመይ ህጹጽነት ድማ።",
+        "repair": "ግምት ጽገና",
+        "repairHint": "ድምር ክፋላት ({amount}) ንምጥቃም ባዶ ግደፍዎ",
+        "replacement": "ግምት መተካእታ",
+        "equipment": "ዝጠፍኡ መሳርሒታትን ክምችትን",
+        "intervention": "ዝተመኸረ ምላሽ",
+        "priority": "ቀዳምነት",
+        "priorityHint": "ህጹጽ፦ ህይወት ዘድሕን ኣገልግሎት ወይ ኣማራጺ ዘይብሉ ብዙሕ ህዝቢ",
+        "beneficiaries": "ዝተጎድኡ ሰባት",
+        "beneficiariesHint": "ብልሙድ ብትካል ዝገልገሉ ሰባት"
+      },
+      "evidence": {
+        "title": "መዘኻኸሪታት፣ ኣቀማምጣን ስእልታትን",
+        "hint": "ስእልታት ነፍሲ ወከፍ ብሎክን ቀንዲ ጉድኣትን መረጋገጺ የኽእሉ።",
+        "notes": "ዕዙባት",
+        "lat": "ኬክሮስ",
+        "lng": "ኬንትሮስ",
+        "gps": "ዘለኹዎ ቦታ ተጠቐም",
+        "addPhotos": "ስእልታት ወስኽ",
+        "photosHint": "JPEG፣ PNG ወይ WebP፤ ብሓደ ግዜ ክሳብ 12",
+        "photo": "ስእሊ {n}",
+        "caption": "መግለጺ",
+        "remove": "ስእሊ ኣውጽእ"
+      },
+      "v": {
+        "required": "የድሊ",
+        "future": "ምብጻሕ ኣብ መጻኢ ክኸውን ኣይክእልን",
+        "score": "ካብ 0 ክሳብ 100 ነጥቢ ኣእትዉ",
+        "pct": "0–100 ኣእትዉ",
+        "coords": "ኬክሮስን ኬንትሮስን ክልቲኦም ኣእትዉ፣ ወይ ሓደ'ውን ኣይተእትዉ"
+      },
+      "fixErrors": "{count, plural, one {# መስክ ኣቓልቦ የድልዮ} other {# መስኮች ኣቓልቦ የድልዮም}}",
+      "gpsUnavailable": "እዚ መሳርሒ ቦታ ክህብ ኣይክእልን",
+      "gpsDenied": "ፍቓድ ቦታ ተኣሪዩ፤ መወሃሃዲታት ብኢድ ኣእትዉ",
+      "uploadFailed": "ሓደ ስእሊ ክጽዓን ኣይተኻእለን",
+      "submitHint": "ገምጋም ናብ ኣረጋጋጺ ይኸይድ፤ ዝቑጸር ድሕሪ ምርግጋጹ እዩ።",
+      "submit": "ንመረጋገጺ ኣቕርብ",
+      "resubmit": "ንመረጋገጺ እንደገና ኣቕርብ"
+    },
+    "detail": {
+      "assessedBy": "{date} ብ{name} ዝተገምገመ",
+      "facility": "ትካል",
+      "revise": "ኣመሓይሽ",
+      "saved": "ተዓቂቡ።",
+      "savedSubmitted": "ቀሪቡ። ኣረጋጋጺ ተሓቢሩ።",
+      "returned": "ንምምሕያሽ ተመሊሱ፦",
+      "rejected": "ተነጺጉ፦",
+      "uxo": "ኣብዚ ቦታ ዘይተባረዐ ተተኳሲ ይጥርጠር።",
+      "impact": "ጽልዋ ህንጻዊ ቅርጺ",
+      "capacity": "ዓቕሚ ኣገልግሎት",
+      "repair": "ግምት ጽገና",
+      "replacement": "ግምት መተካእታ",
+      "equipment": "ክሳራ መሳርሒታት",
+      "people": "ዝተጎድኡ ሰባት",
+      "findings": "ርኽበታት",
+      "intervention": "ዝተመኸረ ምላሽ",
+      "priority": "ቀዳምነት",
+      "inventory": "ክሳራ ንብረት",
+      "access": "ተበጻሕነት",
+      "use": "ናይ ሕጂ ኣጠቓቕማ",
+      "causes": "ጠንቅታት",
+      "components": "ክፋላት ህንጻን መሳርሒታትን",
+      "componentsTotal": "ድምር ግምት ክፋላት {amount}",
+      "noComponents": "ዋላ ሓደ ክፋል ብውልቀ ኣይተዳህሰሰን።",
+      "photos": "{count, plural, =0 {ስእልታት} one {# ስእሊ} other {# ስእልታት}}",
+      "noPhotos": "ዋላ ሓደ ስእሊ ኣይተተሓሓዘን።",
+      "workflow": "መስርሕ ስራሕ",
+      "campaign": "ዘመቻ",
+      "submittedBy": "ዘቕረቦ",
+      "revisionN": "ምምሕያሽ {n}",
+      "verifiedBy": "ዘረጋገጾ",
+      "notYet": "ገና ኣይተረጋገጸን",
+      "source": "ምንጪ",
+      "project": "ፕሮጀክት",
+      "noProject": "ክሳብ ሕጂ ፕሮጀክት የለን",
+      "history": "ታሪኽ",
+      "noHistory": "ክሳብ ሕጂ ዝተመዝገበ ንጥፈት የለን።"
+    },
+    "events": {
+      "CREATED": "ዘመቻ ተወጢኑ",
+      "UPDATED": "ዝርዝራት ዘመቻ ተቐይሮም",
+      "STARTED": "ስራሕ ዓውዲ ተጀሚሩ",
+      "FIELDWORK_CLOSED": "ስራሕ ዓውዲ ተዓጽዩ ንምጽዳቕ ተላኢኹ",
+      "ENDORSED": "ርኽበታት ጸዲቖም",
+      "RETURNED_TO_FIELDWORK": "ናብ ስራሕ ዓውዲ ተመሊሱ",
+      "CANCELLED": "ዘመቻ ተሰሪዙ",
+      "MEMBER_ADDED": "ኣባል ጉጅለ ተወሲኹ",
+      "MEMBER_RELEASED": "ኣባል ጉጅለ ተፋንዩ",
+      "SITES_ADDED": "ቦታታት ተወሲኾም",
+      "FACILITY_REGISTERED": "ሓድሽ ትካል ተመዝጊቡ",
+      "ASSIGNED": "ቦታ ተመዲቡ",
+      "TASK_UPDATED": "ዝርዝራት ቦታ ተሓዲሶም",
+      "TASK_IN_PROGRESS": "ምብጻሕ ቦታ ተጀሚሩ",
+      "TASK_INACCESSIBLE": "ቦታ ዘይብጻሕ ምዃኑ ተሓቢሩ",
+      "TASK_CANCELLED": "ቦታ ወጺኡ",
+      "TASK_PLANNED": "ቦታ እንደገና ተኸፊቱ",
+      "TASK_ASSIGNED": "ቦታ እንደገና ተኸፊቱ",
+      "SUBMITTED": "ገምጋም ቀሪቡ",
+      "RESUBMITTED": "ተመሓይሹ እንደገና ቀሪቡ",
+      "REVISED": "ቅድሚ ገምጋም ተመሓይሹ",
+      "VERIFIED": "ተረጋጊጹ",
+      "RETURNED": "ንምምሕያሽ ተመሊሱ",
+      "REJECTED": "ተነጺጉ",
+      "PROJECT_REGISTERED": "ከም መሰረት ፕሮጀክት ተመዝጊቡ"
+    }
+  },
+  "register": {
+    "fromAssessment": {
+      "name": "{action} {facility}",
+      "description": "ዝተረጋገጸ ገምጋም ጉድኣት ናይ {facility} ({source}፣ ብ{date} ዝተበጽሐ) {severity} ጉድኣት ረኺቡ፣ ብ{priority} ቀዳምነት ድማ {action} ይመክር።\n\n{notes}",
+      "adHoc": "ዘይተወጠነ ምብጻሕ",
+      "note": "ካብ ዝተረጋገጸ ገምጋም ጉድኣት #{id} ዝተመዝገበ",
+      "banner": "ካብ ዝተረጋገጸ ገምጋም ጉድኣት ናይ {facility} ብምብጋስ፦ ትካል፣ ኣቀማምጣ፣ ዝተጎድኡ ሰባትን ግምት ወጻኢን ተመሊኦም ኣለዉ፣ እቲ ገምጋም ድማ ንዚ ፕሮጀክት መርትዖ ይኸውን።",
+      "view": "ገምጋም ርአ",
+      "unlink": "ኣይተተኣሳስር"
     }
   }
 }

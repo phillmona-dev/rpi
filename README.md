@@ -16,13 +16,14 @@ The evolution from dashboard to command platform is recorded in [`docs/09`](docs
 
 Design documents live in [`docs/`](docs/): proposal analysis & recommendations, information
 architecture, system architecture, domain model, API & developer guide, security, roadmap,
-mobile brief, and the command-platform evolution record (`09`).
+mobile brief, the command-platform evolution record (`09`) and the damage assessment workflow (`10`).
 
 ## What the executive sees
 
 | Question | Where |
 |---|---|
 | What is happening? | Command Center: KPIs, early-warning signals, live stream, sector cards |
+| What was damaged, and is it verified? | Damage Assessment (`/damage`): campaigns, team roles, site assignment, verification, endorsement, verified needs |
 | Where? | Geospatial Command (`/map`): boundary, wereda, project, facility and evidence layers; site maps on every project / facility page |
 | Why? | Alert "why this fired", composite risk components, inspection findings, evidence galleries |
 | What is at risk? | Decision Support (`/intelligence`): risk register, delay / cost / supply insights, anomalies |
@@ -53,7 +54,7 @@ Open http://localhost:3000 → sign in with a demo account (password `Rpis@2026!
 | `analyst` | ANALYST | Full read, data entry (progress, assessments) |
 | `pmo.observer` | PMO_FEDERAL | Read-only, every read audited |
 | `admin` | ADMIN | Users and audit log |
-| `field.officer`, `site.manager` | FIELD_OFFICER / SITE_MANAGER | Sync API roles (Phase 2 apps) |
+| `field.officer`, `site.manager` | FIELD_OFFICER / SITE_MANAGER | Own assessment sites on the web (`/damage/my-tasks`); sync API for the Phase 2 apps |
 
 API documentation: http://localhost:8080/swagger-ui.html (disabled under the `prod` profile).
 
