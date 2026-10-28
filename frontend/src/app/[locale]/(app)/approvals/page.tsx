@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowRight, CheckCheck, Clock, Hourglass, Undo2 } from 'lucide-react';
+import { ArrowRight, Clock, Hourglass, Undo2 } from 'lucide-react';
 import { useApprovalCounts, useApprovalQueue } from '@/lib/api/hooks';
 import { useBreadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHeader } from '@/components/common/page-header';
@@ -63,9 +63,6 @@ function ApprovalQueue() {
         <KpiTile loading={cl} icon={Clock} label={t('kpi.oldest')} value={oldest === null ? '—' : t('kpi.days', { count: oldest })}
           accent={oldest !== null && oldest > 14 ? toneVar.critical : oldest !== null && oldest > 7 ? toneVar.serious : undefined} hint={oldest === null ? t('kpi.none') : undefined} />
         <KpiTile loading={cl} icon={Undo2} label={t('kpi.returned')} value={counts?.returned ?? 0} hint={t('kpi.returnedHint', { count: counts?.returnedLast30 ?? 0 })} href="/approvals?tab=returned" />
-        <KpiTile loading={cl} icon={CheckCheck} label={t('kpi.decided')} value={(counts?.approvedLast30 ?? 0) + (counts?.rejectedLast30 ?? 0)}
-          hint={<>{t('kpi.decidedHint', { approved: counts?.approvedLast30 ?? 0, rejected: counts?.rejectedLast30 ?? 0 })}{counts?.medianDecisionDays != null && <> · {t('kpi.median')} {t('kpi.days', { count: Math.round(counts.medianDecisionDays) })}</>}</>}
-          href="/approvals?tab=decided" />
       </KpiRow>
 
       <Tabs value={tab} onValueChange={(v) => set({ tab: v === 'pending' ? null : v, page: null })}>
@@ -101,7 +98,7 @@ function QueueRow({ item, tab, canDecide }: { item: ApprovalQueueItem; tab: Tab;
         <div className="min-w-0 laptop:col-span-5">
           <Link href={`/approvals/${p.id}`} className="block text-lg font-semibold leading-snug hover:underline">{p.name}</Link>
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-            <span className="font-mono">{p.code}</span><SectorLabel sector={p.sector} /><span>{localizedName(p.wereda.name, locale)} · {localizedName(p.wereda.zoneName, locale)}</span>
+            <SectorLabel sector={p.sector} /><span>{localizedName(p.wereda.name, locale)} · {localizedName(p.wereda.zoneName, locale)}</span>
           </div>
           {tab !== 'pending' && <div className="mt-2"><ApprovalBadge value={item.status} /></div>}
         </div>

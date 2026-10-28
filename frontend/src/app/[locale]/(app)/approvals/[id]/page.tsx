@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, CircleAlert } from 'lucide-react';
 import { useApprovalDossier } from '@/lib/api/hooks';
 import { useBreadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHeader, Section, Stat } from '@/components/common/page-header';
@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/i18n/navigation';
 import { useUser } from '@/providers/session';
-import { canSeeApprovals } from '@/lib/domain';
+import { canSeeApprovals, toneVar } from '@/lib/domain';
 import type { ApprovalDossier } from '@/lib/api/types';
 import { fmtDate, localizedName, money, num, pct } from '@/lib/format';
 
@@ -49,6 +49,7 @@ function Dossier({ d }: { d: ApprovalDossier }) {
   const ctx = d.context;
   const tranches = det.finance.disbursements;
   const scheduled = tranches.reduce((s, x) => s + x.amountEtb, 0);
+  const gaps = d.readiness.checks.filter((c) => !c.passed && c.severity === 'WARN' && c.code !== 'NO_DUPLICATES');
 
   return (
     <>
@@ -61,21 +62,45 @@ function Dossier({ d }: { d: ApprovalDossier }) {
 
       <div className="grid gap-6 desktop:grid-cols-12">
         <div className="space-y-6 desktop:col-span-8">
-          <Section title={t('dossier.summary')}>
-            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3">
-              <Stat label={t('dossier.budget')} value={money(p.totalBudgetEtb, locale)} hint={te(`funding.${p.fundingSource}`)} />
-              <Stat label={t('dossier.schedule')} value={`${fmtDate(p.plannedStart, locale, 'short')} → ${fmtDate(p.plannedEnd, locale, 'short')}`} />
-              <Stat label={t('dossier.stage')} value={tl(p.lifecycleStage)} />
-              <Stat label={t('dossier.beneficiaries')} value={num(p.beneficiaries, locale)} />
-              <Stat label={t('dossier.tranches')} value={money(scheduled, locale)} hint={pct(p.totalBudgetEtb ? (scheduled / p.totalBudgetEtb) * 100 : 0)} />
-              <Stat label={tp('overview.contractor')} value={<span className="text-base">{p.contractorName ?? '—'}</span>} />
-            </div>
+          <p className="rounded-lg border bg-card px-5 py-4 text-base leading-relaxed shadow-card">
+            {t('dossier.ask', { budget: money(p.totalBudgetEtb, locale), wereda: localizedName(p.wereda.name, locale), start: fmtDate(p.plannedStart, locale), end: fmtDate(p.plannedEnd, locale),
+              people: p.beneficiaries ? num(p.beneficiaries, locale) : '—', funding: te(`funding.${p.fundingSource}`) })}
+          </p>
+
+          <Section title={t('dossier.beforeDeciding')} hint={t('dossier.beforeDecidingHint')}>
+            {gaps.length === 0 && d.similar.length === 0 ? (
+              <p className="flex items-center gap-2 text-base"><CheckCircle2 className="h-5 w-5" style={{ color: toneVar.good }} aria-hidden />{t('dossier.allGood')}</p>
+            ) : (
+              <ul className="space-y-3">
+                {gaps.map((c) => (
+                  <li key={c.code} className="flex items-start gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0" style={{ color: toneVar.warning }} aria-hidden />
+                    <span><span className="block font-medium">{t(`missing.${c.code}` as 'missing.RISKS')}</span>{c.detail && <span className="block text-sm text-muted-foreground">{c.detail}</span>}</span></li>
+                ))}
+                {d.similar.map((x) => (
+                  <li key={x.id} className="flex items-start gap-3"><CircleAlert className="mt-0.5 h-5 w-5 shrink-0" style={{ color: toneVar.serious }} aria-hidden />
+                    <span><span className="block font-medium">{t('dossier.similarOne')}</span><Link href={`/projects/${x.id}`} className="text-sm text-primary hover:underline">{x.name} · {x.weredaName} · {te(`status.${x.status}`)}</Link></span></li>
+                ))}
+              </ul>
+            )}
+            <details className="mt-4">
+              <summary className="cursor-pointer text-sm font-medium text-primary">{t('dossier.allChecks', { passed: d.readiness.passed, total: d.readiness.total })}</summary>
+              <div className="mt-2"><ReadinessList r={d.readiness} /></div>
+            </details>
           </Section>
 
           <Section title={t('dossier.scope')}>
             <p className="whitespace-pre-line text-base leading-relaxed">{det.description || t('dossier.noneRecorded')}</p>
+            <div className="mt-5 grid grid-cols-2 gap-3 tablet:grid-cols-3">
+              <Stat label={t('dossier.budget')} value={money(p.totalBudgetEtb, locale)} hint={te(`funding.${p.fundingSource}`)} />
+              <Stat label={t('dossier.schedule')} value={`${fmtDate(p.plannedStart, locale, 'short')} → ${fmtDate(p.plannedEnd, locale, 'short')}`} />
+              <Stat label={t('dossier.beneficiaries')} value={num(p.beneficiaries, locale)} />
+              <Stat label={t('dossier.stage')} value={tl(p.lifecycleStage)} />
+              <Stat label={t('dossier.tranches')} value={money(scheduled, locale)} hint={t('dossier.ofBudget', { pct: pct(p.totalBudgetEtb ? (scheduled / p.totalBudgetEtb) * 100 : 0) })} />
+              <Stat label={tp('overview.contractor')} value={<span className="text-base">{p.contractorName ?? '—'}</span>} />
+            </div>
           </Section>
 
+          <h2 className="pt-2 text-lg font-semibold">{t('dossier.fullDetails')}</h2>
           <div className="grid gap-6 laptop:grid-cols-2">
             <Section title={t('dossier.organizations')}>
               {det.governance.organizations.length ? (
@@ -121,12 +146,6 @@ function Dossier({ d }: { d: ApprovalDossier }) {
           {a.status === 'RETURNED' && d.canResubmit && <ResubmitPanel dossier={d} />}
           {a.conditions && <Section title={t('status.conditions')}><p className="text-sm">{a.conditions}</p></Section>}
 
-          <RecordDiscussion type="APPROVAL" id={p.id} threadClassName="h-[480px]" />
-
-          <Section title={t('dossier.readiness')} hint={t('dossier.readinessHint', { passed: d.readiness.passed, total: d.readiness.total })}>
-            <ReadinessList r={d.readiness} />
-          </Section>
-
           <Section title={t('dossier.context')}>
             <dl className="space-y-3 text-sm">
               <div><dt className="text-muted-foreground">{t('dossier.ctx.sectorPortfolio', { sector: te(`sector.${p.sector}`) })}</dt><dd className="font-medium">{t('dossier.ctx.sectorPortfolioValue', { count: ctx.sectorApprovedProjects, budget: money(ctx.sectorApprovedBudgetEtb, locale).replace('ETB ', '') })}</dd></div>
@@ -136,13 +155,8 @@ function Dossier({ d }: { d: ApprovalDossier }) {
             </dl>
           </Section>
 
-          <Section title={t('dossier.similar')} hint={d.similar.length ? t('dossier.similarHint') : undefined}>
-            {d.similar.length ? (
-              <ul className="divide-y">{d.similar.map((s) => <li key={s.id} className="py-2.5"><Link href={`/projects/${s.id}`} className="font-medium hover:underline">{s.name}</Link><div className="text-sm text-muted-foreground">{s.code} · {s.weredaName} · {te(`status.${s.status}`)}</div></li>)}</ul>
-            ) : <p className="text-sm text-muted-foreground">{t('dossier.noSimilar')}</p>}
-          </Section>
-
           <Section title={t('dossier.history')}><ApprovalTrail events={a.events} /></Section>
+          <RecordDiscussion type="APPROVAL" id={p.id} threadClassName="h-[360px]" />
         </aside>
       </div>
     </>
