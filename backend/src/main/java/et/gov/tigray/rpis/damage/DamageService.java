@@ -282,12 +282,12 @@ public class DamageService {
     // ── authorisation ────────────────────────────────────────────────────
     private void requireRecordable(TaskInfo t, Facility f, CurrentUser actor) {
         if (!t.facilityId().equals(f.getId())) throw BusinessException.badRequest("facility_mismatch", "The task is for a different facility");
-        if (t.campaignStatus() != CampaignStatus.ACTIVE) throw BusinessException.conflict("campaign_not_active", "The campaign is not in fieldwork (" + t.campaignStatus() + ")");
+        if (t.campaignStatus() != CampaignStatus.ACTIVE) throw BusinessException.conflict("campaign_not_active", "Site visits for this assessment round are not under way");
         switch (t.status()) {
             case SUBMITTED, VERIFIED -> throw BusinessException.conflict("already_submitted", "This site already has an assessment; open it to revise it");
             case RETURNED -> throw BusinessException.conflict("returned_revise", "The assessment was returned; revise the existing record instead of creating a new one");
             case PLANNED -> throw BusinessException.conflict("task_not_assigned", "The site has no assessor yet");
-            case INACCESSIBLE, CANCELLED -> throw BusinessException.conflict("task_closed", "The site task is " + t.status());
+            case INACCESSIBLE, CANCELLED -> throw BusinessException.conflict("task_closed", "This site has been closed (it could not be reached or was removed)");
             default -> { }
         }
         if (actor == null) throw BusinessException.unauthorized("unauthenticated", "Sign in required");
@@ -299,23 +299,23 @@ public class DamageService {
 
     String cannotReviewReason(DamageAssessment a, TaskInfo t, CurrentUser u) {
         if (u == null) return "Sign in required";
-        if (a.getStatus() != AssessmentStatus.SUBMITTED) return "The assessment is not awaiting review (" + a.getStatus() + ")";
+        if (a.getStatus() != AssessmentStatus.SUBMITTED) return "This assessment is not waiting to be checked";
         Long me = support.agentOfUser(u.id());
         boolean author = u.id() != null && (u.id().equals(a.getSubmittedByUserId()) || u.id().equals(a.getAssessorUserId()))
             || (t != null && me != null && me.equals(t.assessorAgentId()));
-        if (author) return "You recorded this assessment; another person must verify it (separation of duties)";
+        if (author) return "You recorded this assessment; another person must check it";
         boolean oversight = u.has("ANALYST") || u.has("ADMIN")
             || (u.has("SECTOR_HEAD") && (u.sectorScope() == null || u.sectorScope() == a.getFacility().getSector()));
         boolean verifier = t != null && me != null && (me.equals(t.verifierAgentId())
             || isActiveMember(t.campaignId(), me, CampaignRole.VERIFIER) || isActiveMember(t.campaignId(), me, CampaignRole.TEAM_LEAD));
-        if (!oversight && !verifier) return "Only the site's verifier, a campaign verifier or team lead, an analyst or the sector head can verify";
+        if (!oversight && !verifier) return "Only the site's checker, an assessment round checker or team lead, an analyst or the sector head can check";
         return null;
     }
 
     private String cannotReviseReason(DamageAssessment a, TaskInfo t, CurrentUser u) {
         if (u == null) return "Sign in required";
-        if (a.getStatus() != AssessmentStatus.SUBMITTED && a.getStatus() != AssessmentStatus.RETURNED) return "Only submitted or returned assessments can be revised (" + a.getStatus() + ")";
-        if (t != null && t.campaignStatus() != CampaignStatus.ACTIVE) return "The campaign is not in fieldwork (" + t.campaignStatus() + ")";
+        if (a.getStatus() != AssessmentStatus.SUBMITTED && a.getStatus() != AssessmentStatus.RETURNED) return "Only assessments waiting to be checked or sent back can be changed";
+        if (t != null && t.campaignStatus() != CampaignStatus.ACTIVE) return "Site visits for this assessment round are not under way";
         if (u.has("ANALYST") || u.has("ADMIN")) return null;
         if (u.id() != null && u.id().equals(a.getSubmittedByUserId())) return null;
         Long me = support.agentOfUser(u.id());

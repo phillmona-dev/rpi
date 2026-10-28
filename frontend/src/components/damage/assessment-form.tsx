@@ -11,12 +11,14 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Callout, Field, MoneyInput, StepCard, errClass } from '@/components/projects/registration/ui';
 import { SectorDot } from '@/components/common/badges';
-import { ACCESS, COMPONENTS, CURRENT_USES, DAMAGE_CAUSES, INTERVENTIONS, NEED_PRIORITIES, apiMessage, severityForScore } from './shared';
+import { ACCESS, COMPONENTS, CURRENT_USES, DAMAGE_CAUSES, INTERVENTIONS, NEED_PRIORITIES, apiMessage } from './shared';
 import { mediaSrc, needPriorityTone, severityTone, toneVar } from '@/lib/domain';
 import { localizedName, money } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 const SEVERITIES: DamageSeverity[] = ['NONE', 'MINOR', 'MODERATE', 'SEVERE', 'DESTROYED'];
+/** Structural score implied by a damage level, so the person only has to choose the level. */
+const SCORE_FOR: Record<DamageSeverity, number> = { NONE: 0, MINOR: 15, MODERATE: 40, SEVERE: 65, DESTROYED: 90 };
 
 interface Row { condition: DamageSeverity | ''; cost: string; note: string }
 interface Photo { url: string; caption: string }
@@ -68,12 +70,15 @@ export function AssessmentForm({ facility, taskId, beneficiaries, location, exis
   const [locating, setLocating] = React.useState(false);
   const create = useCreateAssessment();
   const revise = useReviseAssessment(existing?.summary.id ?? -1);
+  const [scoreTouched, setScoreTouched] = React.useState(Boolean(existing));
   const set = (patch: Partial<State>) => setS((p) => ({ ...p, ...patch }));
+  const removeRow = (code: string) => setS((p) => { const { [code]: _gone, ...rows } = p.rows; return { ...p, rows }; });
   const setRow = (code: string, patch: Partial<Row>) => setS((p) => ({ ...p, rows: { ...p.rows, [code]: { ...{ condition: '', cost: '', note: '' }, ...p.rows[code], ...patch } } }));
   const catalogue = COMPONENTS[facility.sector];
   const componentTotal = Object.values(s.rows).reduce((a, r) => a + (r.condition ? toNum(r.cost) ?? 0 : 0), 0);
   const score = toNum(s.score);
-  const suggested = score === null ? null : severityForScore(Math.max(0, Math.min(100, score)));
+  const cap = toNum(s.capacity);
+  const capacityChoice = s.capacity === '' ? '' : cap === 0 ? 'NONE' : cap === 100 ? 'FULLY' : 'PARTLY';
 
   const validate = (): Errors => {
     const e: Errors = {};
@@ -153,7 +158,7 @@ export function AssessmentForm({ facility, taskId, beneficiaries, location, exis
       </div>
       {existing?.reviewNote && existing.summary.status === 'RETURNED' && <Callout tone="warning"><span className="font-semibold">{t('returnedBecause')}</span> {existing.reviewNote}</Callout>}
 
-      <StepCard title={t('visit.title')} description={t('visit.hint')}>
+      <StepCard title={`1. ${t('visit.title')}`} description={t('visit.hint')}>
         <div className="grid gap-4 tablet:grid-cols-2">
           <Field id="assessedOn" label={t('visit.date')} required error={errors.assessedOn}>{(a) => <Input type="date" max={today()} value={s.assessedOn} onChange={(e) => set({ assessedOn: e.target.value })} className={errClass(errors.assessedOn)} {...a} />}</Field>
           <Field id="assessorName" label={t('visit.assessor')} required error={errors.assessorName} hint={t('visit.assessorHint')}>{(a) => <Input value={s.assessorName} maxLength={160} onChange={(e) => set({ assessorName: e.target.value })} className={errClass(errors.assessorName)} {...a} />}</Field>
@@ -170,64 +175,92 @@ export function AssessmentForm({ facility, taskId, beneficiaries, location, exis
         {s.uxo && <Callout tone="warning"><AlertTriangle className="mr-1 inline h-4 w-4" />{t('visit.uxoWarning')}</Callout>}
       </StepCard>
 
-      <StepCard title={t('damage.title')} description={t('damage.hint')}>
-        <div className="grid gap-4 tablet:grid-cols-3">
-          <Field id="score" label={t('damage.score')} required error={errors.score} hint={suggested ? t('damage.suggests', { severity: te(`severity.${suggested}`) }) : t('damage.scoreHint')}>
-            {(a) => <Input inputMode="numeric" value={s.score} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 3); const n = toNum(v); set({ score: v, severity: s.severity || (n === null ? '' : severityForScore(Math.min(100, n))) }); }} className={cn('tabular', errClass(errors.score))} {...a} />}
-          </Field>
-          <Field id="capacity" label={t('damage.capacity')} error={errors.capacity} hint={t('damage.capacityHint')}>{(a) => <Input inputMode="numeric" value={s.capacity} onChange={(e) => set({ capacity: e.target.value.replace(/[^0-9]/g, '').slice(0, 3) })} className={cn('tabular', errClass(errors.capacity))} {...a} />}</Field>
-          <Field id="inventory" label={t('damage.inventory')} error={errors.inventory}>{(a) => <Input inputMode="numeric" value={s.inventory} onChange={(e) => set({ inventory: e.target.value.replace(/[^0-9]/g, '').slice(0, 3) })} className={cn('tabular', errClass(errors.inventory))} {...a} />}</Field>
-        </div>
-        <Field id="severity" label={t('damage.severity')} required error={errors.severity}>{() => choice(s.severity, SEVERITIES, (v) => set({ severity: v }), (v) => te(`severity.${v}`), (v) => toneVar[severityTone[v]])}</Field>
+      <StepCard title={`2. ${t('damage.title')}`} description={t('damage.hint')}>
+        <Field id="severity" label={t('damage.severity')} required error={errors.severity}>{() => (
+          <div role="radiogroup" className="grid gap-2 tablet:grid-cols-5">
+            {SEVERITIES.map((v) => {
+              const on = s.severity === v;
+              return (
+                <button key={v} type="button" role="radio" aria-checked={on} onClick={() => set({ severity: v, score: scoreTouched ? s.score : String(SCORE_FOR[v]) })}
+                  className={cn('rounded-md border-2 px-3 py-2.5 text-left transition-colors hover:bg-muted/40', on ? 'bg-muted/50' : 'border-border')} style={on ? { borderColor: toneVar[severityTone[v]] } : undefined}>
+                  <span className="flex items-center gap-2 font-semibold"><span className="h-3 w-3 rounded-full" style={{ background: toneVar[severityTone[v]] }} />{te(`severity.${v}`)}</span>
+                  <span className="mt-0.5 block text-sm text-muted-foreground">{t(`damage.levels.${v}`)}</span>
+                </button>
+              );
+            })}
+          </div>)}</Field>
+        <Field id="capacity" label={t('damage.capacity')} error={errors.capacity}>{() => choice(capacityChoice, ['NONE', 'PARTLY', 'FULLY'] as const,
+          (v) => set({ capacity: v === 'NONE' ? '0' : v === 'FULLY' ? '100' : capacityChoice === 'PARTLY' ? s.capacity : '50' }), (v) => t(`damage.works.${v}`))}</Field>
         <Field id="causes" label={t('damage.causes')} hint={t('damage.causesHint')}>{() => (
           <div className="flex flex-wrap gap-2">
             {DAMAGE_CAUSES.map((c) => { const on = s.causes.includes(c); return (
               <button key={c} type="button" aria-pressed={on} onClick={() => set({ causes: on ? s.causes.filter((x) => x !== c) : [...s.causes, c] })}
                 className={cn('rounded-full border px-3 py-1.5 text-sm', on ? 'border-primary bg-primary/10 font-medium text-primary' : 'hover:bg-muted/40')}>{te(`damageCause.${c}`)}</button>); })}
           </div>)}</Field>
+        <details className="rounded-md border px-4 py-3" open={Boolean(errors.score || errors.inventory || (errors.capacity && capacityChoice === 'PARTLY'))}>
+          <summary className="cursor-pointer text-sm font-medium text-primary">{t('moreDetails')}</summary>
+          <div className="mt-3 grid gap-4 tablet:grid-cols-3">
+            <Field id="score" label={t('damage.score')} required error={errors.score} hint={t('damage.scoreHint')}>
+              {(a) => <Input inputMode="numeric" value={s.score} onChange={(e) => { setScoreTouched(true); set({ score: e.target.value.replace(/[^0-9]/g, '').slice(0, 3) }); }} className={cn('tabular', errClass(errors.score))} {...a} />}
+            </Field>
+            {capacityChoice === 'PARTLY' && <Field id="capacityPct" label={t('damage.capacityPct')} error={errors.capacity}>{(a) => <Input inputMode="numeric" value={s.capacity} onChange={(e) => set({ capacity: e.target.value.replace(/[^0-9]/g, '').slice(0, 3) })} className={cn('tabular', errClass(errors.capacity))} {...a} />}</Field>}
+            <Field id="inventory" label={t('damage.inventory')} error={errors.inventory}>{(a) => <Input inputMode="numeric" value={s.inventory} onChange={(e) => set({ inventory: e.target.value.replace(/[^0-9]/g, '').slice(0, 3) })} className={cn('tabular', errClass(errors.inventory))} {...a} />}</Field>
+          </div>
+        </details>
       </StepCard>
 
-      <StepCard title={t('components.title')} description={t('components.hint')}>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-sm">
-            <thead><tr className="border-b text-left text-muted-foreground"><th className="py-2 pr-3 font-medium">{t('components.element')}</th><th className="py-2 pr-3 font-medium">{t('components.condition')}</th><th className="py-2 pr-3 text-right font-medium">{t('components.cost')}</th><th className="py-2 font-medium">{t('components.note')}</th></tr></thead>
-            <tbody>
-              {catalogue.map((code) => {
-                const r = s.rows[code] ?? { condition: '', cost: '', note: '' };
-                return (
-                  <tr key={code} className="border-b last:border-0">
-                    <td className="py-2 pr-3 font-medium">{te(`component.${code}` as 'component.ROOF')}</td>
-                    <td className="py-2 pr-3">
-                      <Select value={r.condition || 'SKIP'} onValueChange={(v) => setRow(code, { condition: v === 'SKIP' ? '' : (v as DamageSeverity) })}>
-                        <SelectTrigger className="w-[170px]" aria-label={`${te(`component.${code}` as 'component.ROOF')} — ${t('components.condition')}`}><SelectValue /></SelectTrigger>
-                        <SelectContent><SelectItem value="SKIP">{t('components.notSurveyed')}</SelectItem>{SEVERITIES.map((v) => <SelectItem key={v} value={v}>{te(`severity.${v}`)}</SelectItem>)}</SelectContent>
-                      </Select>
-                    </td>
-                    <td className="w-48 py-2 pr-3"><MoneyInput value={r.cost} onValueChange={(v) => setRow(code, { cost: v })} disabled={!r.condition} aria-label={`${te(`component.${code}` as 'component.ROOF')} — ${t('components.cost')}`} /></td>
-                    <td className="py-2"><Input value={r.note} maxLength={500} onChange={(e) => setRow(code, { note: e.target.value })} disabled={!r.condition} aria-label={`${te(`component.${code}` as 'component.ROOF')} — ${t('components.note')}`} /></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      <StepCard title={`3. ${t('components.title')}`} description={t('components.hint')}>
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t('components.title')}>
+          {catalogue.map((code) => { const on = Boolean(s.rows[code]?.condition); return (
+            <button key={code} type="button" aria-pressed={on} onClick={() => on ? removeRow(code) : setRow(code, { condition: 'MODERATE' })}
+              className={cn('rounded-full border px-3 py-1.5 text-sm', on ? 'border-primary bg-primary/10 font-medium text-primary' : 'hover:bg-muted/40')}>{on ? '✓ ' : '+ '}{te(`component.${code}` as 'component.ROOF')}</button>); })}
         </div>
-        <p className="text-sm text-muted-foreground">{t('components.total', { amount: money(componentTotal, locale, { compact: false }) })}</p>
+        {catalogue.some((c) => s.rows[c]?.condition) && (
+          <ul className="divide-y rounded-md border">
+            {catalogue.filter((c) => s.rows[c]?.condition).map((code) => {
+              const r = s.rows[code];
+              const name = te(`component.${code}` as 'component.ROOF');
+              return (
+                <li key={code} className="grid items-center gap-3 p-3 tablet:grid-cols-[1fr_180px_180px_1fr]">
+                  <span className="font-medium">{name}</span>
+                  <Select value={r.condition} onValueChange={(v) => setRow(code, { condition: v as DamageSeverity })}>
+                    <SelectTrigger aria-label={`${name} — ${t('components.condition')}`}><SelectValue /></SelectTrigger>
+                    <SelectContent>{SEVERITIES.map((v) => <SelectItem key={v} value={v}>{te(`severity.${v}`)}</SelectItem>)}</SelectContent>
+                  </Select>
+                  <MoneyInput value={r.cost} onValueChange={(v) => setRow(code, { cost: v })} placeholder={t('components.cost')} aria-label={`${name} — ${t('components.cost')}`} />
+                  <Input value={r.note} maxLength={500} onChange={(e) => setRow(code, { note: e.target.value })} placeholder={t('components.note')} aria-label={`${name} — ${t('components.note')}`} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {componentTotal > 0 && <p className="text-sm text-muted-foreground">{t('components.total', { amount: money(componentTotal, locale, { compact: false }) })}</p>}
       </StepCard>
 
-      <StepCard title={t('needs.title')} description={t('needs.hint')}>
-        <div className="grid gap-4 tablet:grid-cols-3">
-          <Field id="repair" label={t('needs.repair')} hint={componentTotal > 0 ? t('needs.repairHint', { amount: money(componentTotal, locale) }) : undefined}>{(a) => <MoneyInput value={s.repair} onValueChange={(v) => set({ repair: v })} placeholder={componentTotal > 0 ? String(componentTotal) : undefined} {...a} />}</Field>
-          <Field id="replacement" label={t('needs.replacement')}>{(a) => <MoneyInput value={s.replacement} onValueChange={(v) => set({ replacement: v })} {...a} />}</Field>
-          <Field id="equipment" label={t('needs.equipment')}>{(a) => <MoneyInput value={s.equipment} onValueChange={(v) => set({ equipment: v })} {...a} />}</Field>
-        </div>
-        <Field id="intervention" label={t('needs.intervention')} required error={errors.intervention}>{() => choice(s.intervention, INTERVENTIONS, (v) => set({ intervention: v, priority: v === 'NO_ACTION' ? '' : s.priority }), (v) => te(`intervention.${v}`))}</Field>
+      <StepCard title={`4. ${t('needs.title')}`} description={t('needs.hint')}>
+        <Field id="intervention" label={t('needs.intervention')} required error={errors.intervention}>{() => (
+          <div role="radiogroup" className="grid gap-2 tablet:grid-cols-5">
+            {INTERVENTIONS.map((v) => { const on = s.intervention === v; return (
+              <button key={v} type="button" role="radio" aria-checked={on} onClick={() => set({ intervention: v, priority: v === 'NO_ACTION' ? '' : s.priority })}
+                className={cn('rounded-md border-2 px-3 py-2.5 text-left hover:bg-muted/40', on ? 'border-primary bg-muted/50' : 'border-border')}>
+                <span className="block font-semibold">{te(`intervention.${v}`)}</span><span className="mt-0.5 block text-sm text-muted-foreground">{t(`needs.actions.${v}`)}</span>
+              </button>); })}
+          </div>)}</Field>
         {s.intervention && s.intervention !== 'NO_ACTION' && (
           <Field id="priority" label={t('needs.priority')} required error={errors.priority} hint={t('needs.priorityHint')}>{() => choice(s.priority, NEED_PRIORITIES, (v) => set({ priority: v }), (v) => te(`needPriority.${v}`), (v) => toneVar[needPriorityTone[v]])}</Field>
         )}
-        <Field id="beneficiaries" label={t('needs.beneficiaries')} hint={t('needs.beneficiariesHint')} className="tablet:w-1/3">{(a) => <Input inputMode="numeric" value={s.beneficiaries} onChange={(e) => set({ beneficiaries: e.target.value.replace(/[^0-9]/g, '') })} className="tabular" {...a} />}</Field>
+        <div className="grid gap-4 tablet:grid-cols-3">
+          <Field id="repair" label={t('needs.repair')} hint={componentTotal > 0 ? t('needs.repairHint', { amount: money(componentTotal, locale) }) : undefined}>{(a) => <MoneyInput value={s.repair} onValueChange={(v) => set({ repair: v })} placeholder={componentTotal > 0 ? String(componentTotal) : undefined} {...a} />}</Field>
+          <Field id="replacement" label={t('needs.replacement')}>{(a) => <MoneyInput value={s.replacement} onValueChange={(v) => set({ replacement: v })} {...a} />}</Field>
+          <Field id="beneficiaries" label={t('needs.beneficiaries')} hint={t('needs.beneficiariesHint')}>{(a) => <Input inputMode="numeric" value={s.beneficiaries} onChange={(e) => set({ beneficiaries: e.target.value.replace(/[^0-9]/g, '') })} className="tabular" {...a} />}</Field>
+        </div>
+        <details className="rounded-md border px-4 py-3">
+          <summary className="cursor-pointer text-sm font-medium text-primary">{t('moreDetails')}</summary>
+          <div className="mt-3 tablet:w-1/3"><Field id="equipment" label={t('needs.equipment')}>{(a) => <MoneyInput value={s.equipment} onValueChange={(v) => set({ equipment: v })} {...a} />}</Field></div>
+        </details>
       </StepCard>
 
-      <StepCard title={t('evidence.title')} description={t('evidence.hint')}>
+      <StepCard title={`5. ${t('evidence.title')}`} description={t('evidence.hint')}>
         <Field id="notes" label={t('evidence.notes')}>{(a) => <Textarea value={s.notes} onChange={(e) => set({ notes: e.target.value })} maxLength={4000} className="min-h-[120px]" {...a} />}</Field>
         <div className="grid items-end gap-4 tablet:grid-cols-[1fr_1fr_auto]">
           <Field id="lat" label={t('evidence.lat')} error={errors.lat}>{(a) => <Input inputMode="decimal" value={s.lat} onChange={(e) => set({ lat: e.target.value.replace(/[^0-9.\-]/g, '') })} className={cn('tabular', errClass(errors.lat))} {...a} />}</Field>

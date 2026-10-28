@@ -61,8 +61,8 @@ public class CampaignService {
             new MapSqlParameterSource("id", id));
         CampaignDtos.CampaignSummary summary = queries.campaigns(null, null, id).get(0);
         boolean manage = canManage(u);
-        String startReason = manage ? cannotStartReason(c) : "Only analysts and administrators run campaigns";
-        String closeReason = manage ? cannotCloseReason(c) : "Only analysts and administrators run campaigns";
+        String startReason = manage ? cannotStartReason(c) : "Only analysts and administrators run assessment rounds";
+        String closeReason = manage ? cannotCloseReason(c) : "Only analysts and administrators run assessment rounds";
         String endorseReason = cannotEndorseReason(c, u);
         return new CampaignDtos.CampaignDetail(summary, (String) row.get("objective"), (String) row.get("methodology"), queries.weredas(id),
             c.coordinatorUserId(), (String) row.get("created_by_name"), ts(row.get("created_at")), ts(row.get("started_at")), ts(row.get("fieldwork_closed_at")),
@@ -164,7 +164,7 @@ public class CampaignService {
             SELECT DISTINCT w.name_en FROM assessment_task t JOIN facility f ON f.id = t.facility_id JOIN wereda w ON w.id = f.wereda_id
             WHERE t.campaign_id = :c AND t.status <> 'CANCELLED' AND NOT (f.wereda_id IN (:keep))
             """, new MapSqlParameterSource("c", id).addValue("keep", req.weredaIds()), String.class);
-        if (!blocked.isEmpty()) throw BusinessException.conflict("wereda_has_sites", "These weredas have sites in the campaign and must stay in scope: " + String.join(", ", blocked));
+        if (!blocked.isEmpty()) throw BusinessException.conflict("wereda_has_sites", "These weredas have sites in the assessment round and must stay in scope: " + String.join(", ", blocked));
         if (c.sector() != req.sector() && req.sector() != null) {
             Long other = jdbc.queryForObject("SELECT count(*) FROM assessment_task t JOIN facility f ON f.id = t.facility_id WHERE t.campaign_id = :c AND t.status <> 'CANCELLED' AND f.sector <> :s",
                 new MapSqlParameterSource("c", id).addValue("s", req.sector().name()), Long.class);
@@ -234,12 +234,12 @@ public class CampaignService {
                 support.notice(to, "CAMPAIGN_ENDORSED", "SUCCESS", "/damage/campaigns/" + id, data("campaignId", id, "code", c.code(), "name", c.name(), "reference", ref));
             }
             case RETURN -> {
-                if (note == null || note.length() < 10) throw BusinessException.invalid("A reason is required", List.of(Map.of("field", "note", "message", "Explain what must be done before endorsement in at least 10 characters")));
+                if (note == null || note.length() < 10) throw BusinessException.invalid("A reason is required", List.of(Map.of("field", "note", "message", "Explain what must be done before approval in at least 10 characters")));
                 jdbc.update("UPDATE assessment_campaign SET status = 'ACTIVE', fieldwork_closed_at = NULL, updated_at = now() WHERE id = :id", new MapSqlParameterSource("id", id));
                 support.log(id, null, null, "RETURNED_TO_FIELDWORK", note, null);
                 support.notice(to, "CAMPAIGN_RETURNED", "WARNING", "/damage/campaigns/" + id, data("campaignId", id, "code", c.code(), "name", c.name(), "excerpt", note));
             }
-            default -> throw BusinessException.badRequest("invalid_decision", "Endorse (APPROVE) or return (RETURN) the campaign");
+            default -> throw BusinessException.badRequest("invalid_decision", "Approve (APPROVE) or return (RETURN) the assessment round");
         }
         return detail(id);
     }
@@ -269,7 +269,7 @@ public class CampaignService {
         var a = agent.get(0);
         if (!"ACTIVE".equals(a.get("status"))) throw BusinessException.conflict("agent_not_active", a.get("full_name") + " is not an active team member (" + a.get("status") + ")");
         if ((req.role() == CampaignRole.VERIFIER || req.role() == CampaignRole.TEAM_LEAD) && "DATA_COLLECTOR".equals(a.get("agent_type")))
-            throw BusinessException.conflict("role_needs_analyst", "Team leads and verifiers must be field analysts or supervisors");
+            throw BusinessException.conflict("role_needs_analyst", "Team leads and checkers must be field analysts or supervisors");
         if (isActiveMember(id, req.agentId(), req.role())) throw BusinessException.conflict("already_member", a.get("full_name") + " already holds this role in the campaign");
         CurrentUser u = CurrentUser.get().orElse(null);
         jdbc.update("INSERT INTO assessment_campaign_member(campaign_id, agent_id, role, added_by_name) VALUES (:c, :a, :r, :by)",
@@ -288,7 +288,7 @@ public class CampaignService {
         requireStatus(c, CampaignStatus.PLANNING, CampaignStatus.ACTIVE, CampaignStatus.REVIEW);
         var rows = jdbc.queryForList("SELECT m.agent_id, m.role, fa.full_name FROM assessment_campaign_member m JOIN field_agent fa ON fa.id = m.agent_id WHERE m.id = :m AND m.campaign_id = :c AND m.active",
             new MapSqlParameterSource("m", memberId).addValue("c", id));
-        if (rows.isEmpty()) throw new NotFoundException("Campaign member", memberId);
+        if (rows.isEmpty()) throw new NotFoundException("Assessment round member", memberId);
         Long agentId = ((Number) rows.get(0).get("agent_id")).longValue();
         CampaignRole role = CampaignRole.valueOf((String) rows.get(0).get("role"));
         // Sites still depending on this person in this role must be handed over first.
@@ -321,13 +321,13 @@ public class CampaignService {
         for (Long fid : new LinkedHashSet<>(req.facilityIds())) {
             Facility f = facilities.findWithWeredaById(fid).orElse(null);
             if (f == null) { skipped.add("#" + fid + ": unknown facility"); continue; }
-            if (!scope.contains(f.getWereda().getId())) { skipped.add(f.getName() + ": outside the campaign's weredas"); continue; }
-            if (c.sector() != null && c.sector() != f.getSector()) { skipped.add(f.getName() + ": outside the campaign's sector"); continue; }
+            if (!scope.contains(f.getWereda().getId())) { skipped.add(f.getName() + ": outside the weredas of this assessment round"); continue; }
+            if (c.sector() != null && c.sector() != f.getSector()) { skipped.add(f.getName() + ": outside the sector of this assessment round"); continue; }
             int n = jdbc.update("""
                 INSERT INTO assessment_task(campaign_id, facility_id, priority, due_on) VALUES (:c, :f, :p, :due) ON CONFLICT (campaign_id, facility_id) DO NOTHING
                 """, new MapSqlParameterSource("c", id).addValue("f", fid).addValue("p", (req.priority() == null ? AssignmentPriority.NORMAL : req.priority()).name())
                     .addValue("due", req.dueOn() != null ? req.dueOn() : c.plannedEnd()));
-            if (n == 0) skipped.add(f.getName() + ": already in the campaign"); else added++;
+            if (n == 0) skipped.add(f.getName() + ": already in this assessment round"); else added++;
         }
         if (added > 0) support.log(id, null, null, "SITES_ADDED", null, data("count", added));
         return new CampaignDtos.BulkResult(added, skipped);
@@ -339,9 +339,9 @@ public class CampaignService {
     public CampaignDtos.TaskRow registerFacility(Long id, CampaignDtos.NewFacilityRequest req) {
         Campaign c = load(id);
         requireStatus(c, CampaignStatus.PLANNING, CampaignStatus.ACTIVE);
-        if (c.sector() != null && req.facilityType().sector != c.sector()) throw BusinessException.badRequest("sector_mismatch", "The campaign covers the " + c.sector() + " sector only");
+        if (c.sector() != null && req.facilityType().sector != c.sector()) throw BusinessException.badRequest("sector_mismatch", "The assessment round covers the " + c.sector() + " sector only");
         Long inScope = jdbc.queryForObject("SELECT count(*) FROM assessment_campaign_wereda WHERE campaign_id = :c AND wereda_id = :w", new MapSqlParameterSource("c", id).addValue("w", req.weredaId()), Long.class);
-        if (inScope == null || inScope == 0) throw BusinessException.badRequest("wereda_out_of_scope", "Add the wereda to the campaign first");
+        if (inScope == null || inScope == 0) throw BusinessException.badRequest("wereda_out_of_scope", "Add the wereda to the assessment round first");
         if ((req.latitude() == null) != (req.longitude() == null)) throw BusinessException.badRequest("coordinates", "Provide both latitude and longitude, or neither");
         if (req.latitude() != null && (req.latitude() < LAT_MIN || req.latitude() > LAT_MAX || req.longitude() < LNG_MIN || req.longitude() > LNG_MAX))
             throw BusinessException.badRequest("coordinates", "The coordinates are outside Tigray");
@@ -374,14 +374,14 @@ public class CampaignService {
         Campaign c = load(id);
         requireStatus(c, CampaignStatus.PLANNING, CampaignStatus.ACTIVE);
         if (req.assessorAgentId() == null && req.verifierAgentId() == null && req.dueOn() == null && req.priority() == null && req.instructions() == null)
-            throw BusinessException.badRequest("nothing_to_change", "Choose an assessor, verifier, due date, priority or instructions");
+            throw BusinessException.badRequest("nothing_to_change", "Choose an assessor, checker, due date, priority or instructions");
         if (req.assessorAgentId() != null && !(isActiveMember(id, req.assessorAgentId(), CampaignRole.ASSESSOR) || isActiveMember(id, req.assessorAgentId(), CampaignRole.ENGINEER)
             || isActiveMember(id, req.assessorAgentId(), CampaignRole.TEAM_LEAD)))
-            throw BusinessException.conflict("not_assessor", "The assessor must be on the campaign team as assessor, engineer or team lead");
+            throw BusinessException.conflict("not_assessor", "The assessor must be on the assessment round team as assessor, engineer or team lead");
         if (req.verifierAgentId() != null && !(isActiveMember(id, req.verifierAgentId(), CampaignRole.VERIFIER) || isActiveMember(id, req.verifierAgentId(), CampaignRole.TEAM_LEAD)))
-            throw BusinessException.conflict("not_verifier", "The verifier must be on the campaign team as verifier or team lead");
+            throw BusinessException.conflict("not_verifier", "The checker must be on the assessment round team as checker or team lead");
         if (req.assessorAgentId() != null && req.assessorAgentId().equals(req.verifierAgentId()))
-            throw BusinessException.conflict("same_person", "The assessor and the verifier of a site must be different people");
+            throw BusinessException.conflict("same_person", "The assessor and the checker of a site must be different people");
 
         CurrentUser u = CurrentUser.get().orElse(null);
         List<String> skipped = new ArrayList<>();
@@ -390,18 +390,18 @@ public class CampaignService {
         for (Long taskId : new LinkedHashSet<>(req.taskIds())) {
             var rows = jdbc.queryForList("SELECT t.status, t.assessor_agent_id, t.verifier_agent_id, f.name FROM assessment_task t JOIN facility f ON f.id = t.facility_id WHERE t.id = :t AND t.campaign_id = :c",
                 new MapSqlParameterSource("t", taskId).addValue("c", id));
-            if (rows.isEmpty()) { skipped.add("#" + taskId + ": not in this campaign"); continue; }
+            if (rows.isEmpty()) { skipped.add("#" + taskId + ": not in this assessment round"); continue; }
             var t = rows.get(0);
             TaskStatus status = TaskStatus.valueOf((String) t.get("status"));
             String name = (String) t.get("name");
             Long assessor = t.get("assessor_agent_id") == null ? null : ((Number) t.get("assessor_agent_id")).longValue();
             Long verifier = t.get("verifier_agent_id") == null ? null : ((Number) t.get("verifier_agent_id")).longValue();
-            if (!OPEN.contains(status)) { skipped.add(name + ": " + status.name().toLowerCase(Locale.ROOT)); continue; }
+            if (!OPEN.contains(status)) { skipped.add(name + (status == TaskStatus.VERIFIED ? ": already checked" : ": closed (unreachable or removed)")); continue; }
             boolean changeAssessor = req.assessorAgentId() != null && !req.assessorAgentId().equals(assessor);
             if (changeAssessor && (status == TaskStatus.SUBMITTED || status == TaskStatus.RETURNED)) { skipped.add(name + ": already recorded by the current assessor"); continue; }
             Long newAssessor = changeAssessor ? req.assessorAgentId() : assessor;
             Long newVerifier = req.verifierAgentId() != null ? req.verifierAgentId() : verifier;
-            if (newAssessor != null && newAssessor.equals(newVerifier)) { skipped.add(name + ": assessor and verifier would be the same person"); continue; }
+            if (newAssessor != null && newAssessor.equals(newVerifier)) { skipped.add(name + ": the assessor and the checker would be the same person"); continue; }
             jdbc.update("""
                 UPDATE assessment_task SET assessor_agent_id = :a, verifier_agent_id = :v,
                        due_on = coalesce(:due, due_on), priority = coalesce(:p, priority), instructions = coalesce(:ins, instructions),
@@ -439,27 +439,27 @@ public class CampaignService {
         switch (to) {
             case IN_PROGRESS -> {
                 if (!(manage || assessor || lead)) throw BusinessException.forbidden("not_assessor", "Only the site's assessor or a team lead can start it");
-                if (c.status() != CampaignStatus.ACTIVE) throw BusinessException.conflict("campaign_not_active", "The campaign is not in fieldwork");
+                if (c.status() != CampaignStatus.ACTIVE) throw BusinessException.conflict("campaign_not_active", "Site visits for this assessment round are not under way");
                 if (from != TaskStatus.ASSIGNED) throw BusinessException.conflict("invalid_transition", "Only assigned sites can be started");
             }
             case INACCESSIBLE -> {
                 if (!(manage || assessor || lead)) throw BusinessException.forbidden("not_assessor", "Only the site's assessor, a team lead or an analyst can report access problems");
-                if (!EnumSet.of(TaskStatus.PLANNED, TaskStatus.ASSIGNED, TaskStatus.IN_PROGRESS, TaskStatus.RETURNED).contains(from)) throw BusinessException.conflict("invalid_transition", "The site is " + from);
+                if (!EnumSet.of(TaskStatus.PLANNED, TaskStatus.ASSIGNED, TaskStatus.IN_PROGRESS, TaskStatus.RETURNED).contains(from)) throw BusinessException.conflict("invalid_transition", "This site cannot be changed at this point");
                 requireNote(note, "Describe why the site cannot be reached (security, road, flooding…)");
             }
             case CANCELLED -> {
                 if (!manage) throw BusinessException.forbidden("not_manager", "Only analysts and administrators remove sites");
-                if (!EnumSet.of(TaskStatus.PLANNED, TaskStatus.ASSIGNED, TaskStatus.IN_PROGRESS, TaskStatus.RETURNED, TaskStatus.INACCESSIBLE).contains(from)) throw BusinessException.conflict("invalid_transition", "The site is " + from);
-                requireNote(note, "Explain why the site is removed from the campaign");
+                if (!EnumSet.of(TaskStatus.PLANNED, TaskStatus.ASSIGNED, TaskStatus.IN_PROGRESS, TaskStatus.RETURNED, TaskStatus.INACCESSIBLE).contains(from)) throw BusinessException.conflict("invalid_transition", "This site cannot be changed at this point");
+                requireNote(note, "Explain why the site is removed from the assessment round");
             }
             case PLANNED, ASSIGNED -> {
                 if (!manage) throw BusinessException.forbidden("not_manager", "Only analysts and administrators reopen sites");
                 if (from != TaskStatus.INACCESSIBLE && from != TaskStatus.CANCELLED) throw BusinessException.conflict("invalid_transition", "Only inaccessible or cancelled sites can be reopened");
                 to = t.assessor() == null ? TaskStatus.PLANNED : TaskStatus.ASSIGNED;
             }
-            default -> throw BusinessException.badRequest("invalid_status", "Sites move to submitted and verified through their assessment");
+            default -> throw BusinessException.badRequest("invalid_status", "Sites move to submitted and checked through their assessment");
         }
-        if (c.status() == CampaignStatus.COMPLETED || c.status() == CampaignStatus.CANCELLED) throw BusinessException.conflict("campaign_closed", "The campaign is " + c.status());
+        if (c.status() == CampaignStatus.COMPLETED || c.status() == CampaignStatus.CANCELLED) throw BusinessException.conflict("campaign_closed", "This assessment round is already finished or cancelled");
         jdbc.update("""
             UPDATE assessment_task SET status = :s, status_note = :n, started_at = CASE WHEN :s = 'IN_PROGRESS' THEN now() ELSE started_at END, updated_at = now() WHERE id = :t
             """, new MapSqlParameterSource("t", taskId).addValue("s", to.name()).addValue("n", note, Types.VARCHAR));
@@ -471,7 +471,7 @@ public class CampaignService {
 
     // ── rules ────────────────────────────────────────────────────────────
     private String cannotStartReason(Campaign c) {
-        if (c.status() != CampaignStatus.PLANNING) return "The campaign has already started (" + c.status() + ")";
+        if (c.status() != CampaignStatus.PLANNING) return "The assessment round has already started";
         var r = jdbc.queryForMap("""
             SELECT (SELECT count(*) FROM assessment_task WHERE campaign_id = :c AND status <> 'CANCELLED') sites,
                    (SELECT count(*) FROM assessment_task WHERE campaign_id = :c AND status = 'PLANNED') unassigned,
@@ -480,14 +480,14 @@ public class CampaignService {
             """, new MapSqlParameterSource("c", c.id()));
         if (((Number) r.get("sites")).longValue() == 0) return "Add the sites to assess first";
         if (((Number) r.get("assessors")).longValue() == 0) return "Add at least one assessor to the team";
-        if (((Number) r.get("verifiers")).longValue() == 0) return "Add at least one verifier or team lead to the team";
+        if (((Number) r.get("verifiers")).longValue() == 0) return "Add at least one checker or team lead to the team";
         long unassigned = ((Number) r.get("unassigned")).longValue();
         if (unassigned > 0) return unassigned + " sites have no assessor yet";
         return null;
     }
 
     private String cannotCloseReason(Campaign c) {
-        if (c.status() != CampaignStatus.ACTIVE) return "Fieldwork can only be closed while the campaign is active";
+        if (c.status() != CampaignStatus.ACTIVE) return "Site visits can only be closed while the assessment round is active";
         var r = jdbc.queryForMap("""
             SELECT count(*) FILTER (WHERE status IN ('PLANNED', 'ASSIGNED', 'IN_PROGRESS')) open, count(*) FILTER (WHERE status = 'SUBMITTED') submitted,
                    count(*) FILTER (WHERE status = 'RETURNED') returned, count(*) FILTER (WHERE status = 'VERIFIED') verified
@@ -495,10 +495,10 @@ public class CampaignService {
             """, new MapSqlParameterSource("c", c.id()));
         List<String> left = new ArrayList<>();
         if (((Number) r.get("open")).longValue() > 0) left.add(r.get("open") + " not yet assessed");
-        if (((Number) r.get("submitted")).longValue() > 0) left.add(r.get("submitted") + " awaiting verification");
-        if (((Number) r.get("returned")).longValue() > 0) left.add(r.get("returned") + " returned for revision");
-        if (!left.isEmpty()) return "Sites still open: " + String.join(", ", left) + ". Finish them, or mark them inaccessible or cancelled";
-        if (((Number) r.get("verified")).longValue() == 0) return "No site has a verified assessment";
+        if (((Number) r.get("submitted")).longValue() > 0) left.add(r.get("submitted") + " waiting to be checked");
+        if (((Number) r.get("returned")).longValue() > 0) left.add(r.get("returned") + " sent back for changes");
+        if (!left.isEmpty()) return "Sites still open: " + String.join(", ", left) + ". Finish them, or mark them as unreachable or removed";
+        if (((Number) r.get("verified")).longValue() == 0) return "No site has a checked assessment";
         return null;
     }
 
@@ -506,16 +506,16 @@ public class CampaignService {
         if (u == null) return "Sign in required";
         boolean executive = u.has("EXECUTIVE");
         boolean head = u.has("SECTOR_HEAD") && c.sector() != null && (u.sectorScope() == null || u.sectorScope() == c.sector());
-        if (!executive && !head) return c.sector() == null ? "Only the Chief Executive endorses multi-sector campaigns" : "Only the sector head or the Chief Executive endorses campaign findings";
-        if (c.status() != CampaignStatus.REVIEW) return "The campaign is not awaiting endorsement (" + c.status() + ")";
-        if (u.id() != null && (u.id().equals(c.coordinatorUserId()) || u.id().equals(c.createdByUserId()))) return "You ran this campaign; another person must endorse it (separation of duties)";
+        if (!executive && !head) return c.sector() == null ? "Only the Chief Executive approves multi-sector assessment rounds" : "Only the sector head or the Chief Executive approves assessment round findings";
+        if (c.status() != CampaignStatus.REVIEW) return "The assessment round is not waiting for approval";
+        if (u.id() != null && (u.id().equals(c.coordinatorUserId()) || u.id().equals(c.createdByUserId()))) return "You ran this assessment round; another person must approve it";
         return null;
     }
 
     private void validate(CampaignDtos.CampaignRequest req, CurrentUser u, Campaign existing) {
         List<Map<String, String>> errors = new ArrayList<>();
         if (req.plannedEnd().isBefore(req.plannedStart())) errors.add(Map.of("field", "plannedEnd", "message", "The end date must be on or after the start date"));
-        if (existing == null && req.plannedEnd().isBefore(LocalDate.now(ZoneOffset.UTC))) errors.add(Map.of("field", "plannedEnd", "message", "The campaign cannot end in the past"));
+        if (existing == null && req.plannedEnd().isBefore(LocalDate.now(ZoneOffset.UTC))) errors.add(Map.of("field", "plannedEnd", "message", "The assessment round cannot end in the past"));
         if (u != null && u.sectorScope() != null && req.sector() != u.sectorScope()) errors.add(Map.of("field", "sector", "message", "Your account is limited to the " + u.sectorScope() + " sector"));
         Set<Integer> ids = new HashSet<>(req.weredaIds());
         Long known = jdbc.queryForObject("SELECT count(*) FROM wereda WHERE id IN (:ids)", new MapSqlParameterSource("ids", ids), Long.class);
@@ -527,7 +527,7 @@ public class CampaignService {
                 """, new MapSqlParameterSource("id", req.coordinatorUserId()), Long.class);
             if (ok == null || ok == 0) errors.add(Map.of("field", "coordinatorUserId", "message", "The coordinator must be an active analyst, sector head or administrator"));
         }
-        if (!errors.isEmpty()) throw BusinessException.invalid("The campaign has errors", errors);
+        if (!errors.isEmpty()) throw BusinessException.invalid("The assessment round has errors", errors);
     }
 
     private void setWeredas(Long id, List<Integer> weredaIds) {
@@ -563,18 +563,18 @@ public class CampaignService {
                 rs.getString("sector") == null ? null : Sector.valueOf(rs.getString("sector")), CampaignStatus.valueOf(rs.getString("status")),
                 rs.getObject("planned_start", LocalDate.class), rs.getObject("planned_end", LocalDate.class),
                 (Long) rs.getObject("coordinator_user_id"), (Long) rs.getObject("created_by_user_id"))).stream().findFirst()
-            .orElseThrow(() -> new NotFoundException("Assessment campaign", id));
+            .orElseThrow(() -> new NotFoundException("Assessment assessment round", id));
     }
 
     private static void requireVisible(Campaign c) {
         CurrentUser.get().ifPresent(u -> {
             if (u.has("SECTOR_HEAD") && u.sectorScope() != null && c.sector() != null && c.sector() != u.sectorScope())
-                throw BusinessException.forbidden("out_of_scope", "This campaign is outside your sector");
+                throw BusinessException.forbidden("out_of_scope", "This assessment round is outside your sector");
         });
     }
 
     private static void requireStatus(Campaign c, CampaignStatus... allowed) {
-        if (!Arrays.asList(allowed).contains(c.status())) throw BusinessException.conflict("campaign_status", "Not possible while the campaign is " + c.status());
+        if (!Arrays.asList(allowed).contains(c.status())) throw BusinessException.conflict("campaign_status", "This is not possible at the current stage of the assessment round");
     }
 
     private static void requireNote(String note, String message) {
