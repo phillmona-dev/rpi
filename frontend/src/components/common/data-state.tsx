@@ -14,13 +14,17 @@ export function DataState({ isLoading, error, isEmpty, onRetry, skeleton, emptyT
   if (isLoading) return <div className={cn('space-y-2', className)} aria-busy="true" aria-live="polite">{skeleton ?? Array.from({ length: rows }).map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}</div>;
   if (error) {
     const e = error as Partial<ApiError>;
+    // Plain words for the common cases; the server's own text only for problems with what was sent (4xx).
+    const denied = e.status === 401 || e.status === 403;
+    const title = denied ? t('forbidden') : e.status === 404 ? t('notFoundPlain') : t('error');
+    const detail = denied ? t('forbiddenHint') : e.status && e.status >= 400 && e.status < 500 && e.status !== 404 ? e.detail : t('errorHint');
     return (
       <div role="alert" className={cn('flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-destructive/40 bg-destructive/5 p-6 text-center', className)}>
         <AlertTriangle className="h-5 w-5 text-destructive" />
-        <p className="text-sm font-medium">{e.title ?? t('error')}</p>
-        {e.detail && <p className="max-w-md text-xs text-muted-foreground">{e.detail}</p>}
-        {e.correlationId && <p className="text-2xs text-muted-foreground font-mono">ID {e.correlationId}</p>}
-        {onRetry && <Button size="sm" variant="outline" onClick={onRetry}><RefreshCw />{t('retry')}</Button>}
+        <p className="text-sm font-medium">{title}</p>
+        {detail && <p className="max-w-md text-sm text-muted-foreground">{detail}</p>}
+        {e.correlationId && !denied && <p className="text-2xs text-muted-foreground font-mono">{t('reference', { id: e.correlationId })}</p>}
+        {onRetry && !denied && <Button size="sm" variant="outline" onClick={onRetry}><RefreshCw />{t('retry')}</Button>}
       </div>
     );
   }

@@ -1,11 +1,27 @@
 'use client';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useMessages, useTranslations } from 'next-intl';
 import type { Report, ReportColumn, ReportSection } from '@/lib/api/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fmtDate, fmtDateTime, moneyFull, num } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
-function cell(v: unknown, c: ReportColumn, locale: string): string {
+/** Where to look up the plain name of a code the server sends in a column (first match wins). */
+const LOOKUP: Record<string, string[]> = {
+  sector: ['enums.sector'], health: ['enums.health'], severity: ['enums.alertSeverity', 'enums.severity'], rule: ['enums.rule'],
+  status: ['enums.status', 'enums.alertStatus', 'enums.verification', 'enums.milestone', 'enums.disbursement', 'intelligence.insightStatus'],
+  type: ['enums.facilityType', 'enums.inspectionType'], stage: ['projects.lifecycle.stages'], from: ['projects.lifecycle.stages'], to: ['projects.lifecycle.stages'],
+  band: ['intelligence.band'], kind: ['intelligence.insightKind'], action: ['brief.action'], source: ['enums.funding', 'enums.source'], riskType: ['intelligence.riskTypes'],
+};
+function lookup(messages: Record<string, unknown>, key: string, v: string): string | null {
+  for (const path of LOOKUP[key] ?? []) {
+    let cur: unknown = messages;
+    for (const part of [...path.split('.'), v]) cur = cur && typeof cur === 'object' ? (cur as Record<string, unknown>)[part] : undefined;
+    if (typeof cur === 'string') return cur;
+  }
+  return null;
+}
+
+function cell(v: unknown, c: ReportColumn, locale: string, messages: Record<string, unknown>): string {
   if (v === null || v === undefined || v === '') return '—';
   switch (c.format) {
     case 'money': return moneyFull(Number(v), locale);
@@ -13,7 +29,7 @@ function cell(v: unknown, c: ReportColumn, locale: string): string {
     case 'num': return num(Number(v), locale, 1);
     case 'date': return fmtDate(String(v).slice(0, 10), locale, 'short');
     case 'datetime': return fmtDateTime(String(v), locale);
-    default: return String(v).replace(/_/g, ' ');
+    default: return lookup(messages, c.key, String(v)) ?? String(v).replace(/_/g, ' ');
   }
 }
 
@@ -43,6 +59,7 @@ export function ReportView({ r }: { r: Report }) {
 
 function Section({ s, locale }: { s: ReportSection; locale: string }) {
   const tc = useTranslations('common');
+  const messages = useMessages() as Record<string, unknown>;
   return (
     <section className="break-inside-avoid">
       <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">{s.title}</h2>
@@ -53,7 +70,7 @@ function Section({ s, locale }: { s: ReportSection; locale: string }) {
       {s.kind === 'TABLE' && (s.rows?.length ? (
         <div className="mt-2 rounded-md border"><Table>
           <TableHeader><TableRow>{s.columns?.map((c) => <TableHead key={c.key} className={cn(c.align === 'right' && 'text-right')}>{c.label}</TableHead>)}</TableRow></TableHeader>
-          <TableBody>{s.rows.map((row, i) => <TableRow key={i}>{s.columns?.map((c) => <TableCell key={c.key} className={cn('text-xs', c.align === 'right' && 'text-right tabular whitespace-nowrap')}>{cell(row[c.key], c, locale)}</TableCell>)}</TableRow>)}</TableBody>
+          <TableBody>{s.rows.map((row, i) => <TableRow key={i}>{s.columns?.map((c) => <TableCell key={c.key} className={cn('text-xs', c.align === 'right' && 'text-right tabular whitespace-nowrap')}>{cell(row[c.key], c, locale, messages)}</TableCell>)}</TableRow>)}</TableBody>
         </Table></div>
       ) : <p className="mt-2 text-sm text-muted-foreground">{tc('noneRecorded')}</p>)}
       {s.kind === 'LIST' && (s.items?.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{s.items.map((i, k) => <li key={k}>{i}</li>)}</ul> : <p className="mt-2 text-sm text-muted-foreground">{tc('noneRecorded')}</p>)}

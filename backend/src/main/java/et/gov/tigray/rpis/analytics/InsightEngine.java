@@ -102,7 +102,7 @@ public class InsightEngine {
             f("Change in weekly progress (last 8 reports)", String.format("%+.1f%% per week", trend), 0.15), f("Work done", pct(physical), 0.1)));
         insights.upsert(new InsightService.Draft(InsightKind.DELAY_PREDICTION, EntityType.PROJECT, p.getId(), p.getSector(), wid, PROVIDER, InsightBasis.RULE, dsev,
             Math.round(pDelay * 100) * 1.0, confidence(physical), (int) Math.max(0, slip),
-            String.format("%d%% chance of finishing after %s", Math.round(pDelay * 100), plannedEnd),
+            String.format("%d%% chance of finishing after %s", Math.round(pDelay * 100), plannedEnd.format(java.time.format.DateTimeFormatter.ofPattern("d MMM yyyy", java.util.Locale.ENGLISH))),
             slip > 0 ? "At the current pace the work will finish " + slip + " days after the planned end." : "At the current pace the planned end date can still be met.", dx));
         n++;
 

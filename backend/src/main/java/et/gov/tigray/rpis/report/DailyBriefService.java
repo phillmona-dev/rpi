@@ -33,7 +33,8 @@ public class DailyBriefService {
     private final AlertService alerts;
     private final NamedParameterJdbcTemplate jdbc;
 
-    public record Change(String label, long last24h, long last7d) {}
+    /** {@code key} names the line for the UI to translate; {@code label} is the English text. */
+    public record Change(String key, String label, long last24h, long last7d) {}
     public record ProjectLine(Long id, String code, String name, Sector sector, String weredaName, BigDecimal physicalPct, BigDecimal plannedPct, BigDecimal variancePp, String health, LocalDate plannedEnd) {}
     public record DecisionLine(Long alertId, String title, String actor, String action, String note, Instant at) {}
     public record DailyBrief(Instant generatedAt, String preparedFor, Sector scope, DashboardDtos.Kpis kpis, AlertDtos.Counts alertCounts, List<Change> changes,
@@ -43,11 +44,11 @@ public class DailyBriefService {
     public DailyBrief build(Sector sector) {
         var p = et.gov.tigray.rpis.common.SqlParams.scope(sector, null, null);
         List<Change> changes = List.of(
-            count("Damage assessments received", "SELECT count(*) FROM damage_assessment a JOIN facility f ON f.id=a.facility_id WHERE a.created_at > now() - interval '%s' AND (:sector IS NULL OR f.sector = :sector)", p),
-            count("Progress reports received", "SELECT count(*) FROM progress_log l JOIN project p ON p.id=l.project_id WHERE l.created_at > now() - interval '%s' AND (:sector IS NULL OR p.sector = :sector)", p),
-            count("Alerts raised", "SELECT count(*) FROM alert WHERE triggered_at > now() - interval '%s' AND (:sector IS NULL OR sector = :sector)", p),
-            count("Alerts resolved", "SELECT count(*) FROM alert WHERE resolved_at > now() - interval '%s' AND status='RESOLVED' AND (:sector IS NULL OR sector = :sector)", p),
-            count("Disbursements released", "SELECT count(*) FROM disbursement d JOIN project p ON p.id=d.project_id WHERE d.released_date > current_date - interval '%s' AND (:sector IS NULL OR p.sector = :sector)", p));
+            count("assessments", "Damage assessments received", "SELECT count(*) FROM damage_assessment a JOIN facility f ON f.id=a.facility_id WHERE a.created_at > now() - interval '%s' AND (:sector IS NULL OR f.sector = :sector)", p),
+            count("reports", "Progress reports received", "SELECT count(*) FROM progress_log l JOIN project p ON p.id=l.project_id WHERE l.created_at > now() - interval '%s' AND (:sector IS NULL OR p.sector = :sector)", p),
+            count("alertsRaised", "Problems found", "SELECT count(*) FROM alert WHERE triggered_at > now() - interval '%s' AND (:sector IS NULL OR sector = :sector)", p),
+            count("alertsResolved", "Problems fixed", "SELECT count(*) FROM alert WHERE resolved_at > now() - interval '%s' AND status='RESOLVED' AND (:sector IS NULL OR sector = :sector)", p),
+            count("payments", "Payments released", "SELECT count(*) FROM disbursement d JOIN project p ON p.id=d.project_id WHERE d.released_date > current_date - interval '%s' AND (:sector IS NULL OR p.sector = :sector)", p));
         List<AlertDtos.AlertSummary> critical = alerts.search(new AlertService.Filter(List.of(AlertStatus.OPEN, AlertStatus.ACKNOWLEDGED, AlertStatus.ASSIGNED),
             List.of(AlertSeverity.CRITICAL), sector, null, null, null, null), PageRequest.of(0, 10, Sort.by("triggeredAt").descending())).getContent();
         List<ProjectLine> delayed = jdbc.query("""
@@ -69,10 +70,10 @@ public class DailyBriefService {
             queries.kpis(sector, null, null), alerts.counts(sector), changes, critical, delayed, completed, decisions, queries.sectors(null, null));
     }
 
-    private Change count(String label, String sqlTemplate, MapSqlParameterSource p) {
+    private Change count(String key, String label, String sqlTemplate, MapSqlParameterSource p) {
         Long d1 = jdbc.queryForObject(sqlTemplate.formatted("24 hours"), p, Long.class);
         Long d7 = jdbc.queryForObject(sqlTemplate.formatted("7 days"), p, Long.class);
-        return new Change(label, d1 == null ? 0 : d1, d7 == null ? 0 : d7);
+        return new Change(key, label, d1 == null ? 0 : d1, d7 == null ? 0 : d7);
     }
 
     private ProjectLine line(java.sql.ResultSet rs, int i) throws java.sql.SQLException {

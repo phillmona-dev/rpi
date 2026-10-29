@@ -61,15 +61,22 @@ export default function ReportsPage() {
   };
   const print = () => { record.mutate({ type, period, title: report?.title ?? type, scope: query as Record<string, unknown>, format: 'JSON', rowCount: report?.sections.reduce((n, s) => n + (s.rows?.length ?? 0), 0) }); setTimeout(() => window.print(), 150); };
 
+  const area = (sc: Record<string, unknown> | null) => {
+    if (!sc || !Object.keys(sc).length) return ts('region');
+    const parts: string[] = [];
+    if (sc.sector) parts.push(te(`sector.${sc.sector as Sector}`));
+    if (sc.zoneId) { const z = zones?.find((x) => x.id === Number(sc.zoneId)); parts.push(z ? localizedName(z.name, locale) : ts('zone')); }
+    if (sc.weredaId) { const w = weredas?.find((x) => x.id === Number(sc.weredaId)); parts.push(w ? localizedName(w.name, locale) : ts('wereda')); }
+    if (sc.projectId) parts.push(t('oneProject'));
+    return parts.join(' · ') || ts('region');
+  };
   const runCols: Column<ReportRun>[] = [
     { key: 'when', header: t('runColumns.when'), cell: (r) => <span className="tabular text-xs whitespace-nowrap">{fmtDateTime(r.generatedAt, locale)}</span> },
     { key: 'report', header: t('runColumns.report'), cell: (r) => <span className="font-medium">{t(`types.${r.reportType}`)}</span> },
     { key: 'period', header: t('runColumns.period'), cell: (r) => t(`periods.${r.period}`) },
-    { key: 'scope', header: t('runColumns.scope'), cell: (r) => <span className="font-mono text-2xs text-muted-foreground">{r.scope && Object.keys(r.scope).length ? Object.entries(r.scope).map(([k, v]) => `${k}=${v}`).join(' ') : ts('region')}</span> },
-    { key: 'format', header: t('runColumns.format'), cell: (r) => <span className="text-xs">{r.format === 'JSON' ? 'PDF / print' : r.format}</span> },
+    { key: 'scope', header: t('runColumns.scope'), cell: (r) => <span className="text-xs">{area(r.scope)}</span> },
+    { key: 'format', header: t('runColumns.format'), cell: (r) => <span className="text-xs">{r.format === 'CSV' ? t('formatCsv') : t('formatPrint')}</span> },
     { key: 'by', header: t('runColumns.by'), cell: (r) => r.generatedBy ?? '—' },
-    { key: 'rows', header: t('runColumns.rows'), align: 'right', cell: (r) => r.rowCount ?? '—' },
-    { key: 'digest', header: t('runColumns.digest'), cell: (r) => <span className="font-mono text-2xs text-muted-foreground" title={r.sha256 ?? ''}>{r.sha256?.slice(0, 12) ?? '—'}</span> },
   ];
 
   return (
@@ -86,7 +93,7 @@ export default function ReportsPage() {
               <ul className="space-y-1" role="radiogroup" aria-label={t('type')}>
                 {catalog.map((c) => (
                   <li key={c.type}><button type="button" role="radio" aria-checked={type === c.type} onClick={() => set({ type: c.type })} className={cn('w-full rounded-md border px-3 py-2 text-left transition-colors hover:bg-muted/60', type === c.type && 'border-primary bg-primary/5')}>
-                    <div className="text-sm font-medium">{t(`types.${c.type}`)}</div><div className="line-clamp-2 text-2xs text-muted-foreground">{c.description}</div></button></li>
+                    <div className="text-sm font-medium">{t(`types.${c.type}`)}</div><div className="line-clamp-2 text-xs text-muted-foreground">{t(`descriptions.${c.type}`)}</div></button></li>
                 ))}
               </ul>
             )}
@@ -98,7 +105,6 @@ export default function ReportsPage() {
               {!user.sectorScope && entry?.scopes.includes('sector') && <div className="space-y-1"><Label>{ts('sector')}</Label><Select value={sector ?? 'ALL'} onValueChange={(v) => set({ sector: v === 'ALL' ? null : v })}><SelectTrigger aria-label={ts('sector')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{ts('allSectors')}</SelectItem>{SECTORS.map((s) => <SelectItem key={s} value={s}>{te(`sector.${s}`)}</SelectItem>)}</SelectContent></Select></div>}
               {entry?.scopes.includes('zone') && <div className="space-y-1"><Label>{ts('zone')}</Label><Select value={zoneId ? String(zoneId) : 'ALL'} onValueChange={(v) => set({ zoneId: v === 'ALL' ? null : v, weredaId: null })}><SelectTrigger aria-label={ts('zone')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{ts('allZones')}</SelectItem>{zones?.map((z) => <SelectItem key={z.id} value={String(z.id)}>{localizedName(z.name, locale)}</SelectItem>)}</SelectContent></Select></div>}
               {entry?.scopes.includes('wereda') && <div className="space-y-1"><Label>{ts('wereda')}</Label><Select value={weredaId ? String(weredaId) : 'ALL'} onValueChange={(v) => set({ weredaId: v === 'ALL' ? null : v })}><SelectTrigger aria-label={ts('wereda')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{tc('all')}</SelectItem>{weredas?.filter((w) => !zoneId || w.zoneId === zoneId).map((w) => <SelectItem key={w.id} value={String(w.id)}>{localizedName(w.name, locale)}</SelectItem>)}</SelectContent></Select></div>}
-              <p className="text-2xs text-muted-foreground">{t('federalNote')}</p>
             </div>
           </Section>
         </aside>
@@ -109,7 +115,7 @@ export default function ReportsPage() {
             </DataState>
           </div>
           <Section id="runs" title={t('runs')} hint={t('runsHint')} className="no-print">
-            <DataState isLoading={rl} isEmpty={!runs?.length} skeleton={<TableSkeleton cols={8} rows={5} />}><DataTable columns={runCols} rows={runs ?? []} rowKey={(r) => r.id} dense /></DataState>
+            <DataState isLoading={rl} isEmpty={!runs?.length} emptyTitle={t('noRuns')} skeleton={<TableSkeleton cols={6} rows={5} />}><DataTable columns={runCols} rows={runs ?? []} rowKey={(r) => r.id} dense /></DataState>
           </Section>
         </div>
       </div>

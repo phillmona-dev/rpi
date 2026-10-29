@@ -111,7 +111,7 @@ export interface ZoneSlice { zoneId: number; zoneName: string; budgetEtb: number
 export interface VarianceItem { projectId: number; projectCode: string; projectName: string; sector: Sector; budgetEtb: number; expendedEtb: number; physicalPct: number; cpi: number | null; forecastCostEtb: number | null }
 export interface FinanceOverview { bySector: FundingSlice[]; byFundingSource: FundingSlice[]; byStatus: FundingSlice[]; byZone: ZoneSlice[]; pendingDisbursements: PipelineItem[]; costVariance: VarianceItem[] }
 
-export interface BriefChange { label: string; last24h: number; last7d: number }
+export interface BriefChange { key: string; label: string; last24h: number; last7d: number }
 export interface BriefProjectLine { id: number; code: string; name: string; sector: Sector; weredaName: string; physicalPct: number; plannedPct: number; variancePp: number; health: ProjectHealth; plannedEnd: string }
 export interface BriefDecision { alertId: number; title: string; actor: string | null; action: string; note: string | null; at: string }
 export interface DailyBrief { generatedAt: string; preparedFor: string; scope: Sector | null; kpis: Kpis; alertCounts: AlertCounts; changes: BriefChange[]; newCriticalAlerts: AlertSummary[]; newlyDelayed: BriefProjectLine[]; completedRecently: BriefProjectLine[]; decisionsTaken: BriefDecision[]; sectors: SectorSummary[] }
