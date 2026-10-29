@@ -245,7 +245,7 @@
       "spi": "SPI",
       "cpi": "CPI",
       "stage": "ደረጃ",
-      "risk": "ሓደጋ",
+      "risk": "ነጥቢ ኣቓልቦ",
       "verified": "ዝተረጋገጸ",
       "releasedPct": "{pct} ተለቒቑ",
       "wasPlanned": "ብመደብ፦ {date}"
@@ -448,10 +448,40 @@
     "title": "ባጀትን ወጻኢን",
     "subtitle": "ክንደይ ገንዘብ ከም ዝተመደበ፣ ከም ዝተለቐቐን ከም ዝወጸን",
     "views": {
-      "overview": "ሓፈሻዊ እይታ",
-      "pipeline": "ዘይተፈነዉ ክፍሊታት",
-      "variance": "ፍልልይ ወጻኢ"
-    }
+      "overview": "ጽማቝ",
+      "pipeline": "ዝጽበዩ ክፍሊታት",
+      "variance": "ወጻኢኦም ዝቐልጠፈ"
+    },
+    "bySector": "ብዘርፊ",
+    "bySource": "ብኸፋሊ ኣካል",
+    "byZone": "ብዞባ",
+    "byStatus": "ብኩነታት ፕሮጀክት",
+    "pipeline": "ክለቐቑ ዝጽበዩ ክፍሊታት",
+    "pipelineHint": "ክሳብ ሕጂ ዘይተለቐቑ ዝተመደቡ ክፍሊታት፤ ነዊሕ ዝጸንሑ ቅድም",
+    "variance": "ካብ ዝተሰርሐ ስራሕ ንላዕሊ ገንዘብ ዘውጽኡ ፕሮጀክትታት",
+    "varianceHint": "ምስ ዝተሰርሐ ስራሕ ክነጻጸር ዝወጸ ገንዘብ ዝበዝሓሎም ኣብ ስራሕ ዘለዉ ፕሮጀክትታት",
+    "columns": {
+      "project": "ፕሮጀክት",
+      "tranche": "ክፍሊት",
+      "planned": "ዝኽፈለሉ ዕለት",
+      "amount": "መጠን",
+      "source": "ከፋሊ",
+      "status": "ኩነታት",
+      "lag": "ዝደንጎየሉ ግዜ",
+      "budget": "ባጀት",
+      "spent": "ዝወጸ",
+      "progress": "ዝተሰርሐ ስራሕ",
+      "cpi": "CPI",
+      "forecast": "ክኸውን ዝኽእል መወዳእታ ወጻኢ",
+      "zone": "ዞባ",
+      "projects": "ፕሮጀክትታት",
+      "allocated": "ባጀት",
+      "released": "ዝተለቐቐ",
+      "utilisation": "ዝተለቐቐ ብጽሒት"
+    },
+    "utilisationHint": "ካብ ባጀት ነፍሲ ወከፍ ዞባ ዝተለቐቐ ብጽሒት",
+    "daysLate": "{count, plural, one {# መዓልቲ} other {# መዓልታት}}",
+    "paymentNo": "ቁ. {n}"
   },
   "brief": {
     "title": "መዓልታዊ ጽማቝ ፈጻሚ ስራሕ",
@@ -697,7 +727,163 @@
   },
   "intelligence": {
     "title": "ሓደጋታትን ቀዳምነታትን",
-    "subtitle": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት ኣየኖት ምዃኖም፣ ስለምንታይ፣ ቅድም እንታይ ክውሰን ከም ዘለዎን"
+    "subtitle": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት ኣየኖት ምዃኖም፣ ስለምንታይ፣ ቅድም እንታይ ክውሰን ከም ዘለዎን",
+    "tabs": {
+      "brief": "እንታይ ክውሰን ከም ዘለዎ",
+      "risk": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት",
+      "compare": "ምንጽጻር",
+      "priorities": "ቅድሚ ኩሉ ገንዘብ ዝምደበሉ",
+      "insights": "መጠንቀቕታታትን ግምታትን"
+    },
+    "signals": "ምልክታት መጠንቀቕታ",
+    "actions": "ዝጽበዩኹም ውሳነታት",
+    "actionsHint": "ኣዝዮም ከቢዶምን ነዊሕ ዝጸንሑን ቅድም። ምኽንያቱን እቲ ዝምከርን ንምርኣይ ሓንቲ ካርድ ጠውቑ።",
+    "kind": {
+      "DECISION": "ውሳነ",
+      "FUNDING": "ገንዘብ",
+      "VERIFICATION": "ፍተሻ ቦታ",
+      "ESCALATION": "ህጹጽ",
+      "REALLOCATION": "ገንዘብ ምቕያር",
+      "REVIEW": "ክርአ ዘለዎ"
+    },
+    "suggested": "ዝምከር ቀጻሊ ስጉምቲ",
+    "evidence": "መበገሲ ዝኾኑ ኣሃዛት",
+    "openAlert": "ነቲ ጸገም ክፈት",
+    "openInsight": "ክፈት",
+    "riskRegister": "ኣቓልቦ ዘድልዮም ፕሮጀክትታት",
+    "riskHint": "ነፍሲ ወከፍ ፕሮጀክት ካብ 0 ክሳብ 100 ነጥቢ ኣቓልቦ ይወሃቦ፤ እቲ ነጥቢ ካብ ምድንጓይ፣ ወጻኢ፣ ዝጎደሉ ጸብጻባት፣ ዝደንጎዩ ምዕራፋት፣ ዘይተፈትሑ ጉዳያት፣ ዝደንጎዩ ክፍሊታትን ፍተሻታት ቦታን ይሕሰብ። ነጥቢ ክብ ምስ በለ ዝያዳ ኣቓልቦ የድሊ።",
+    "riskComponents": "እቲ ነጥቢ ካብ እንታይ ከም ዝተሓሰበ",
+    "band": {
+      "LOW": "ትሑት",
+      "MODERATE": "ማእከላይ",
+      "HIGH": "ልዑል",
+      "CRITICAL": "ኣዝዩ ልዑል"
+    },
+    "component": {
+      "schedule": "ምድንጓይ",
+      "cost": "ወጻኢ",
+      "reporting": "ዝጎደሉ ጸብጻባት",
+      "milestones": "ዝደንጎዩ ምዕራፋት",
+      "issues": "ዘይተፈትሑ ጉዳያት",
+      "funding": "ዝደንጎዩ ክፍሊታት",
+      "verification": "ፍተሻታት ቦታ"
+    },
+    "sectorComparison": "ምንጽጻር ዘርፍታት",
+    "zoneComparison": "ምንጽጻር ዞባታት",
+    "contractorPerformance": "ምንጽጻር ተቛረጽቲ",
+    "comparisonHint": "ቁጽሪ 1 ዝበለጸ ዝሰርሕ ዘሎ እዩ፦ ካብ መደብ ብዙሕ ዘይደንጎየ፣ ጸብጻባት ብቐጻሊ ዝሰድድን ዝወሓደ ኣቓልቦ ዘድልዮን።",
+    "columns": {
+      "unit": "ሽም",
+      "active": "ኣብ ስራሕ",
+      "delayed": "ዝደንጎዩ",
+      "variance": "ካብ መደብ ቅድሚት ወይ ድሕሪት",
+      "cpi": "ማእከላይ CPI",
+      "reporting": "ጸብጻብ ዝሰደዱ (14 መዓልቲ)",
+      "verified": "ኣብ ቦታ ዝተፈተሹ (30 መዓልቲ)",
+      "disbursed": "ዝተለቐቐ ገንዘብ",
+      "risk": "ነጥቢ ኣቓልቦ",
+      "critical": "ኣዝዮም ከቢድ ጸገማት",
+      "rank": "ደረጃ",
+      "contractor": "ተቛራጺ",
+      "projects": "ፕሮጀክትታት",
+      "completed": "ዝተዛዘሙ",
+      "onTime": "ብግዜኦም ዝተዛዘሙ",
+      "budget": "ባጀት"
+    },
+    "fundingPriorities": "ፕሮጀክት ዝጽበዩ ዝተጎድኡ ትካላት",
+    "fundingHint": "ፕሮጀክት ዘይብሎም ብኸቢድ ዝተጎድኡ ወይ ዝዓነዉ ትካላት፤ ነቲ ዝወጽእ ገንዘብ ብዙሓት ሰባት ዝጠቕሙ ቅድም።",
+    "priorityColumns": {
+      "score": "ቀዳምነት",
+      "facility": "ትካል",
+      "severity": "ጉድኣት",
+      "beneficiaries": "ተጠቀምቲ ሰባት",
+      "replacement": "ዳግማይ ንምህናጽ ዘድሊ ወጻኢ",
+      "wereda": "ወረዳ"
+    },
+    "insights": "መጠንቀቕታታትን ግምታትን",
+    "insightsHint": "ካብ ዝተመዝገቡ ኣሃዛት ብዝተቐመጡ ሕግታት ዝተሓሰቡ እዮም። ንምውሳን ይሕግዙኹም እምበር ኣብ ክንዳኹም ኣይውስኑን።",
+    "insightKind": {
+      "DELAY_PREDICTION": "ክከውን ዝኽእል ምድንጓይ",
+      "COMPLETION_FORECAST": "ክዛዘመሉ ዝጽበ ዕለት",
+      "COST_RISK": "ክህሉ ዝኽእል ተወሳኺ ወጻኢ",
+      "SUPPLY_RISK": "ኣቑሑ ክደንጉዩ ይኽእሉ",
+      "RISK_SCORE": "ነጥቢ ኣቓልቦ",
+      "DAMAGE_PRIORITY": "ቀዳምነት ጉድኣት",
+      "FUNDING_PRIORITY": "ቀዳምነት ገንዘብ",
+      "ANOMALY": "ዘይልሙዳት ኣሃዛት",
+      "RECOMMENDATION": "ምኽሪ"
+    },
+    "insightStatus": {
+      "ACTIVE": "ናይ ሕጂ",
+      "SUPERSEDED": "ብሓድሽ ተተኪኡ",
+      "DISMISSED": "ንጎኒ ዝተገደፈ",
+      "ACTIONED": "ስጉምቲ ዝተወስደሉ"
+    },
+    "features": "መበገሲ ዝኾኑ ኣሃዛት",
+    "anomalies": "ዝተረኽቡ ዘይልሙዳት ኣሃዛት",
+    "reviewed": "ብ{name} ተራእዩ · {time}",
+    "review": "ዝወሰንኩምዎ መዝግቡ",
+    "dismissNote": "ስለምንታይ ንጎኒ ከም ዝገደፍኩምዎ (ግድን እዩ)",
+    "forecastHistory": "ቀደም ዝነበሩ ግምታት",
+    "disclaimer": "ንውሳነ ሓገዝ",
+    "noInsights": "ኣብዚ መጠንቀቕታ ወይ ግምት የለን",
+    "noRisk": "ኣብዚ ነጥቢ ኣቓልቦ ዘለዎ ፕሮጀክት የለን",
+    "signal": {
+      "REPORTING_COVERAGE": "ጸብጻብ ዝሰዱ ፕሮጀክትታት",
+      "VERIFICATION_COVERAGE": "ኣብ ቦታ ዝተፈተሹ ፕሮጀክትታት",
+      "DISBURSEMENT_LAG": "ዝደንጎዩ ክፍሊታት",
+      "COST_EXPOSURE": "ክህሉ ዝኽእል ተወሳኺ ወጻኢ",
+      "SCHEDULE_SLIP": "ልዕሊ 2 ኣዋርሕ ዝደንጎዩ ፕሮጀክትታት",
+      "UNADDRESSED_DAMAGE": "ብኸቢድ ዝተጎድኡ፣ ፕሮጀክት ዘይብሎም",
+      "DECISION_BACKLOG": "ልዕሊ 3 መዓልቲ ዝተጸበዩ ውሳነታት",
+      "DATA_ANOMALIES": "ክፍተሹ ዘለዎም ዘይልሙዳት ኣሃዛት",
+      "PORTFOLIO_RISK": "ጥቡቕ ኣቓልቦ ዘድልዮም ፕሮጀክትታት",
+      "FIELD_DATA_FRESHNESS": "ናይ ቀረባ ሓበሬታ ካብ ዓውዲ",
+      "FIELD_DATA_AGE": "ናይ ቀረባ ሓበሬታ ካብ ዓውዲ"
+    },
+    "noAccess": "ሓደጋታትን ቀዳምነታትን ንተራኹም ክፉት ኣይኮነን",
+    "noAccessHint": "ንዋና ፈጻሚ ስራሕ፣ ንሓለፍቲ ዘርፊ፣ ንተንተንቲ፣ ንፌደራላዊ ተዓዛብን ንኣመሓደርቲን ክፉት እዩ። እንተ ኣድለየኩም ንኣመሓዳሪ ሕተቱ።",
+    "projectFunding": "ኣየኖት ክፍሊታት ይለቐቑ",
+    "projectFundingHint": "ክፍሊቶም ዝደንጎየ ወይ ኣብ ውሽጢ 60 መዓልቲ ዝበጽሕ ኣብ ስራሕ ዘለዉ ፕሮጀክትታት። እቲ ቀዳምነት (0–100) እቲ ክፍሊት ክንደይ ህጹጽ ምዃኑ፣ እቲ ፕሮጀክት ክንደይ ብጽቡቕ ይኸይድ ከም ዘሎ፣ ኣብ ቦታ ተፈቲሹ እንተኾይኑን ክንደይ ሰባት ከም ዝጥቀሙን የመዛዝን።",
+    "projectFundingColumns": {
+      "score": "ቀዳምነት",
+      "project": "ፕሮጀክት",
+      "health": "ከመይ ይኸይድ ኣሎ",
+      "progress": "ዝተሰርሐ ስራሕ",
+      "pending": "ዝጽበ ክፍሊት",
+      "due": "ዝበጽሓሉ ዕለት",
+      "recommendation": "ምኽሪ",
+      "rationale": "ስለምንታይ"
+    },
+    "recommendation": {
+      "RELEASE": "ይለቐቕ",
+      "CONDITIONAL": "ብቅድመ-ኩነት ይለቐቕ",
+      "HOLD": "ይጽናሕ"
+    },
+    "daysLate": "{count, plural, one {# መዓልቲ ደንጒዩ} other {# መዓልታት ደንጒዩ}}",
+    "noProjectFunding": "ኣብዚ ዝጽበ ክፍሊት የለን",
+    "riskType": "ቀንዲ ምኽንያት",
+    "riskTypes": {
+      "SCHEDULE": "ካብ መደብ ድሕሪት ዝተረፈ",
+      "COST": "ካብ ዝተመደበ ንላዕሊ ዝወጽእ",
+      "REPORTING": "ናይ ቀረባ ጸብጻብ የለን",
+      "MILESTONES": "ግዜኦም ዝሓለፈ ምዕራፋት",
+      "ISSUES": "ዘይተፈትሑ ጉዳያት",
+      "FUNDING": "ዝደንጎዩ ክፍሊታት",
+      "VERIFICATION": "ምዕባለ ኣብ ቦታ ኣይተፈተሸን"
+    },
+    "severity": "ክንደይ ከቢድ",
+    "sector": "ዘርፊ",
+    "recommendedAction": "ዝምከር ቀጻሊ ስጉምቲ",
+    "viewDetail": "ዝርዝር ርአ",
+    "rationale": "እዚ ስለምንታይ ኣቓልቦ ከም ዘድልዮ",
+    "subject": "ዝምልከቶ",
+    "age": "ዝተጸበየሉ ግዜ",
+    "moreSignals": "ተወሳኺ {count} ኣርኢ",
+    "fewerSignals": "ዝወሓደ ኣርኢ",
+    "seeWhy": "ስለምንታይ ምዃኑ ርአ →",
+    "basisRule": "ብዝተቐመጡ ሕግታት ተሓሲቡ፤ ብAI ኣይኮነን።",
+    "basisModel": "ብሞዴል ግምት ተሓሲቡ።"
   },
   "evidence": {
     "title": "ስእልታትን ምርመራታትን ቦታ",
@@ -705,7 +891,51 @@
   },
   "map": {
     "title": "ካርታ",
-    "subtitle": "ፕሮጀክትታት፣ ትካላትን ጉድኣትን ኣብ ካርታ ትግራይ"
+    "subtitle": "ፕሮጀክትታት፣ ትካላትን ጉድኣትን ኣብ ካርታ ትግራይ",
+    "layers": {
+      "boundaries": "ዶባት",
+      "weredas": "ኣሃዛት ወረዳ",
+      "projects": "ፕሮጀክትታት",
+      "facilities": "ትካላት",
+      "evidence": "ስእልታትን ምብጻሓትን ቦታ"
+    },
+    "colorBy": "ሕብሪ ፕሮጀክትታት ዘርእዮ",
+    "color": {
+      "health": "ከመይ ይኸይድ ኣሎ",
+      "risk": "ነጥቢ ኣቓልቦ",
+      "progress": "ዝተሰርሐ ስራሕ",
+      "sector": "ዘርፊ"
+    },
+    "facilityColorBy": "ሕብሪ ትካላት ዘርእዮ",
+    "facilityColor": {
+      "severity": "ጉድኣት",
+      "operational": "ዝሰርሕ ወይ ዘይሰርሕ",
+      "sector": "ዘርፊ"
+    },
+    "filters": "መጻረዪታት",
+    "visible": "ኣብ ካርታ ዝርኣዩ፦ {projects} ፕሮጀክትታት · {facilities} ትካላት",
+    "selected": "ዝተመረጸ",
+    "noBoundaries": "ዶባት ወረዳታት ገና ኣይተጻዕኑን፤ ስለዚ ነፍሲ ወከፍ ወረዳ ከም ንእሽቶ ክቢ ይርአ።",
+    "legend": {
+      "health": "እቲ ፕሮጀክት ከመይ ይኸይድ ኣሎ",
+      "risk": "ነጥቢ ኣቓልቦ",
+      "severity": "ጉድኣት",
+      "evidence": "ስእልታትን ምብጻሓትን ቦታ",
+      "size": "ዝዓበየ ክቢ = ዝዓበየ ባጀት"
+    },
+    "openDetail": "ዝርዝር ክፈት",
+    "unaddressedOnly": "ፕሮጀክት ዘይብሎም ብኸቢድ ዝተጎድኡ ትካላት ጥራይ",
+    "minRisk": "ዝተሓተ ነጥቢ ኣቓልቦ",
+    "riskLegend": {
+      "low": "ትሑት (ትሕቲ 25)",
+      "moderate": "ማእከላይ (25–49)",
+      "high": "ልዑል (50–74)",
+      "critical": "ኣዝዩ ልዑል (75ን ልዕሊኡን)"
+    },
+    "basemap": "ናይ ድሕሪት ካርታ",
+    "basemapHint": "እቲ ናይ ድሕሪት ካርታ ካብ ኣገልግሎት ካርታ ኢንተርነት እዩ ዝመጽእ።",
+    "search": "ወረዳ፣ ፕሮጀክት ወይ ትካል ድለ",
+    "unsupported": "ብራውዘር ናይዚ ኮምፒተር ደገፍ 3D ግራፊክስ ስለ ዘይብሉ እቲ ካርታ ኣብዚ ክርአ ኣይክእልን። ካልእ ብራውዘር ወይ ኮምፒተር ፈትኑ፤ ካልኦት ገጻት ኩሎም ከም ልሙድ ይሰርሑ።"
   },
   "reports": {
     "title": "ጸብጻባት",

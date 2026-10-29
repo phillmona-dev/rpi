@@ -74,31 +74,31 @@ public class IntelligenceService {
         List<IntelligenceDtos.Signal> out = new ArrayList<>();
         double cov = active == 0 ? 100 : n(r, "reported14") * 100.0 / active;
         out.add(sig("REPORTING_COVERAGE", cov >= 80 ? AlertSeverity.LOW : cov >= 60 ? AlertSeverity.MEDIUM : AlertSeverity.HIGH, bd(cov, 0), "%", pct(cov),
-            "Share of active projects with a site report in the last 14 days (" + n(r, "reported14") + " of " + active + ").", "/projects?status=ACTIVE&sort=lastProgressReportAt&dir=asc"));
+            n(r, "reported14") + " of " + active + " projects under way sent a progress report in the last 14 days.", "/projects?status=ACTIVE&sort=lastProgressReportAt&dir=asc"));
         double vcov = active == 0 ? 100 : n(r, "verified_recent") * 100.0 / active;
         out.add(sig("VERIFICATION_COVERAGE", vcov >= 60 ? AlertSeverity.LOW : vcov >= 35 ? AlertSeverity.MEDIUM : AlertSeverity.HIGH, bd(vcov, 0), "%", pct(vcov),
-            "Active projects with an independently verified inspection in the last " + props.getMedia().getEvidenceStaleDays() + " days (" + n(r, "verified_recent") + " of " + active + ").", "/evidence?status=UNVERIFIED"));
+            n(r, "verified_recent") + " of " + active + " projects under way had their progress checked on site in the last " + props.getMedia().getEvidenceStaleDays() + " days.", "/evidence?status=UNVERIFIED"));
         BigDecimal lag = money(r, "lag_etb");
         out.add(sig("DISBURSEMENT_LAG", lag.signum() == 0 ? AlertSeverity.LOW : n(r, "lag_projects") >= 5 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, lag, "ETB", "ETB " + compact(lag),
-            n(r, "lag_projects") + " active projects have tranches unreleased past their planned date.", "/finance"));
+            n(r, "lag_projects") + " projects under way are waiting for payments that are past their due date.", "/finance"));
         BigDecimal exp = money(r, "cost_exposure");
         out.add(sig("COST_EXPOSURE", exp.signum() == 0 ? AlertSeverity.LOW : AlertSeverity.MEDIUM, exp, "ETB", "ETB " + compact(exp),
-            "Forecast cost above budget across active projects (CPI projection).", "/finance"));
+            "How much more than their budgets the projects under way are likely to cost, judging by spending so far.", "/finance"));
         out.add(sig("SCHEDULE_SLIP", n(r, "slip60") == 0 ? AlertSeverity.LOW : n(r, "slip60") >= 5 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, bd(n(r, "slip60"), 0), "projects", String.valueOf(n(r, "slip60")),
-            "Active projects forecast to finish more than 60 days after their planned end.", "/projects?health=DELAYED&health=STALLED"));
+            "Projects under way expected to finish more than two months after their planned end.", "/projects?health=DELAYED&health=STALLED"));
         out.add(sig("UNADDRESSED_DAMAGE", n(r, "unaddressed") == 0 ? AlertSeverity.LOW : n(r, "unaddressed") >= 10 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, bd(n(r, "unaddressed"), 0), "facilities", String.valueOf(n(r, "unaddressed")),
-            "Severely damaged or destroyed facilities without any reconstruction project; " + String.format("%,d", n(r, "unaddressed_benef")) + " beneficiaries affected.", "/facilities?severity=SEVERE"));
+            "Heavily damaged or destroyed facilities that no project covers yet; about " + String.format("%,d", n(r, "unaddressed_benef")) + " people are affected.", "/facilities?severity=SEVERE"));
         out.add(sig("DECISION_BACKLOG", n(r, "backlog") == 0 ? AlertSeverity.LOW : n(r, "backlog") >= 5 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, bd(n(r, "backlog"), 0), "alerts", String.valueOf(n(r, "backlog")),
-            "Decision-required alerts open for more than 72 hours without assignment or resolution.", "/alerts?decisionRequired=true"));
+            "Problems needing a decision that have been waiting more than 3 days without anyone taking them on.", "/alerts?decisionRequired=true"));
         out.add(sig("DATA_ANOMALIES", n(r, "anomalies") == 0 ? AlertSeverity.LOW : AlertSeverity.MEDIUM, bd(n(r, "anomalies"), 0), "projects", String.valueOf(n(r, "anomalies")),
-            "Projects with flagged data anomalies (progress jumps, spend without progress, reported vs observed gaps).", "/intelligence?tab=insights&kind=ANOMALY"));
+            "Projects whose figures look unusual and should be checked (sudden jumps, spending without progress, reports that do not match site visits).", "/intelligence?tab=insights&kind=ANOMALY"));
         double hr = active == 0 ? 0 : n(r, "high_risk") * 100.0 / active;
         out.add(sig("PORTFOLIO_RISK", hr >= 40 ? AlertSeverity.HIGH : hr >= 20 ? AlertSeverity.MEDIUM : AlertSeverity.LOW, bd(hr, 0), "%", pct(hr),
-            n(r, "high_risk") + " of " + active + " active projects carry a high or critical composite risk score.", "/projects?minRiskScore=50&sort=riskScore&dir=desc"));
+            n(r, "high_risk") + " of " + active + " projects under way need close attention (high attention score).", "/projects?minRiskScore=50&sort=riskScore&dir=desc"));
         java.sql.Timestamp lf = (java.sql.Timestamp) r.get("last_field");
         long hours = lf == null ? 999 : Math.max(0, java.time.Duration.between(lf.toInstant(), Instant.now()).toHours());
-        out.add(sig("FIELD_DATA_FRESHNESS", hours <= 48 ? AlertSeverity.LOW : hours <= 168 ? AlertSeverity.MEDIUM : AlertSeverity.HIGH, bd(hours, 0), "h", hours < 48 ? hours + " h" : (hours / 24) + " d",
-            "Time since the most recent field data (assessment, site report or inspection) reached the platform.", "/damage"));
+        out.add(sig("FIELD_DATA_FRESHNESS", hours <= 48 ? AlertSeverity.LOW : hours <= 168 ? AlertSeverity.MEDIUM : AlertSeverity.HIGH, bd(hours, 0), "h", hours < 48 ? hours + (hours == 1 ? " hour" : " hours") : (hours / 24) + " days",
+            "How long ago the latest information from the field (damage assessment, site report or site visit) arrived.", "/damage"));
         return out;
     }
 
@@ -111,16 +111,16 @@ public class IntelligenceService {
         for (AlertDtos.AlertSummary a : queue) {
             String kind, action;
             switch (a.rule()) {
-                case DISBURSEMENT_LAG -> { kind = "FUNDING"; action = "Instruct the treasury / funder to release the tranche or approve bridge financing; record the decision on the alert."; }
-                case SEVERE_DAMAGE_UNADDRESSED -> { kind = "FUNDING"; action = "Decide whether to open a reconstruction project or defer; assign the sector bureau to scope it."; }
-                case STALLED_REPORTING -> { kind = "VERIFICATION"; action = "Commission a field verification visit and require the contractor to resume weekly reporting."; }
-                case SCHEDULE_SLIPPAGE, MILESTONE_OVERDUE -> { kind = "DECISION"; action = "Request a time-bound recovery plan from the contractor and supervising engineer; consider re-baselining or contractual remedies."; }
-                case COST_OVERRUN -> { kind = "REVIEW"; action = "Trigger a variation / cost audit before approving further interim payment certificates."; }
-                case PROGRESS_DISCREPANCY -> { kind = "ESCALATION"; action = "Suspend acceptance of reported progress until a second inspection confirms the figures."; }
-                default -> { kind = "DECISION"; action = "Review and record a decision on the alert."; }
+                case DISBURSEMENT_LAG -> { kind = "FUNDING"; action = "Ask the treasury or the funder to release the payment, or approve temporary funding; record your decision on the problem."; }
+                case SEVERE_DAMAGE_UNADDRESSED -> { kind = "FUNDING"; action = "Decide whether to start a project to rebuild it now or later; ask the sector bureau to prepare it."; }
+                case STALLED_REPORTING -> { kind = "VERIFICATION"; action = "Send someone to check the site, and ask the contractor to send a progress report every week again."; }
+                case SCHEDULE_SLIPPAGE, MILESTONE_OVERDUE -> { kind = "DECISION"; action = "Ask the contractor and the supervising engineer for a plan, with dates, to catch up; if needed, change the schedule or apply the penalties in the contract."; }
+                case COST_OVERRUN -> { kind = "REVIEW"; action = "Have the costs checked before approving any further payment to the contractor."; }
+                case PROGRESS_DISCREPANCY -> { kind = "ESCALATION"; action = "Do not accept the reported progress until a second site visit confirms it."; }
+                default -> { kind = "DECISION"; action = "Look at the problem and record your decision."; }
             }
             List<IntelligenceDtos.Evidence> ev = new ArrayList<>();
-            if (a.metrics() != null) a.metrics().forEach((k, v) -> { if (v != null && ev.size() < 4) ev.add(new IntelligenceDtos.Evidence(humanize(k), fmtMetric(k, v))); });
+            if (a.metrics() != null) a.metrics().forEach((k, v) -> { if (v != null && !TECHNICAL.contains(k) && ev.size() < 4) ev.add(new IntelligenceDtos.Evidence(humanize(k), fmtMetric(k, v))); });
             out.add(new IntelligenceDtos.Action("alert-" + a.id(), ++i, kind, a.severity(), a.title(), a.detail(), ev, action, a.entityType(), a.entityId(), a.entityName(), a.entityCode(),
                 a.sector(), a.weredaName(), a.id(), null, "RULE", a.ageHours()));
         }
@@ -129,11 +129,11 @@ public class IntelligenceService {
         for (var c : cs) {
             if (c.delayed() >= 2 && out.size() < 14) {
                 out.add(new IntelligenceDtos.Action("contractor-" + c.contractor().hashCode(), ++i, "REVIEW", c.delayed() >= 3 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM,
-                    "Review contractor performance: " + c.contractor(),
-                    c.delayed() + " of " + c.active() + " active projects delayed or stalled; portfolio variance " + c.avgVariancePp() + " pp, CPI " + c.avgCpi() + ".",
-                    List.of(new IntelligenceDtos.Evidence("Active projects", String.valueOf(c.active())), new IntelligenceDtos.Evidence("Delayed", String.valueOf(c.delayed())),
-                            new IntelligenceDtos.Evidence("Avg schedule variance", c.avgVariancePp() + " pp"), new IntelligenceDtos.Evidence("Portfolio budget", "ETB " + compact(c.budgetEtb()))),
-                    "Convene a contractor performance review; consider capacity limits before awarding further contracts.", null, null, c.contractor(), null, null, null, null, null, "RULE", 0));
+                    "Many late projects with one contractor: " + c.contractor(),
+                    c.delayed() + " of their " + c.active() + " projects under way are late or have stopped; on average they are " + c.avgVariancePp().abs() + "% " + (c.avgVariancePp().signum() < 0 ? "behind" : "ahead of") + " plan.",
+                    List.of(new IntelligenceDtos.Evidence("Projects under way", String.valueOf(c.active())), new IntelligenceDtos.Evidence("Late or stopped", String.valueOf(c.delayed())),
+                            new IntelligenceDtos.Evidence("Budget of their projects", "ETB " + compact(c.budgetEtb()))),
+                    "Meet the contractor about the delays, and think twice before giving them more contracts.", null, null, c.contractor(), null, null, null, null, null, "RULE", 0));
             }
         }
         // Top funding priorities (unaddressed damage) not already covered by an alert card
@@ -141,11 +141,11 @@ public class IntelligenceService {
             boolean dup = out.stream().anyMatch(x -> x.entityType() == EntityType.FACILITY && Objects.equals(x.entityId(), f.facilityId()));
             if (dup) continue;
             out.add(new IntelligenceDtos.Action("priority-" + f.facilityId(), ++i, "FUNDING", f.priorityScore().doubleValue() >= 70 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM,
-                "Prioritise reconstruction funding: " + f.name(),
-                String.format("%s facility serving %,d beneficiaries with no project; replacement estimate ETB %s.", f.severity().toLowerCase(), f.beneficiaries() == null ? 0 : f.beneficiaries(), compact(f.replacementEstimateEtb())),
-                List.of(new IntelligenceDtos.Evidence("Priority score", f.priorityScore() + "/100"), new IntelligenceDtos.Evidence("Beneficiaries", String.format("%,d", f.beneficiaries() == null ? 0 : f.beneficiaries())),
-                        new IntelligenceDtos.Evidence("Replacement estimate", "ETB " + compact(f.replacementEstimateEtb())), new IntelligenceDtos.Evidence("Damage", f.severity())),
-                "Decide on inclusion in the next funding round; task the sector bureau with a scoping assessment.", EntityType.FACILITY, f.facilityId(), f.name(), f.code(), f.sector(), f.weredaName(), null, f.insightId(), "RULE", 0));
+                "Fund rebuilding first: " + f.name(),
+                String.format("A %s facility serving about %,d people, with no project yet. Rebuilding is estimated at ETB %s.", "DESTROYED".equals(f.severity()) ? "destroyed" : "heavily damaged", f.beneficiaries() == null ? 0 : f.beneficiaries(), compact(f.replacementEstimateEtb())),
+                List.of(new IntelligenceDtos.Evidence("Priority (out of 100)", String.valueOf(f.priorityScore())), new IntelligenceDtos.Evidence("People served", String.format("%,d", f.beneficiaries() == null ? 0 : f.beneficiaries())),
+                        new IntelligenceDtos.Evidence("Cost to rebuild", "ETB " + compact(f.replacementEstimateEtb()))),
+                "Decide whether to include it in the next funding round, and ask the sector bureau to prepare the project.", EntityType.FACILITY, f.facilityId(), f.name(), f.code(), f.sector(), f.weredaName(), null, f.insightId(), "RULE", 0));
         }
         out.sort(Comparator.comparing((IntelligenceDtos.Action a) -> a.severity().ordinal()).thenComparing(a -> -a.ageHours()));
         List<IntelligenceDtos.Action> ranked = new ArrayList<>();
@@ -334,14 +334,16 @@ public class IntelligenceService {
         if (Math.abs(d) >= 1e4) return String.format("%.0f K", d / 1e3);
         return String.format("%,.0f", d);
     }
-    private static final Map<String, String> LABELS = Map.ofEntries(Map.entry("physicalPct", "Physical progress"), Map.entry("plannedPct", "Planned progress"), Map.entry("variancePp", "Schedule variance (pp)"),
-        Map.entry("spi", "SPI"), Map.entry("cpi", "CPI"), Map.entry("overrunPct", "Projected overrun %"), Map.entry("expendedEtb", "Certified expenditure"), Map.entry("budgetEtb", "Budget"),
-        Map.entry("daysSinceReport", "Days since site report"), Map.entry("daysSinceVerified", "Days since verified visit"), Map.entry("thresholdDays", "Threshold (days)"), Map.entry("milestone", "Milestone"),
-        Map.entry("plannedDate", "Planned date"), Map.entry("overdueDays", "Days overdue"), Map.entry("tranche", "Tranche"), Map.entry("amountEtb", "Amount"), Map.entry("lagDays", "Days late"), Map.entry("fundingSource", "Funding source"),
-        Map.entry("severity", "Damage"), Map.entry("replacementEstimateEtb", "Replacement estimate"), Map.entry("beneficiaries", "Beneficiaries"), Map.entry("reportedPct", "Reported progress"), Map.entry("observedPct", "Observed on site"), Map.entry("gapPp", "Gap (pp)"), Map.entry("visitedOn", "Inspected on"));
+    private static final Map<String, String> LABELS = Map.ofEntries(Map.entry("physicalPct", "Work done"), Map.entry("plannedPct", "Planned by now"), Map.entry("variancePp", "Difference from plan"),
+        Map.entry("spi", "SPI"), Map.entry("cpi", "CPI"), Map.entry("overrunPct", "Likely extra cost (%)"), Map.entry("expendedEtb", "Money spent"), Map.entry("budgetEtb", "Budget"),
+        Map.entry("daysSinceReport", "Days since last report"), Map.entry("daysSinceVerified", "Days since last site check"), Map.entry("thresholdDays", "Allowed (days)"), Map.entry("milestone", "Step"),
+        Map.entry("plannedDate", "Planned date"), Map.entry("overdueDays", "Days late"), Map.entry("tranche", "Payment number"), Map.entry("amountEtb", "Amount"), Map.entry("lagDays", "Days late"), Map.entry("fundingSource", "Paid for by"),
+        Map.entry("severity", "Damage"), Map.entry("replacementEstimateEtb", "Cost to rebuild"), Map.entry("beneficiaries", "People served"), Map.entry("reportedPct", "Reported done"), Map.entry("observedPct", "Found on site"), Map.entry("gapPp", "Difference"), Map.entry("visitedOn", "Visited on"));
+    /** Figures only specialists read; left out of the action cards. */
+    private static final Set<String> TECHNICAL = Set.of("spi", "cpi");
     private static String humanize(String k) { if (LABELS.containsKey(k)) return LABELS.get(k); String sp = k.replaceAll("([A-Z])", " $1"); return k.length() <= 3 ? k.toUpperCase() : sp.substring(0, 1).toUpperCase() + sp.substring(1); }
     private static String fmtMetric(String k, Object v) {
-        if (v instanceof Number num) { if (k.toLowerCase().contains("etb")) return "ETB " + compact(new BigDecimal(num.toString())); if (k.toLowerCase().contains("pct")) return String.format("%.1f%%", num.doubleValue()); if (k.toLowerCase().endsWith("pp")) return String.format("%+.1f pp", num.doubleValue()); if (k.equals("spi") || k.equals("cpi")) return String.format("%.2f", num.doubleValue()); return num.toString(); }
+        if (v instanceof Number num) { if (k.toLowerCase().contains("etb")) return "ETB " + compact(new BigDecimal(num.toString())); if (k.toLowerCase().contains("pct")) return String.format("%.0f%%", num.doubleValue()); if (k.toLowerCase().endsWith("pp")) return String.format("%+.0f%%", num.doubleValue()); if (k.equals("spi") || k.equals("cpi")) return String.format("%.2f", num.doubleValue()); return num.toString(); }
         return String.valueOf(v);
     }
     @SuppressWarnings("unchecked")

@@ -75,8 +75,8 @@ public class InsightEngine {
         if (p.getRiskScore() != null) {
             String band = RiskScoringService.band(p.getRiskScore());
             insights.upsert(new InsightService.Draft(InsightKind.RISK_SCORE, EntityType.PROJECT, p.getId(), p.getSector(), wid, RiskScoringService.PROVIDER, InsightBasis.RULE,
-                sevForBand(band), p.getRiskScore().doubleValue(), 0.7, null, "Composite risk " + p.getRiskScore() + "/100 (" + band.toLowerCase() + ")",
-                "Weighted schedule, cost, reporting, milestone, issue, funding and verification signals.", p.getRiskComponents()));
+                sevForBand(band), p.getRiskScore().doubleValue(), 0.7, null, "Attention score " + p.getRiskScore() + " out of 100 (" + band.toLowerCase() + ")",
+                "Built from delays, costs, missing reports, late steps, open issues, late payments and site checks.", p.getRiskComponents()));
             n++;
         } else insights.resolve(InsightKind.RISK_SCORE, EntityType.PROJECT, p.getId());
 
@@ -98,12 +98,12 @@ public class InsightEngine {
         double pDelay = clamp01(0.5 + (1 - spi) * 1.2 + (slip > 0 ? Math.min(0.3, slip / 300.0) : -0.15) - trend * 0.5);
         AlertSeverity dsev = pDelay >= 0.8 ? AlertSeverity.CRITICAL : pDelay >= 0.6 ? AlertSeverity.HIGH : pDelay >= 0.4 ? AlertSeverity.MEDIUM : AlertSeverity.LOW;
         Map<String, Object> dx = explain(List.of(
-            f("Schedule performance index", String.format("%.2f", spi), 0.45), f("Forecast slip vs planned end", slip + " days", 0.3),
-            f("Productivity trend (8 reports)", String.format("%+.1f pp/wk", trend), 0.15), f("Physical progress", pct(physical), 0.1)));
+            f("Work done compared with plan", String.format("%.0f%%", spi * 100), 0.45), f("Expected delay at the end", slip + " days", 0.3),
+            f("Change in weekly progress (last 8 reports)", String.format("%+.1f%% per week", trend), 0.15), f("Work done", pct(physical), 0.1)));
         insights.upsert(new InsightService.Draft(InsightKind.DELAY_PREDICTION, EntityType.PROJECT, p.getId(), p.getSector(), wid, PROVIDER, InsightBasis.RULE, dsev,
             Math.round(pDelay * 100) * 1.0, confidence(physical), (int) Math.max(0, slip),
-            String.format("%d%% likelihood of missing %s", Math.round(pDelay * 100), plannedEnd),
-            slip > 0 ? "Current productivity projects completion " + slip + " days after the planned end." : "Current productivity keeps the planned end within reach.", dx));
+            String.format("%d%% chance of finishing after %s", Math.round(pDelay * 100), plannedEnd),
+            slip > 0 ? "At the current pace the work will finish " + slip + " days after the planned end." : "At the current pace the planned end date can still be met.", dx));
         n++;
 
         // 3. Completion forecast (latest provider output, with history available on the project page)
@@ -112,8 +112,8 @@ public class InsightEngine {
             insights.upsert(new InsightService.Draft(InsightKind.COMPLETION_FORECAST, EntityType.PROJECT, p.getId(), p.getSector(), wid, fc.getProvider(), InsightBasis.RULE,
                 slip > 90 ? AlertSeverity.HIGH : slip > 30 ? AlertSeverity.MEDIUM : AlertSeverity.LOW, (double) slip, fc.getConfidence() == null ? null : fc.getConfidence().doubleValue(),
                 (int) ChronoUnit.DAYS.between(LocalDate.now(ZoneOffset.UTC), fc.getForecastEnd()),
-                "Forecast completion " + fc.getForecastEnd() + (slip != 0 ? String.format(" (%+d days vs plan)", slip) : " (on plan)"), fc.getRationale(),
-                explain(List.of(f("Planned end", plannedEnd.toString(), 0.3), f("Forecast end", fc.getForecastEnd().toString(), 0.4), f("Provider", fc.getProvider(), 0.3)))));
+                "Expected to finish on " + fc.getForecastEnd() + (slip > 0 ? String.format(" (%d days late)", slip) : slip < 0 ? String.format(" (%d days early)", -slip) : " (on time)"), fc.getRationale(),
+                explain(List.of(f("Planned end", plannedEnd.toString(), 0.3), f("Expected end", fc.getForecastEnd().toString(), 0.4), f("Worked out by", fc.getProvider().replace('_', ' ').toLowerCase(), 0.3)))));
             n++;
         }
 
@@ -127,11 +127,11 @@ public class InsightEngine {
         AlertSeverity csev = exposurePct >= 25 ? AlertSeverity.CRITICAL : exposurePct >= 15 ? AlertSeverity.HIGH : exposurePct >= 8 ? AlertSeverity.MEDIUM : AlertSeverity.LOW;
         insights.upsert(new InsightService.Draft(InsightKind.COST_RISK, EntityType.PROJECT, p.getId(), p.getSector(), wid, PROVIDER, InsightBasis.RULE, csev,
             Math.round(exposurePct * 10) / 10.0, 0.5, (int) (remainingMonths * 30),
-            String.format("Cost exposure %.0f%% of budget (ETB %,.0f)", exposurePct, overrun + inflationExposure),
-            String.format("CPI-based overrun ETB %,.0f plus inflation on remaining works ETB %,.0f at %.0f%%/yr over %.0f months.", overrun, inflationExposure,
+            String.format("May cost %.0f%% more than the budget (about ETB %,.0f)", exposurePct, overrun + inflationExposure),
+            String.format("Spending so far points to ETB %,.0f extra, plus ETB %,.0f from price rises on the remaining work (%.0f%% a year over %.0f months).", overrun, inflationExposure,
                 props.getAnalytics().getConstructionInflationPctAnnual(), remainingMonths),
-            explain(List.of(f("Cost performance index", String.format("%.2f", cpi), 0.5), f("Remaining works", pct(remainingShare * 100), 0.25),
-                f("Assumed construction inflation", props.getAnalytics().getConstructionInflationPctAnnual() + "%/yr", 0.25)))));
+            explain(List.of(f("Work done for the money spent", String.format("%.0f%%", cpi * 100), 0.5), f("Work still to do", pct(remainingShare * 100), 0.25),
+                f("Expected price rise", props.getAnalytics().getConstructionInflationPctAnnual() + "% a year", 0.25)))));
         n++;
 
         // 5. Supply-chain / material risk from the risk register, issues and funding flow
@@ -146,12 +146,12 @@ public class InsightEngine {
             supplyPts += i.getSeverity() == Level.HIGH ? 25 : 12; drivers.add(i.getTitle());
         }
         long laggingTranches = disbursements.findByProjectIdOrderByTrancheNoAsc(p.getId()).stream().filter(d -> d.getReleasedDate() == null && d.getPlannedDate().isBefore(today)).count();
-        if (laggingTranches > 0) { supplyPts += 10 * laggingTranches; drivers.add(laggingTranches + " tranche(s) unreleased past due"); }
+        if (laggingTranches > 0) { supplyPts += 10 * laggingTranches; drivers.add(laggingTranches + (laggingTranches == 1 ? " payment" : " payments") + " past due"); }
         if (supplyPts > 0) {
             double sScore = Math.min(100, supplyPts);
             insights.upsert(new InsightService.Draft(InsightKind.SUPPLY_RISK, EntityType.PROJECT, p.getId(), p.getSector(), wid, PROVIDER, InsightBasis.RULE,
                 sScore >= 60 ? AlertSeverity.HIGH : sScore >= 30 ? AlertSeverity.MEDIUM : AlertSeverity.LOW, sScore, 0.45, 90,
-                "Material / supply-chain risk " + Math.round(sScore) + "/100", "Drivers: " + String.join("; ", drivers.subList(0, Math.min(4, drivers.size()))) + ".",
+                "Risk of materials arriving late: " + Math.round(sScore) + " out of 100", "Because of: " + String.join("; ", drivers.subList(0, Math.min(4, drivers.size()))) + ".",
                 explain(drivers.stream().map(d -> f(d, "open", 1.0 / drivers.size())).toList())));
             n++;
         } else insights.resolve(InsightKind.SUPPLY_RISK, EntityType.PROJECT, p.getId());
@@ -162,7 +162,7 @@ public class InsightEngine {
             AlertSeverity asev = anomalies.stream().anyMatch(a -> "HIGH".equals(a.get("severity"))) ? AlertSeverity.HIGH : AlertSeverity.MEDIUM;
             Map<String, Object> ex = new LinkedHashMap<>(); ex.put("basis", "RULE"); ex.put("items", anomalies); ex.put("dataAsOf", today.toString());
             insights.upsert(new InsightService.Draft(InsightKind.ANOMALY, EntityType.PROJECT, p.getId(), p.getSector(), wid, PROVIDER, InsightBasis.RULE, asev,
-                (double) anomalies.size(), 0.6, null, anomalies.size() + (anomalies.size() == 1 ? " data anomaly flagged" : " data anomalies flagged"),
+                (double) anomalies.size(), 0.6, null, anomalies.size() + (anomalies.size() == 1 ? " unusual figure to check" : " unusual figures to check"),
                 anomalies.stream().map(a -> String.valueOf(a.get("title"))).reduce((a, b) -> a + "; " + b).orElse(""), ex));
             n++;
         } else insights.resolve(InsightKind.ANOMALY, EntityType.PROJECT, p.getId());
@@ -177,29 +177,29 @@ public class InsightEngine {
             double d = logs.get(i).getPhysicalProgressPct().doubleValue() - logs.get(i - 1).getPhysicalProgressPct().doubleValue();
             long days = ChronoUnit.DAYS.between(logs.get(i - 1).getLogDate(), logs.get(i).getLogDate());
             if (d >= jump && days <= 7 && logs.get(i).getLogDate().isAfter(today.minusDays(120)))
-                out.add(anomaly("PROGRESS_JUMP", "MEDIUM", String.format("Progress jumped %.0f pp in %d days (%s)", d, days, logs.get(i).getLogDate()),
-                    "A single report added more than " + jump + " pp; verify with a site inspection."));
+                out.add(anomaly("PROGRESS_JUMP", "MEDIUM", String.format("Progress jumped by %.0f%% in %d days (%s)", d, days, logs.get(i).getLogDate()),
+                    "One report added more than " + jump + "%; check it with a site visit."));
         }
         if (logs.size() >= 2) {
             LocalDate cutoff = today.minusDays(60);
             double progressDelta = logs.get(logs.size() - 1).getPhysicalProgressPct().doubleValue() - logs.stream().filter(l -> !l.getLogDate().isAfter(cutoff)).reduce((a, b) -> b).map(l -> l.getPhysicalProgressPct().doubleValue()).orElse(logs.get(0).getPhysicalProgressPct().doubleValue());
             BigDecimal spend60 = expenditures.findByProjectIdOrderByPeriodStartAsc(p.getId()).stream().filter(e -> e.getPeriodEnd().isAfter(cutoff)).map(Expenditure::getAmountEtb).reduce(BigDecimal.ZERO, BigDecimal::add);
             if (spend60.signum() > 0 && progressDelta <= 1 && p.getStatus() == ProjectStatus.ACTIVE)
-                out.add(anomaly("SPEND_WITHOUT_PROGRESS", "HIGH", String.format("ETB %,.0f certified in 60 days with %.1f pp progress", spend60, progressDelta),
-                    "Certified expenditure is not matched by physical progress; review interim payment certificates."));
+                out.add(anomaly("SPEND_WITHOUT_PROGRESS", "HIGH", String.format("ETB %,.0f spent in 60 days for only %.1f%% more work", spend60, progressDelta),
+                    "The money spent is not matched by work done; check the payment requests."));
         }
         double disbPct = p.getTotalBudgetEtb().signum() == 0 ? 0 : p.getDisbursedEtb().doubleValue() / p.getTotalBudgetEtb().doubleValue() * 100;
         if (disbPct - p.getPhysicalProgressPct().doubleValue() > 35)
-            out.add(anomaly("DISBURSED_AHEAD_OF_PROGRESS", "MEDIUM", String.format("%.0f%% released vs %.0f%% physical", disbPct, p.getPhysicalProgressPct()),
-                "Funds released run well ahead of delivered works; confirm advance-payment guarantees."));
+            out.add(anomaly("DISBURSED_AHEAD_OF_PROGRESS", "MEDIUM", String.format("%.0f%% of the money released, but only %.0f%% of the work done", disbPct, p.getPhysicalProgressPct()),
+                "Much more money has been released than work done; make sure advance payments are guaranteed."));
         Map<String, Object> obs = jdbc.queryForMap("""
             SELECT coalesce(max(observed_progress_pct), -1) obs, coalesce(max(reported_progress_pct), -1) rep FROM field_inspection
             WHERE project_id = :id AND observed_progress_pct IS NOT NULL AND visited_on > current_date - interval '60 days' AND verification_status <> 'REJECTED'
             """, new MapSqlParameterSource().addValue("id", p.getId(), Types.BIGINT));
         double o = ((Number) obs.get("obs")).doubleValue(), r = ((Number) obs.get("rep")).doubleValue();
         if (o >= 0 && r >= 0 && r - o >= 10)
-            out.add(anomaly("REPORTED_VS_OBSERVED", "HIGH", String.format("Site reported %.0f%% but inspection observed %.0f%%", r, o),
-                "Independent inspection contradicts the site report; treat reported progress as unverified."));
+            out.add(anomaly("REPORTED_VS_OBSERVED", "HIGH", String.format("Site reported %.0f%% done, but the visit found %.0f%%", r, o),
+                "A site visit found less work than the site reported; do not rely on the reported progress."));
         return out;
     }
 
@@ -217,10 +217,10 @@ public class InsightEngine {
             double score = Math.min(100, Math.log10(1 + reach) * 25 * severityW + (f.getSector() == et.gov.tigray.rpis.common.Sector.HEALTH ? 10 : 0));
             insights.upsert(new InsightService.Draft(InsightKind.FUNDING_PRIORITY, EntityType.FACILITY, f.getId(), f.getSector(), f.getWereda().getId(), PROVIDER, InsightBasis.RULE,
                 score >= 70 ? AlertSeverity.HIGH : score >= 40 ? AlertSeverity.MEDIUM : AlertSeverity.LOW, Math.round(score * 10) / 10.0, 0.55, null,
-                "Funding priority " + Math.round(score) + "/100 — " + f.getLatestSeverity().name().toLowerCase() + ", no project",
-                String.format("%,.0f beneficiaries; replacement estimate ETB %,.0f; %s.", beneficiaries, replacement, f.getLatestSeverity() == DamageSeverity.DESTROYED ? "facility destroyed" : "severely damaged"),
-                explain(List.of(f("Beneficiaries", String.format("%,.0f", beneficiaries), 0.4), f("Replacement estimate", String.format("ETB %,.0f", replacement), 0.3),
-                    f("Severity", f.getLatestSeverity().name(), 0.2), f("Sector weighting", f.getSector().name(), 0.1)))));
+                "Priority for funding: " + Math.round(score) + " out of 100 — " + (f.getLatestSeverity() == DamageSeverity.DESTROYED ? "destroyed" : "heavily damaged") + ", no project",
+                String.format("About %,.0f people served; rebuilding is estimated at ETB %,.0f.", beneficiaries, replacement),
+                explain(List.of(f("People served", String.format("%,.0f", beneficiaries), 0.4), f("Cost to rebuild", String.format("ETB %,.0f", replacement), 0.3),
+                    f("Damage", f.getLatestSeverity() == DamageSeverity.DESTROYED ? "destroyed" : "heavy", 0.2), f("Sector", f.getSector().name().toLowerCase(), 0.1)))));
             n++;
         }
         return n;

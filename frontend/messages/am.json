@@ -245,7 +245,7 @@
       "spi": "SPI",
       "cpi": "CPI",
       "stage": "ደረጃ",
-      "risk": "ስጋት",
+      "risk": "የትኩረት ነጥብ",
       "verified": "የተረጋገጠ",
       "releasedPct": "{pct} ተለቋል",
       "wasPlanned": "የታቀደው፦ {date}"
@@ -448,10 +448,40 @@
     "title": "በጀት እና ወጪ",
     "subtitle": "ምን ያህል ገንዘብ እንደታቀደ፣ እንደተለቀቀ እና እንደወጣ",
     "views": {
-      "overview": "አጠቃላይ እይታ",
-      "pipeline": "ያልተለቀቁ ክፍያዎች",
-      "variance": "የወጪ ልዩነት"
-    }
+      "overview": "ማጠቃለያ",
+      "pipeline": "የሚጠብቁ ክፍያዎች",
+      "variance": "ወጪው የፈጠነባቸው"
+    },
+    "bySector": "በዘርፍ",
+    "bySource": "በከፋዩ አካል",
+    "byZone": "በዞን",
+    "byStatus": "በፕሮጀክት ሁኔታ",
+    "pipeline": "ለመለቀቅ የሚጠብቁ ክፍያዎች",
+    "pipelineHint": "እስካሁን ያልተለቀቁ የታቀዱ ክፍያዎች፤ ረጅም ጊዜ የቆዩት መጀመሪያ",
+    "variance": "ከሥራቸው እድገት በላይ ገንዘብ እያወጡ ያሉ ፕሮጀክቶች",
+    "varianceHint": "ከተሠራው ሥራ ጋር ሲነጻጸር የወጣው ገንዘብ ከፍ ያለባቸው በሥራ ላይ ያሉ ፕሮጀክቶች",
+    "columns": {
+      "project": "ፕሮጀክት",
+      "tranche": "ክፍያ",
+      "planned": "የሚከፈልበት ቀን",
+      "amount": "መጠን",
+      "source": "ከፋዩ",
+      "status": "ሁኔታ",
+      "lag": "የዘገየው ጊዜ",
+      "budget": "በጀት",
+      "spent": "የወጣ",
+      "progress": "የተሠራው ሥራ",
+      "cpi": "CPI",
+      "forecast": "ሊሆን የሚችለው የመጨረሻ ወጪ",
+      "zone": "ዞን",
+      "projects": "ፕሮጀክቶች",
+      "allocated": "በጀት",
+      "released": "የተለቀቀ",
+      "utilisation": "የተለቀቀው ድርሻ"
+    },
+    "utilisationHint": "ከእያንዳንዱ ዞን በጀት የተለቀቀው ድርሻ",
+    "daysLate": "{count, plural, one {# ቀን} other {# ቀናት}}",
+    "paymentNo": "ቁ. {n}"
   },
   "brief": {
     "title": "የሥራ አስፈፃሚ ዕለታዊ ማጠቃለያ",
@@ -697,7 +727,163 @@
   },
   "intelligence": {
     "title": "ስጋቶች እና ቅድሚያዎች",
-    "subtitle": "ትኩረት የሚያስፈልጋቸው ፕሮጀክቶች የትኞቹ እንደሆኑ፣ ለምን፣ እና መጀመሪያ ምን መወሰን እንዳለበት"
+    "subtitle": "ትኩረት የሚያስፈልጋቸው ፕሮጀክቶች የትኞቹ እንደሆኑ፣ ለምን፣ እና መጀመሪያ ምን መወሰን እንዳለበት",
+    "tabs": {
+      "brief": "ምን መወሰን እንዳለበት",
+      "risk": "ትኩረት የሚፈልጉ ፕሮጀክቶች",
+      "compare": "ንጽጽር",
+      "priorities": "በቅድሚያ ገንዘብ የሚመደብለት",
+      "insights": "ማስጠንቀቂያዎች እና ትንበያዎች"
+    },
+    "signals": "የማስጠንቀቂያ ምልክቶች",
+    "actions": "እርስዎን የሚጠብቁ ውሳኔዎች",
+    "actionsHint": "በጣም ከባድ እና ረጅም ጊዜ የቆዩት መጀመሪያ። ምክንያቱን እና የሚመከረውን ለማየት አንድ ካርድ ይጫኑ።",
+    "kind": {
+      "DECISION": "ውሳኔ",
+      "FUNDING": "ገንዘብ",
+      "VERIFICATION": "የቦታ ፍተሻ",
+      "ESCALATION": "አስቸኳይ",
+      "REALLOCATION": "ገንዘብ ማዛወር",
+      "REVIEW": "መታየት ያለበት"
+    },
+    "suggested": "የሚመከረው ቀጣይ እርምጃ",
+    "evidence": "መነሻ የሆኑ አሃዞች",
+    "openAlert": "ችግሩን ክፈት",
+    "openInsight": "ክፈት",
+    "riskRegister": "ትኩረት የሚፈልጉ ፕሮጀክቶች",
+    "riskHint": "እያንዳንዱ ፕሮጀክት ከ0 እስከ 100 የትኩረት ነጥብ ያገኛል፤ ነጥቡ የሚሰላው ከመዘግየት፣ ከወጪ፣ ከጎደሉ ሪፖርቶች፣ ከዘገዩ ምዕራፎች፣ ካልተፈቱ ጉዳዮች፣ ከዘገዩ ክፍያዎች እና ከቦታ ፍተሻዎች ነው። ነጥቡ ከፍ ባለ ቁጥር የበለጠ ትኩረት ያስፈልገዋል።",
+    "riskComponents": "ነጥቡ የተሰላባቸው ነገሮች",
+    "band": {
+      "LOW": "ዝቅተኛ",
+      "MODERATE": "መጠነኛ",
+      "HIGH": "ከፍተኛ",
+      "CRITICAL": "በጣም ከፍተኛ"
+    },
+    "component": {
+      "schedule": "መዘግየት",
+      "cost": "ወጪ",
+      "reporting": "የጎደሉ ሪፖርቶች",
+      "milestones": "የዘገዩ ምዕራፎች",
+      "issues": "ያልተፈቱ ጉዳዮች",
+      "funding": "የዘገዩ ክፍያዎች",
+      "verification": "የቦታ ፍተሻዎች"
+    },
+    "sectorComparison": "ዘርፎች ሲነጻጸሩ",
+    "zoneComparison": "ዞኖች ሲነጻጸሩ",
+    "contractorPerformance": "ተቋራጮች ሲነጻጸሩ",
+    "comparisonHint": "ቁጥር 1 በጣም ጥሩ እየሠራ ያለው ነው፦ ከዕቅድ ብዙም ያልዘገየ፣ ሪፖርቶችን በየጊዜው የሚልክ እና አነስተኛ ትኩረት የሚፈልግ።",
+    "columns": {
+      "unit": "ስም",
+      "active": "በሥራ ላይ",
+      "delayed": "የዘገዩ",
+      "variance": "ከዕቅድ ቀድሞ ወይም ዘግይቶ",
+      "cpi": "አማካይ CPI",
+      "reporting": "ሪፖርት የላኩ (14 ቀናት)",
+      "verified": "በቦታው የተፈተሹ (30 ቀናት)",
+      "disbursed": "የተለቀቀ ገንዘብ",
+      "risk": "የትኩረት ነጥብ",
+      "critical": "በጣም ከባድ ችግሮች",
+      "rank": "ደረጃ",
+      "contractor": "ተቋራጭ",
+      "projects": "ፕሮጀክቶች",
+      "completed": "የተጠናቀቁ",
+      "onTime": "በጊዜው የተጠናቀቁ",
+      "budget": "በጀት"
+    },
+    "fundingPriorities": "ፕሮጀክት የሚጠብቁ የተጎዱ ተቋማት",
+    "fundingHint": "ፕሮጀክት የሌላቸው ክፉኛ የተጎዱ ወይም የወደሙ ተቋማት፤ ለሚወጣው ገንዘብ ብዙ ሰዎችን የሚጠቅሙት መጀመሪያ።",
+    "priorityColumns": {
+      "score": "ቅድሚያ",
+      "facility": "ተቋም",
+      "severity": "ጉዳት",
+      "beneficiaries": "ተጠቃሚ ሰዎች",
+      "replacement": "እንደገና ለመገንባት የሚያስፈልገው ወጪ",
+      "wereda": "ወረዳ"
+    },
+    "insights": "ማስጠንቀቂያዎች እና ትንበያዎች",
+    "insightsHint": "ከተመዘገቡት አሃዞች በተቀመጡ ሕጎች የተሰሉ ናቸው። ለመወሰን ይረዱዎታል እንጂ በእርስዎ ቦታ አይወስኑም።",
+    "insightKind": {
+      "DELAY_PREDICTION": "ሊከሰት የሚችል መዘግየት",
+      "COMPLETION_FORECAST": "የሚጠበቅ የማጠናቀቂያ ቀን",
+      "COST_RISK": "ሊኖር የሚችል ተጨማሪ ወጪ",
+      "SUPPLY_RISK": "ቁሳቁሶች ሊዘገዩ ይችላሉ",
+      "RISK_SCORE": "የትኩረት ነጥብ",
+      "DAMAGE_PRIORITY": "የጉዳት ቅድሚያ",
+      "FUNDING_PRIORITY": "የገንዘብ ቅድሚያ",
+      "ANOMALY": "ያልተለመዱ አሃዞች",
+      "RECOMMENDATION": "ምክር"
+    },
+    "insightStatus": {
+      "ACTIVE": "ወቅታዊ",
+      "SUPERSEDED": "በአዲስ ተተክቷል",
+      "DISMISSED": "ወደ ጎን የተተወ",
+      "ACTIONED": "እርምጃ የተወሰደበት"
+    },
+    "features": "መነሻ የሆኑ አሃዞች",
+    "anomalies": "የተገኙ ያልተለመዱ አሃዞች",
+    "reviewed": "በ{name} ታይቷል · {time}",
+    "review": "የወሰኑትን ይመዝግቡ",
+    "dismissNote": "ለምን ወደ ጎን እንደተዉት (ግዴታ)",
+    "forecastHistory": "ቀደም ያሉ ትንበያዎች",
+    "disclaimer": "ለውሳኔ የሚረዳ",
+    "noInsights": "እዚህ ምንም ማስጠንቀቂያ ወይም ትንበያ የለም",
+    "noRisk": "እዚህ የትኩረት ነጥብ ያለው ፕሮጀክት የለም",
+    "signal": {
+      "REPORTING_COVERAGE": "ሪፖርት የሚልኩ ፕሮጀክቶች",
+      "VERIFICATION_COVERAGE": "በቦታው የተፈተሹ ፕሮጀክቶች",
+      "DISBURSEMENT_LAG": "የዘገዩ ክፍያዎች",
+      "COST_EXPOSURE": "ሊኖር የሚችል ተጨማሪ ወጪ",
+      "SCHEDULE_SLIP": "ከ2 ወር በላይ የዘገዩ ፕሮጀክቶች",
+      "UNADDRESSED_DAMAGE": "ክፉኛ የተጎዱ፣ ፕሮጀክት የሌላቸው",
+      "DECISION_BACKLOG": "ከ3 ቀን በላይ የጠበቁ ውሳኔዎች",
+      "DATA_ANOMALIES": "መፈተሽ ያለባቸው ያልተለመዱ አሃዞች",
+      "PORTFOLIO_RISK": "የቅርብ ክትትል የሚፈልጉ ፕሮጀክቶች",
+      "FIELD_DATA_FRESHNESS": "ከመስክ የመጡ የቅርብ ጊዜ መረጃዎች",
+      "FIELD_DATA_AGE": "ከመስክ የመጡ የቅርብ ጊዜ መረጃዎች"
+    },
+    "noAccess": "ስጋቶች እና ቅድሚያዎች ለእርስዎ ሚና ክፍት አይደለም",
+    "noAccessHint": "ለዋና ሥራ አስፈፃሚው፣ ለዘርፍ ኃላፊዎች፣ ለተንታኞች፣ ለፌዴራል ታዛቢው እና ለአስተዳዳሪዎች ክፍት ነው። ካስፈለገዎት አስተዳዳሪን ይጠይቁ።",
+    "projectFunding": "የትኞቹ ክፍያዎች ይለቀቁ",
+    "projectFundingHint": "ክፍያቸው የዘገየ ወይም በ60 ቀናት ውስጥ የሚደርስ በሥራ ላይ ያሉ ፕሮጀክቶች። ቅድሚያው (0–100) ክፍያው ምን ያህል አስቸኳይ እንደሆነ፣ ፕሮጀክቱ ምን ያህል በጥሩ ሁኔታ እየሄደ እንደሆነ፣ በቦታው መፈተሹን እና ምን ያህል ሰዎች እንደሚጠቀሙ ያገናዝባል።",
+    "projectFundingColumns": {
+      "score": "ቅድሚያ",
+      "project": "ፕሮጀክት",
+      "health": "እንዴት እየሄደ ነው",
+      "progress": "የተሠራው ሥራ",
+      "pending": "የሚጠብቅ ክፍያ",
+      "due": "የሚደርስበት ቀን",
+      "recommendation": "ምክር",
+      "rationale": "ለምን"
+    },
+    "recommendation": {
+      "RELEASE": "ይለቀቅ",
+      "CONDITIONAL": "በቅድመ ሁኔታ ይለቀቅ",
+      "HOLD": "ይቆይ"
+    },
+    "daysLate": "{count, plural, one {# ቀን ዘግይቷል} other {# ቀናት ዘግይቷል}}",
+    "noProjectFunding": "እዚህ የሚጠብቅ ክፍያ የለም",
+    "riskType": "ዋናው ምክንያት",
+    "riskTypes": {
+      "SCHEDULE": "ከዕቅድ ወደኋላ የቀረ",
+      "COST": "ከታቀደው በላይ ወጪ እያወጣ",
+      "REPORTING": "የቅርብ ጊዜ ሪፖርት የለም",
+      "MILESTONES": "ጊዜያቸው ያለፈ ምዕራፎች",
+      "ISSUES": "ያልተፈቱ ጉዳዮች",
+      "FUNDING": "የዘገዩ ክፍያዎች",
+      "VERIFICATION": "ሂደቱ በቦታው አልተፈተሸም"
+    },
+    "severity": "ምን ያህል ከባድ",
+    "sector": "ዘርፍ",
+    "recommendedAction": "የሚመከረው ቀጣይ እርምጃ",
+    "viewDetail": "ዝርዝሩን ተመልከት",
+    "rationale": "ይህ ለምን ትኩረት እንደሚያስፈልገው",
+    "subject": "የሚመለከተው",
+    "age": "የጠበቀው ጊዜ",
+    "moreSignals": "ተጨማሪ {count} አሳይ",
+    "fewerSignals": "ያነሰ አሳይ",
+    "seeWhy": "ለምን እንደሆነ ተመልከት →",
+    "basisRule": "በተቀመጡ ሕጎች የተሰላ ነው፤ በAI አይደለም።",
+    "basisModel": "በትንበያ ሞዴል የተሰላ ነው።"
   },
   "evidence": {
     "title": "የቦታ ፎቶዎች እና ፍተሻዎች",
@@ -705,7 +891,51 @@
   },
   "map": {
     "title": "ካርታ",
-    "subtitle": "ፕሮጀክቶች፣ ተቋማት እና ጉዳት በትግራይ ካርታ ላይ"
+    "subtitle": "ፕሮጀክቶች፣ ተቋማት እና ጉዳት በትግራይ ካርታ ላይ",
+    "layers": {
+      "boundaries": "ወሰኖች",
+      "weredas": "የወረዳ አሃዞች",
+      "projects": "ፕሮጀክቶች",
+      "facilities": "ተቋማት",
+      "evidence": "የቦታ ፎቶዎች እና ጉብኝቶች"
+    },
+    "colorBy": "የፕሮጀክቶች ቀለም የሚያሳየው",
+    "color": {
+      "health": "እንዴት እየሄደ ነው",
+      "risk": "የትኩረት ነጥብ",
+      "progress": "የተሠራው ሥራ",
+      "sector": "ዘርፍ"
+    },
+    "facilityColorBy": "የተቋማት ቀለም የሚያሳየው",
+    "facilityColor": {
+      "severity": "ጉዳት",
+      "operational": "የሚሠራ ወይም የማይሠራ",
+      "sector": "ዘርፍ"
+    },
+    "filters": "ማጣሪያዎች",
+    "visible": "በካርታው ላይ የሚታዩ፦ {projects} ፕሮጀክቶች · {facilities} ተቋማት",
+    "selected": "የተመረጠ",
+    "noBoundaries": "የወረዳ ወሰኖች ገና አልተጫኑም፤ ስለዚህ እያንዳንዱ ወረዳ እንደ ትንሽ ክብ ይታያል።",
+    "legend": {
+      "health": "ፕሮጀክቱ እንዴት እየሄደ ነው",
+      "risk": "የትኩረት ነጥብ",
+      "severity": "ጉዳት",
+      "evidence": "የቦታ ፎቶዎች እና ጉብኝቶች",
+      "size": "ትልቅ ክብ = ትልቅ በጀት"
+    },
+    "openDetail": "ዝርዝሩን ክፈት",
+    "unaddressedOnly": "ፕሮጀክት የሌላቸው ክፉኛ የተጎዱ ተቋማት ብቻ",
+    "minRisk": "ዝቅተኛው የትኩረት ነጥብ",
+    "riskLegend": {
+      "low": "ዝቅተኛ (ከ25 በታች)",
+      "moderate": "መጠነኛ (25–49)",
+      "high": "ከፍተኛ (50–74)",
+      "critical": "በጣም ከፍተኛ (75 እና ከዚያ በላይ)"
+    },
+    "basemap": "የጀርባ ካርታ",
+    "basemapHint": "የጀርባ ካርታው የሚመጣው ከኢንተርኔት የካርታ አገልግሎት ነው።",
+    "search": "ወረዳ፣ ፕሮጀክት ወይም ተቋም ፈልግ",
+    "unsupported": "የዚህ ኮምፒውተር ብራውዘር የ3D ግራፊክስ ድጋፍ ስለሌለው ካርታው እዚህ ሊታይ አይችልም። ሌላ ብራውዘር ወይም ኮምፒውተር ይሞክሩ፤ ሌሎቹ ገጾች በሙሉ እንደተለመደው ይሠራሉ።"
   },
   "reports": {
     "title": "ሪፖርቶች",

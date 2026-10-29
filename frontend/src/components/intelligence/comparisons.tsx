@@ -22,7 +22,6 @@ export function UnitComparisonTable({ rows, unitLabel, onRow }: { rows: UnitComp
     { key: 'active', header: t('active'), align: 'right', cell: (u) => u.projectsActive },
     { key: 'delayed', header: t('delayed'), align: 'right', cell: (u) => <span style={{ color: u.projectsDelayed ? toneVar.serious : undefined }}>{u.projectsDelayed}</span> },
     { key: 'variance', header: t('variance'), align: 'right', cell: (u) => <span style={{ color: (u.avgVariancePp ?? 0) <= -5 ? toneVar.serious : undefined }}>{signedPp(u.avgVariancePp, 1)}</span> },
-    { key: 'cpi', header: t('cpi'), align: 'right', cell: (u) => <span style={{ color: (u.avgCpi ?? 1) < 0.9 ? toneVar.serious : undefined }}>{ratio(u.avgCpi)}</span> },
     { key: 'reporting', header: t('reporting'), cell: (u) => <Bar v={u.reportingCoveragePct} color={(u.reportingCoveragePct ?? 100) < 60 ? toneVar.serious : undefined} /> },
     { key: 'verified', header: t('verified'), cell: (u) => <Bar v={u.verifiedCoveragePct} color={(u.verifiedCoveragePct ?? 100) < 35 ? toneVar.serious : 'var(--status-good)'} /> },
     { key: 'disbursed', header: t('disbursed'), cell: (u) => <Bar v={u.disbursementPct} color="var(--seq-650)" /> },
@@ -42,7 +41,6 @@ export function ContractorTable({ rows }: { rows: ContractorPerformance[] }) {
     { key: 'projects', header: t('projects'), align: 'right', cell: (c) => <span>{c.projects}<span className="block text-2xs text-muted-foreground">{c.active} {t('active').toLowerCase()} · {c.completed} {t('completed').toLowerCase()}</span></span> },
     { key: 'delayed', header: t('delayed'), align: 'right', cell: (c) => <span className="font-medium" style={{ color: c.delayed ? toneVar.serious : undefined }}>{c.delayed}</span> },
     { key: 'variance', header: t('variance'), align: 'right', cell: (c) => <span style={{ color: (c.avgVariancePp ?? 0) <= -5 ? toneVar.serious : undefined }}>{signedPp(c.avgVariancePp, 1)}</span> },
-    { key: 'cpi', header: t('cpi'), align: 'right', cell: (c) => <span style={{ color: (c.avgCpi ?? 1) < 0.9 ? toneVar.serious : undefined }}>{ratio(c.avgCpi)}</span> },
     { key: 'onTime', header: t('onTime'), cell: (c) => <Bar v={c.onTimeRatePct} color="var(--status-good)" /> },
     { key: 'budget', header: t('budget'), align: 'right', cell: (c) => money(c.budgetEtb, locale) },
   ];

@@ -43,11 +43,10 @@ export function ActionCards({ actions, isLoading, error, refetch, limit, columns
                 </div>
                 <h3 className="mt-2 text-base font-semibold leading-snug">{a.title}</h3>
                 <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">{a.sector && <SectorDot sector={a.sector} />}{a.entityName && <span className="truncate max-w-[260px]">{a.entityName}</span>}{a.weredaName && <span>· {a.weredaName}</span>}{a.ageHours > 0 && <span>· {age(a.ageHours)}</span>}</div>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{a.rationale}</p>
-                {a.evidence.length > 0 && <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">{a.evidence.map((e) => <div key={e.label} className="min-w-0"><dt className="truncate text-muted-foreground">{e.label}</dt><dd className="truncate font-medium tabular">{e.value}</dd></div>)}</dl>}
+                <p className="mt-2 text-sm line-clamp-3">{a.rationale}</p>
                 <div className="mt-3 rounded-md bg-muted/40 p-2.5 text-sm"><span className="font-medium">{t('suggested')}: </span>{a.suggestedAction}</div>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-2xs uppercase tracking-wide text-muted-foreground">{a.basis === 'RULE' ? 'Rule-based' : 'Model'}</span>
+                  <span className="text-sm text-primary">{t('seeWhy')}</span>
                   <div className="flex gap-1.5" onClick={stop} onKeyDown={stop}>
                     {a.alertId && <Button size="xs" onClick={() => setOpen(a.alertId)}>{t('openAlert')}</Button>}
                     {href && <Button asChild size="xs" variant="outline"><Link href={href as '/'}>{te(a.entityType as 'PROJECT')}<ArrowUpRight /></Link></Button>}
@@ -90,7 +89,7 @@ function ActionDetail({ action: a, onClose, onOpenAlert }: { action: ActionCard 
             {a.evidence.length > 0 && <section><h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('evidence')}</h4>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-md border p-3 text-xs">{a.evidence.map((e) => <div key={e.label} className="min-w-0"><dt className="text-muted-foreground">{e.label}</dt><dd className="font-medium tabular">{e.value}</dd></div>)}</dl></section>}
             <section className="rounded-md bg-muted/40 p-3"><h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('suggested')}</h4><p>{a.suggestedAction}</p></section>
-            <p className="text-2xs uppercase tracking-wide text-muted-foreground">{tc('basis')}: {a.basis === 'RULE' ? 'Rule-based' : 'Model'}</p>
+            <p className="text-xs text-muted-foreground">{a.basis === 'RULE' ? t('basisRule') : t('basisModel')}</p>
           </div>
           <DialogFooter className="gap-2 sm:gap-2">
             {a.alertId && <Button size="sm" onClick={() => onOpenAlert(a.alertId!)}>{t('openAlert')}</Button>}

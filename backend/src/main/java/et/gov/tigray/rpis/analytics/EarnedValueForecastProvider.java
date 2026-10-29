@@ -34,8 +34,8 @@ public class EarnedValueForecastProvider implements ForecastProvider {
         }
         BigDecimal forecastCost = cpi != null && cpi > 0.2 ? in.budget().divide(BigDecimal.valueOf(cpi), 2, RoundingMode.HALF_UP) : in.budget();
         double confidence = in.physicalPct() < 10 ? 0.35 : in.physicalPct() < 40 ? 0.55 : 0.7;
-        String rationale = String.format("Observed productivity %.2f%%/day; SPI %s; CPI %s. Baseline earned-value projection, not an AI forecast.",
-            in.physicalPct() / Math.max(1, ChronoUnit.DAYS.between(start, in.asOf())), spi == null ? "n/a" : spi, cpi == null ? "n/a" : cpi);
+        String rationale = String.format("So far the work has moved forward by about %.2f%% a day; this is when it finishes if that pace continues. Worked out from the recorded figures, not by AI.",
+            in.physicalPct() / Math.max(1, ChronoUnit.DAYS.between(start, in.asOf())));
         return new Forecast(forecastEnd, forecastCost, confidence, rationale, spi, cpi);
     }
 

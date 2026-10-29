@@ -18,7 +18,7 @@ class EarnedValueForecastProviderTest {
         assertThat(f.cpi()).isLessThan(1.0);
         assertThat(f.forecastEnd()).isAfter(end);
         assertThat(f.forecastCost()).isGreaterThan(new BigDecimal("100000000"));
-        assertThat(f.rationale()).contains("not an AI forecast");
+        assertThat(f.rationale()).contains("not by AI");
     }
 
     @Test

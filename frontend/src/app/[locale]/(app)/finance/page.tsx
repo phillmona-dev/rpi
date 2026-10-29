@@ -11,7 +11,7 @@ import { SectorDot, ToneBadge } from '@/components/common/badges';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQueryParams } from '@/lib/use-query-params';
 import { useRouter } from '@/i18n/navigation';
-import { fmtDate, localizedName, money, pct, ratio } from '@/lib/format';
+import { fmtDate, localizedName, money, pct } from '@/lib/format';
 import type { PipelineItem, VarianceItem, ZoneSlice, Sector } from '@/lib/api/types';
 import { SECTORS } from '@/lib/api/types';
 import { toneVar, type Tone } from '@/lib/domain';
@@ -52,11 +52,11 @@ export default function FinancePage() {
   ];
   const pipeCols: Column<PipelineItem>[] = [
     { key: 'project', header: t('columns.project'), cell: (p) => <div className="min-w-[240px]"><div className="flex items-center gap-1.5 font-medium"><SectorDot sector={p.sector} /><span className="truncate max-w-[320px]">{p.projectName}</span></div><div className="text-xs text-muted-foreground">{p.projectCode} · {p.weredaName}</div></div> },
-    { key: 'tranche', header: t('columns.tranche'), align: 'center', cell: (p) => `#${p.trancheNo}` },
+    { key: 'tranche', header: t('columns.tranche'), align: 'center', cell: (p) => t('paymentNo', { n: p.trancheNo }) },
     { key: 'amount', header: t('columns.amount'), align: 'right', cell: (p) => <span className="font-medium">{money(p.amountEtb, locale)}</span> },
     { key: 'source', header: t('columns.source'), cell: (p) => te(`funding.${p.fundingSource}`) },
     { key: 'planned', header: t('columns.planned'), align: 'right', cell: (p) => fmtDate(p.plannedDate, locale, 'short') },
-    { key: 'lag', header: t('columns.lag'), align: 'right', cell: (p) => <span style={{ color: p.lagDays > 45 ? toneVar.serious : undefined }}>{p.lagDays > 0 ? `${p.lagDays} d` : '—'}</span> },
+    { key: 'lag', header: t('columns.lag'), align: 'right', cell: (p) => <span style={{ color: p.lagDays > 45 ? toneVar.serious : undefined }}>{p.lagDays > 0 ? t('daysLate', { count: p.lagDays }) : '—'}</span> },
     { key: 'status', header: t('columns.status'), cell: (p) => <ToneBadge tone={disbTone[p.status]} label={te(`disbursement.${p.status}`)} /> },
   ];
   const varCols: Column<VarianceItem>[] = [
@@ -64,7 +64,6 @@ export default function FinancePage() {
     { key: 'progress', header: t('columns.progress'), align: 'right', cell: (p) => pct(p.physicalPct) },
     { key: 'budget', header: t('columns.budget'), align: 'right', cell: (p) => money(p.budgetEtb, locale) },
     { key: 'spent', header: t('columns.spent'), align: 'right', cell: (p) => money(p.expendedEtb, locale) },
-    { key: 'cpi', header: t('columns.cpi'), align: 'right', cell: (p) => <span className="font-medium" style={{ color: (p.cpi ?? 1) < 0.9 ? toneVar.critical : toneVar.serious }}>{ratio(p.cpi)}</span> },
     { key: 'forecast', header: t('columns.forecast'), align: 'right', cell: (p) => <span>{money(p.forecastCostEtb, locale)}{p.forecastCostEtb && <span className="block text-xs text-muted-foreground">+{pct(((p.forecastCostEtb - p.budgetEtb) / p.budgetEtb) * 100)}</span>}</span> },
   ];
   return (

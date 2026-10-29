@@ -21,9 +21,11 @@ export function WeredaMap({ weredas, metric, height = 420, focusId, interactive 
   const ref = React.useRef<HTMLDivElement>(null);
   const mapRef = React.useRef<MlMap | null>(null);
   const [ready, setReady] = React.useState(false);
+  const [unsupported, setUnsupported] = React.useState(false);
   const locale = useLocale();
   const t = useTranslations('dashboard.metric');
   const tg = useTranslations('geo');
+  const tm = useTranslations('map');
   const router = useRouter();
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
 
@@ -42,7 +44,9 @@ export function WeredaMap({ weredas, metric, height = 420, focusId, interactive 
   React.useEffect(() => {
     if (!ref.current || mapRef.current) return;
     const style = process.env.NEXT_PUBLIC_MAP_STYLE_URL || FALLBACK_STYLE;
-    const map = new maplibregl.Map({ container: ref.current, style, bounds: TIGRAY_BOUNDS, fitBoundsOptions: { padding: 24 }, attributionControl: false, interactive, cooperativeGestures: interactive });
+    let map: maplibregl.Map;
+    // Computers without 3D graphics (WebGL) cannot draw the map; say so instead of breaking the page.
+    try { map = new maplibregl.Map({ container: ref.current, style, bounds: TIGRAY_BOUNDS, fitBoundsOptions: { padding: 24 }, attributionControl: false, interactive, cooperativeGestures: interactive }); } catch { setUnsupported(true); return; }
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
     if (interactive) map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
     let fellBack = false;
@@ -107,6 +111,7 @@ export function WeredaMap({ weredas, metric, height = 420, focusId, interactive 
 
   return (
     <div className="relative overflow-hidden rounded-md border" style={{ height }}>
+      {unsupported && <div className="absolute inset-0 z-10 flex items-center justify-center bg-muted p-6 text-center text-sm text-muted-foreground">{tm('unsupported')}</div>}
       <div ref={ref} className="h-full w-full" role="application" aria-label={tg('title')} />
       <div className="pointer-events-none absolute bottom-2 left-2 rounded-md border bg-card/90 px-2 py-1 text-2xs text-muted-foreground backdrop-blur">
         <span className="font-medium text-foreground">{t(metric)}</span> · <span>{tg('noBoundary')}</span>
