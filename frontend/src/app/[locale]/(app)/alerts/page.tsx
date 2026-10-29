@@ -37,14 +37,16 @@ export default function AlertsPage() {
   const { data, isLoading, error, refetch } = useAlerts(query);
   const { data: counts } = useAlertCounts(user.sectorScope);
   const cols: Column<AlertSummary>[] = [
+    { key: 'title', header: t('columns.title'), cell: (a) => (
+      <div className="min-w-[300px]">
+        <div className="font-medium">{a.title}</div>
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">{a.sector && <SectorDot sector={a.sector} />}<span className="truncate max-w-[260px]">{a.entityName ?? a.entityCode}</span>{a.weredaName && <span>· {a.weredaName}</span>}<span>· {te(`rule.${a.rule}`)}</span></div>
+        {(a.decisionRequired || overdueCritical(a)) && <div className="mt-1 flex flex-wrap gap-1">{overdueCritical(a) && <Badge variant="outline" className="text-xs" style={{ color: toneVar.critical, borderColor: toneVar.critical }}>{t('overdue')}</Badge>}{a.decisionRequired && <Badge variant="outline" className="text-xs">{t('decisionBadge')}</Badge>}</div>}
+      </div>) },
     { key: 'severity', header: t('columns.severity'), cell: (a) => <AlertSeverityBadge value={a.severity} /> },
-    { key: 'title', header: t('columns.title'), cell: (a) => <div className="min-w-[320px]"><div className="font-medium">{a.title}</div>{(a.decisionRequired || overdueCritical(a)) && <div className="mt-0.5 flex flex-wrap gap-1">{overdueCritical(a) && <Badge variant="outline" className="text-2xs" style={{ color: toneVar.critical, borderColor: toneVar.critical }}>{t('overdue')}</Badge>}{a.decisionRequired && <Badge variant="outline" className="text-2xs">{t('decisionBadge')}</Badge>}</div>}</div> },
-    { key: 'rule', header: t('columns.rule'), cell: (a) => <span className="whitespace-nowrap text-xs text-muted-foreground">{te(`rule.${a.rule}`)}</span> },
-    { key: 'entity', header: t('columns.entity'), cell: (a) => <div className="flex items-center gap-1.5 text-sm">{a.sector && <SectorDot sector={a.sector} />}<span className="truncate max-w-[220px]">{a.entityName ?? a.entityCode}</span><span className="text-2xs text-muted-foreground">{te(`entityType.${a.entityType}`)}</span></div> },
-    { key: 'wereda', header: t('columns.wereda'), cell: (a) => a.weredaName ?? '—' },
-    { key: 'age', header: t('columns.age'), align: 'right', cell: (a) => <span className={cn('tabular', overdueCritical(a) && 'font-semibold')} style={{ color: overdueCritical(a) ? toneVar.critical : a.ageHours > 72 && UNRESOLVED.includes(a.status) ? toneVar.serious : undefined }}>{a.ageHours < 48 ? `${a.ageHours} h` : `${Math.floor(a.ageHours / 24)} d`}</span> },
+    { key: 'age', header: t('columns.age'), align: 'right', cell: (a) => <span className={cn('whitespace-nowrap', overdueCritical(a) && 'font-semibold')} style={{ color: overdueCritical(a) ? toneVar.critical : a.ageHours > 72 && UNRESOLVED.includes(a.status) ? toneVar.serious : undefined }}>{tc('daysAgo', { count: Math.floor(a.ageHours / 24) })}</span> },
     { key: 'status', header: t('columns.status'), cell: (a) => <AlertStatusBadge value={a.status} /> },
-    { key: 'assignee', header: t('columns.assignee'), cell: (a) => a.assignedToName ?? '—' },
+    { key: 'assignee', header: t('columns.assignee'), cell: (a) => a.assignedToName ?? <span className="text-muted-foreground">{t('nobody')}</span> },
   ];
   const sel = (k: string, label: string, opts: string[], ns: string, w = 'w-[160px]') => (
     <Select value={get(k) ?? 'ALL'} onValueChange={(v) => set({ [k]: v === 'ALL' ? null : v })}><SelectTrigger className={w} aria-label={label}><SelectValue /></SelectTrigger>
@@ -55,11 +57,10 @@ export default function AlertsPage() {
     <>
       <PageHeader title={t('title')} subtitle={t('subtitle')} />
       {counts && (
-        <div className="grid grid-cols-2 gap-3 tablet:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 tablet:grid-cols-4">
           {([
             ['open', counts.open, undefined, !hasAny, { status: null, severity: null, decisionRequired: null }],
             ['critical', counts.critical, counts.critical ? toneVar.critical : undefined, get('severity') === 'CRITICAL', { severity: 'CRITICAL', status: null, decisionRequired: null }],
-            ['high', counts.high, counts.high ? toneVar.serious : undefined, get('severity') === 'HIGH', { severity: 'HIGH', status: null, decisionRequired: null }],
             ['decision', counts.decisionRequired, undefined, get('decisionRequired') === 'true', { decisionRequired: 'true', status: null, severity: null }],
             ['resolved7', counts.resolvedLast7Days, undefined, get('status') === 'RESOLVED', { status: 'RESOLVED', severity: null, decisionRequired: null }],
           ] as const).map(([k, v, color, active, filter]) => (
@@ -73,13 +74,11 @@ export default function AlertsPage() {
         {sel('status', t('filters.status'), ['OPEN', 'ACKNOWLEDGED', 'ASSIGNED', 'RESOLVED', 'DISMISSED'], 'alertStatus')}
         {sel('severity', t('filters.severity'), ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'], 'alertSeverity')}
         {!user.sectorScope && sel('sector', t('filters.sector'), SECTORS, 'sector')}
-        {sel('entityType', t('filters.entityType'), ['PROJECT', 'FACILITY', 'WEREDA'], 'entityType')}
-        <Select value={get('decisionRequired') ?? 'ALL'} onValueChange={(v) => set({ decisionRequired: v === 'ALL' ? null : v })}><SelectTrigger className="w-[190px]"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{t('filters.decision')}: {tc('all')}</SelectItem><SelectItem value="true">{tc('yes')}</SelectItem><SelectItem value="false">{tc('no')}</SelectItem></SelectContent></Select>
         {hasAny && <Button variant="ghost" size="sm" onClick={() => set({ status: null, severity: null, sector: null, entityType: null, decisionRequired: null })}><X />{tc('clearFilters')}</Button>}
       </div>
       <div className="rounded-lg border bg-card shadow-card">
-        <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.content.length} emptyTitle={t('empty')} skeleton={<div className="p-4"><TableSkeleton cols={8} rows={10} /></div>} className="p-4">
-          <DataTable columns={cols} rows={data?.content ?? []} rowKey={(a) => a.id} onRowClick={(a) => setOpen(a.id)} dense caption={t('title')} rowClassName={(a) => overdueCritical(a) ? 'bg-[color-mix(in_srgb,var(--status-critical)_10%,transparent)] shadow-[inset_3px_0_0_var(--status-critical)] hover:bg-[color-mix(in_srgb,var(--status-critical)_16%,transparent)]' : undefined} />
+        <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.content.length} emptyTitle={t('empty')} skeleton={<div className="p-4"><TableSkeleton cols={5} rows={10} /></div>} className="p-4">
+          <DataTable columns={cols} rows={data?.content ?? []} rowKey={(a) => a.id} onRowClick={(a) => setOpen(a.id)} caption={t('title')} rowClassName={(a) => overdueCritical(a) ? 'bg-[color-mix(in_srgb,var(--status-critical)_10%,transparent)] shadow-[inset_3px_0_0_var(--status-critical)] hover:bg-[color-mix(in_srgb,var(--status-critical)_16%,transparent)]' : undefined} />
           {data && <Pagination page={data.page} totalPages={data.totalPages} totalElements={data.totalElements} size={data.size} onPage={(p) => set({ page: String(p) }, false)} onSize={(s) => set({ size: String(s) })} />}
         </DataState>
       </div>

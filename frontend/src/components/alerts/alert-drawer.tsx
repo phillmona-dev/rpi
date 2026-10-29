@@ -27,6 +27,7 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
   const locale = useLocale();
   const user = useUser();
   const { data, isLoading, error, refetch } = useAlert(id);
+  const trole = useTranslations('roles');
   const act = useAlertAction(id);
   const [action, setAction] = React.useState<AlertAction>('ACKNOWLEDGE');
   const [note, setNote] = React.useState('');
@@ -70,9 +71,12 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
                 <p className="mt-1">{a.detail}</p>
                 <p className="mt-2 text-xs text-muted-foreground">{th(a.rule)}</p>
                 {a.metrics && Object.keys(a.metrics).length > 0 && (
-                  <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs tablet:grid-cols-3">
-                    {Object.entries(a.metrics).map(([k, v]) => v !== null && <div key={k}><dt className="text-muted-foreground">{k.length <= 3 ? k.toUpperCase() : k.replace(/([A-Z])/g, ' $1').replace(/^./, (c) => c.toUpperCase())}</dt><dd className="font-medium tabular">{fmtMetric(k, v)}</dd></div>)}
-                  </dl>
+                  <details className="mt-3">
+                    <summary className="cursor-pointer text-xs font-medium text-primary">{t('detail.metrics')}</summary>
+                    <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs tablet:grid-cols-3">
+                      {Object.entries(a.metrics).map(([k, v]) => v !== null && <div key={k}><dt className="text-muted-foreground">{k.length <= 3 ? k.toUpperCase() : k.replace(/([A-Z])/g, ' $1').replace(/^./, (c) => c.toUpperCase())}</dt><dd className="font-medium tabular">{fmtMetric(k, v)}</dd></div>)}
+                    </dl>
+                  </details>
                 )}
               </section>
               <dl className="grid grid-cols-3 gap-2 text-xs">
@@ -80,20 +84,6 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
                 <div><dt className="text-muted-foreground">{t('detail.acknowledged')}</dt><dd>{fmtDateTime(a.acknowledgedAt, locale)}</dd></div>
                 <div><dt className="text-muted-foreground">{t('columns.assignee')}</dt><dd>{a.assignedToName ?? '—'}</dd></div>
               </dl>
-              <Separator />
-              <section>
-                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('detail.history')}</h4>
-                {data.history.length === 0 ? <p className="mt-1 text-sm text-muted-foreground">—</p> : (
-                  <ol className="mt-2 space-y-2">
-                    {data.history.map((h) => (
-                      <li key={h.id} className="flex gap-2 text-sm">
-                        <span className="mt-0.5 text-muted-foreground">{h.action === 'ACKNOWLEDGE' ? <Eye className="h-4 w-4" /> : h.action === 'ASSIGN' ? <UserPlus className="h-4 w-4" /> : h.action === 'RESOLVE' ? <CheckCircle2 className="h-4 w-4" /> : h.action === 'DISMISS' ? <XCircle className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}</span>
-                        <div className="min-w-0"><div className="flex flex-wrap gap-x-2 text-xs text-muted-foreground"><span className="font-medium text-foreground">{h.actorName ?? 'system'}</span><span>{t(`actions.${h.action.toLowerCase()}` as 'actions.acknowledge')}</span><span>· {fmtDateTime(h.createdAt, locale)}</span></div>{h.note && <p className="text-sm">{h.note}</p>}</div>
-                      </li>
-                    ))}
-                  </ol>
-                )}
-              </section>
               <Separator />
               <section aria-labelledby="act-title">
                 <h4 id="act-title" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('actions.title')}</h4>
@@ -107,7 +97,7 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
                     {action === 'ASSIGN' && (
                       <div className="space-y-1"><Label htmlFor="assignee">{t('actions.assignee')}</Label>
                         <Select value={assignee} onValueChange={setAssignee}><SelectTrigger id="assignee"><SelectValue placeholder="—" /></SelectTrigger>
-                          <SelectContent>{users?.map((u) => <SelectItem key={u.id} value={String(u.id)}>{u.fullName} · {u.roles.join(', ')}</SelectItem>)}</SelectContent></Select></div>
+                          <SelectContent>{users?.map((u) => <SelectItem key={u.id} value={String(u.id)}>{u.fullName} · {u.roles.map((r) => trole(r as 'ADMIN')).join(', ')}</SelectItem>)}</SelectContent></Select></div>
                     )}
                     <div className="space-y-1"><Label htmlFor="note">{t('actions.note')}{needsNote && ' *'}</Label><Textarea id="note" value={note} onChange={(e) => setNote(e.target.value)} placeholder={t('actions.notePlaceholder')} maxLength={2000} /></div>
                     <div className="flex items-center justify-between gap-3">
@@ -115,6 +105,20 @@ export function AlertDrawer({ id, onClose }: { id: number | null; onClose: () =>
                       <Button onClick={submit} disabled={act.isPending || (action === 'ASSIGN' && !assignee)}>{t('actions.submit')}</Button>
                     </div>
                   </div>
+                )}
+              </section>
+              <Separator />
+              <section>
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('detail.history')}</h4>
+                {data.history.length === 0 ? <p className="mt-1 text-sm text-muted-foreground">—</p> : (
+                  <ol className="mt-2 space-y-2">
+                    {data.history.map((h) => (
+                      <li key={h.id} className="flex gap-2 text-sm">
+                        <span className="mt-0.5 text-muted-foreground">{h.action === 'ACKNOWLEDGE' ? <Eye className="h-4 w-4" /> : h.action === 'ASSIGN' ? <UserPlus className="h-4 w-4" /> : h.action === 'RESOLVE' ? <CheckCircle2 className="h-4 w-4" /> : h.action === 'DISMISS' ? <XCircle className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}</span>
+                        <div className="min-w-0"><div className="flex flex-wrap gap-x-2 text-xs text-muted-foreground"><span className="font-medium text-foreground">{h.actorName ?? t('detail.system')}</span><span>{t(`actions.${h.action.toLowerCase()}` as 'actions.acknowledge')}</span><span>· {fmtDateTime(h.createdAt, locale)}</span></div>{h.note && <p className="text-sm">{h.note}</p>}</div>
+                      </li>
+                    ))}
+                  </ol>
                 )}
               </section>
               <Separator />

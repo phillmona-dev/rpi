@@ -12,7 +12,7 @@
     "facilities": "ትካላት",
     "damage": "ገምጋም ጉድኣት",
     "finance": "ባጀትን ወጻኢን",
-    "alerts": "መስርዕ ውሳነ",
+    "alerts": "ጸገማት",
     "briefing": "መዓልታዊ ጽማቝ",
     "administration": "ምምሕዳር",
     "users": "ሕሳባት ተጠቀምቲ",
@@ -386,18 +386,63 @@
     }
   },
   "alerts": {
-    "title": "መስርዕ ውሳነ",
-    "subtitle": "እቲ ሲስተም ዝረኸቦም፣ ሓደ ሰብ ክርእዮም ዘለዎ ጸገማት። ልዕሊ 3 መዓልቲ ከይተፈትሑ ዝጸንሑ ከቢድ ጸገማት ብቀይሕ ይርኣዩ።",
+    "title": "ጸገማት",
+    "subtitle": "ኣብ ሓበሬታ ፕሮጀክትታት ዝተረኽቡ፣ ሓደ ሰብ ክርእዮም ዘለዎ ጸገማት። ልዕሊ 3 መዓልቲ ከይተፈትሑ ዝጸንሑ ከቢድ ጸገማት ብቀይሕ ይርኣዩ።",
     "actions": {
-      "acknowledge": "ተፈላጥነት ሃብ",
-      "assign": "መድብ",
-      "resolve": "ፍታሕ",
-      "dismiss": "ኣሰናብት",
-      "comment": "ርእይቶ",
+      "acknowledge": "ርእየዮ ኣለኹ",
+      "assign": "ንሓደ ሰብ ሃቦ",
+      "resolve": "ከም ዝተፈትሐ ምልክት ግበር",
+      "dismiss": "ሓቀኛ ጸገም ኣይኮነን",
+      "comment": "ርእይቶ ወስኽ",
       "note": "መዘኻኸሪ",
-      "submit": "ስጉምቲ መዝግብ"
+      "submit": "ዓቅብ",
+      "title": "እንታይ ክትገብሩ ትደልዩ?",
+      "notePlaceholder": "እንታይ ከም ዝተወሰነ ወይ ከም ዝተገብረ",
+      "assignee": "ንመን ይወሃብ",
+      "noteRequired": "በጃኹም ሓጺር መዘኻኸሪ ጸሓፉ",
+      "readOnly": "ጸገማት ክትርእዩ ትኽእሉ ኢኹም፣ ግን ስጉምቲ ክትወስዱ ኣይትኽእሉን።",
+      "done": "ተዓቂቡ"
     },
-    "decisionBadge": "ውሳነ የድሊ"
+    "decisionBadge": "ውሳነ የድሊ",
+    "count": "{count, plural, one {# ጸገም} other {# ጸገማት}}",
+    "columns": {
+      "severity": "ክንደይ ከቢድ",
+      "title": "ጸገም",
+      "entity": "ዝምልከቶ",
+      "sector": "ዘርፊ",
+      "wereda": "ወረዳ",
+      "age": "ዝጸንሐሉ ግዜ",
+      "status": "ኩነታት",
+      "assignee": "ዝሓዞ ሰብ",
+      "rule": "ዓይነት"
+    },
+    "filters": {
+      "status": "ኩነታት",
+      "severity": "ክንደይ ከቢድ",
+      "decision": "ውሳነ የድሊ",
+      "sector": "ዘርፊ",
+      "entityType": "ዝምልከቶ"
+    },
+    "counts": {
+      "open": "ኩሎም ዘይተፈትሑ ጸገማት",
+      "critical": "ኣዝዩ ከቢድ",
+      "high": "ከቢድ",
+      "decision": "ውሳነ ዘድልዮም",
+      "resolved7": "ኣብዚ ሰሙን ዝተፈትሑ"
+    },
+    "detail": {
+      "why": "እዚ ስለምንታይ ተላዒሉ",
+      "metrics": "ዝተጠቕመሎም ኣሃዛት",
+      "history": "ክሳብ ሕጂ ዝተገብረ",
+      "openSubject": "{type} ክፈት",
+      "triggered": "ዝተላዕለሉ",
+      "acknowledged": "ዝተራእየሉ",
+      "resolved": "ዝተፈትሐሉ",
+      "system": "እቲ ሲስተም"
+    },
+    "empty": "ምስዞም መጻረዪታት ዝሰማማዕ ጸገም የለን",
+    "overdue": "ከቢድ ኮይኑ ልዕሊ 3 መዓልቲ ከይተፈትሐ ዝጸንሐ",
+    "nobody": "ክሳብ ሕጂ ዋላ ሓደ የለን"
   },
   "finance": {
     "title": "ባጀትን ወጻኢን",
@@ -457,17 +502,17 @@
       "FUNCTIONAL": "ዝሰርሕ"
     },
     "alertSeverity": {
-      "CRITICAL": "ወሳኒ",
-      "HIGH": "ልዑል",
+      "CRITICAL": "ኣዝዩ ከቢድ",
+      "HIGH": "ከቢድ",
       "MEDIUM": "ማእከላይ",
-      "LOW": "ትሑት"
+      "LOW": "ቀሊል"
     },
     "alertStatus": {
-      "OPEN": "ክፉት",
-      "ACKNOWLEDGED": "ተፈላጥነት ዝተዋህቦ",
-      "ASSIGNED": "ዝተመደበ",
+      "OPEN": "ሓድሽ",
+      "ACKNOWLEDGED": "ዝተራእየ",
+      "ASSIGNED": "ንሰብ ዝተዋህበ",
       "RESOLVED": "ዝተፈትሐ",
-      "DISMISSED": "ዝተሰናበተ"
+      "DISMISSED": "ጸገም ዘይኮነ"
     },
     "funding": {
       "REGIONAL_TREASURY": "ክልላዊ ግምጃ ቤት",
@@ -621,6 +666,33 @@
       "NO_VERIFIER": "ፈታሺ የለን",
       "NOT_STARTED": "ስራሕ ኣይጀመረን",
       "OK": "እኹል ሰብ ኣለዎ"
+    },
+    "rule": {
+      "SCHEDULE_SLIPPAGE": "ካብ መደብ ድሕሪት ዝተረፈ",
+      "COST_OVERRUN": "ካብ መደብ ንላዕሊ ወጻኢ",
+      "STALLED_REPORTING": "ጸብጻብ ምዕባለ የለን",
+      "MILESTONE_OVERDUE": "ግዜኡ ዝሓለፈ ምዕራፍ",
+      "DISBURSEMENT_LAG": "ዝደንጎየ ክፍሊት",
+      "SEVERE_DAMAGE_UNADDRESSED": "ፕሮጀክት ዘይተሓዘሉ ጉድኣት",
+      "QUALITY_NONCONFORMANCE": "ጽሬቱ ትሑት ዝኾነ ስራሕ",
+      "FIELD_VERIFICATION_OVERDUE": "ቦታ ኣይተፈተሸን",
+      "PROGRESS_DISCREPANCY": "ጸብጻብ ምስ ቦታ ኣይሰማማዕን"
+    },
+    "ruleHint": {
+      "SCHEDULE_SLIPPAGE": "ክሳብ ሕጂ ካብቲ መደብ ዝጸበዮ ዝወሓደ ስራሕ ምስ ዝስራሕ ይላዓል።",
+      "COST_OVERRUN": "ምስ ዝተሰርሐ ስራሕ ክነጻጸር ዝወጸ ገንዘብ ልዑል ምስ ዝኸውን፣ ማለት እቲ ፕሮጀክት ካብ መደብ ንላዕሊ ከውጽእ ምስ ዝኽእል ይላዓል።",
+      "STALLED_REPORTING": "ካብ ቦታ ንነዊሕ ግዜ ጸብጻብ ምዕባለ ምስ ዘይመጽእ ይላዓል።",
+      "MILESTONE_OVERDUE": "ዝተመደበ ምዕራፍ ስራሕ ከይተዛዘመ ዕለቱ ምስ ዝሓልፍ ይላዓል።",
+      "DISBURSEMENT_LAG": "ዝተመደበ ክፍሊት ብግዜኡ ምስ ዘይተለቐቐ ይላዓል።",
+      "SEVERE_DAMAGE_UNADDRESSED": "ብኸቢድ ዝተጎድአ ወይ ዝዓነወ ትካል ዳግማይ ዝሃንጾ ፕሮጀክት ምስ ዘይብሉ ይላዓል።",
+      "QUALITY_NONCONFORMANCE": "ኣብ ምብጻሕ ቦታ ጽሬቱ ትሑት ዝኾነ ስራሕ ምስ ዝርከብ ይላዓል።",
+      "FIELD_VERIFICATION_OVERDUE": "ዝተሓበረ ምዕባለ ንነዊሕ ግዜ ኣብ ቦታ ብዝኾነ ሰብ ምስ ዘይፍተሽ ይላዓል።",
+      "PROGRESS_DISCREPANCY": "ኣብ ምብጻሕ ቦታ ዝተሰርሐ ስራሕ ካብቲ ቦታ ዝሓበሮ ብንጹር ዝወሓደ ኮይኑ ምስ ዝርከብ ይላዓል።"
+    },
+    "entityType": {
+      "PROJECT": "ፕሮጀክት",
+      "FACILITY": "ትካል",
+      "WEREDA": "ወረዳ"
     }
   },
   "intelligence": {

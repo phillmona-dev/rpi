@@ -64,13 +64,13 @@ public class AlertRuleEngine {
 
             if (variance <= -a.getScheduleVarianceDelayedPp()) {
                 created += upsert(stillFiring, AlertRule.SCHEDULE_SLIPPAGE, variance <= -30 ? AlertSeverity.CRITICAL : AlertSeverity.HIGH, p,
-                    "Schedule slippage: " + fmt(-variance) + " pp behind plan",
-                    String.format("Physical progress %s%% versus planned %s%% (threshold %.0f pp). Forecast completion %s against planned %s.",
-                        p.getPhysicalProgressPct(), p.getPlannedProgressPct(), a.getScheduleVarianceDelayedPp(), p.getForecastEnd(), p.getPlannedEnd()), m, true);
+                    "Behind plan by " + fmt(-variance) + "%",
+                    String.format("%s%% of the work is done, but the plan expected %s%% by now. At this pace it will finish on %s instead of %s.",
+                        fmt(p.getPhysicalProgressPct().doubleValue()), fmt(p.getPlannedProgressPct().doubleValue()), p.getForecastEnd() == null ? "an unknown date" : p.getForecastEnd(), p.getPlannedEnd()), m, true);
             } else if (variance <= -a.getScheduleVarianceAtRiskPp()) {
                 created += upsert(stillFiring, AlertRule.SCHEDULE_SLIPPAGE, AlertSeverity.MEDIUM, p,
-                    "At risk: " + fmt(-variance) + " pp behind plan",
-                    String.format("Physical progress %s%% versus planned %s%% (warning threshold %.0f pp).", p.getPhysicalProgressPct(), p.getPlannedProgressPct(), a.getScheduleVarianceAtRiskPp()), m, false);
+                    "Starting to fall behind: " + fmt(-variance) + "% behind plan",
+                    String.format("%s%% of the work is done; the plan expected %s%% by now.", fmt(p.getPhysicalProgressPct().doubleValue()), fmt(p.getPlannedProgressPct().doubleValue())), m, false);
             }
 
             if (p.getCpi() != null && p.getPhysicalProgressPct().doubleValue() >= 10) {
@@ -79,8 +79,9 @@ public class AlertRuleEngine {
                     Map<String, Object> cm = new LinkedHashMap<>(m); cm.put("overrunPct", Math.round(overrunPct));
                     cm.put("expendedEtb", p.getExpendedEtb()); cm.put("budgetEtb", p.getTotalBudgetEtb());
                     created += upsert(stillFiring, AlertRule.COST_OVERRUN, overrunPct >= 25 ? AlertSeverity.CRITICAL : AlertSeverity.HIGH, p,
-                        "Cost overrun trend: +" + Math.round(overrunPct) + "% at completion",
-                        String.format("CPI %.2f: ETB %,.0f certified for %s%% physical progress on an ETB %,.0f budget.", p.getCpi(), p.getExpendedEtb(), p.getPhysicalProgressPct(), p.getTotalBudgetEtb()), cm, true);
+                        "Likely to cost about " + Math.round(overrunPct) + "% more than planned",
+                        String.format("ETB %,.0f has been spent for %s%% of the work, on a budget of ETB %,.0f. At this rate the project will cost about %d%% more than planned.",
+                            p.getExpendedEtb(), fmt(p.getPhysicalProgressPct().doubleValue()), p.getTotalBudgetEtb(), Math.round(overrunPct)), cm, true);
                 }
             }
 
@@ -90,9 +91,9 @@ public class AlertRuleEngine {
             if (p.getStatus() == ProjectStatus.ACTIVE && daysSince > a.getStalledReportingDays()) {
                 Map<String, Object> sm = new LinkedHashMap<>(m); sm.put("daysSinceReport", daysSince);
                 created += upsert(stillFiring, AlertRule.STALLED_REPORTING, daysSince > 2L * a.getStalledReportingDays() ? AlertSeverity.CRITICAL : AlertSeverity.HIGH, p,
-                    "No site report for " + daysSince + " days",
-                    String.format("Last progress report %s. Threshold is %d days. Site may be stalled or the site manager offline.",
-                        p.getLastProgressReportAt() == null ? "never received" : p.getLastProgressReportAt().atZone(ZoneOffset.UTC).toLocalDate().toString(), a.getStalledReportingDays()), sm, true);
+                    "No progress report for " + daysSince + " days",
+                    String.format("%s Reports are expected at least every %d days: work may have stopped, or the site manager may not be able to send reports.",
+                        p.getLastProgressReportAt() == null ? "No progress report has been received yet." : "The last progress report was on " + p.getLastProgressReportAt().atZone(ZoneOffset.UTC).toLocalDate() + ".", a.getStalledReportingDays()), sm, true);
             }
         }
 
@@ -105,9 +106,9 @@ public class AlertRuleEngine {
             if (p.getPhysicalProgressPct().doubleValue() >= 10 && sinceVerified > 2L * staleDays) {
                 Map<String, Object> vm = new LinkedHashMap<>(); vm.put("daysSinceVerified", sinceVerified); vm.put("physicalPct", p.getPhysicalProgressPct()); vm.put("thresholdDays", 2L * staleDays);
                 created += upsert(stillFiring, AlertRule.FIELD_VERIFICATION_OVERDUE, sinceVerified > 4L * staleDays ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, p,
-                    "No verified site inspection for " + sinceVerified + " days",
-                    String.format("Reported progress %s%% has not been independently verified in the field since %s. Commission an inspection before relying on the figure.",
-                        p.getPhysicalProgressPct(), p.getLastVerifiedAt() == null ? "project start" : p.getLastVerifiedAt().atZone(ZoneOffset.UTC).toLocalDate().toString()), vm, false);
+                    "No one has checked this site for " + sinceVerified + " days",
+                    String.format("The reported progress (%s%%) has not been checked on site since %s. Send someone to check before relying on it.",
+                        fmt(p.getPhysicalProgressPct().doubleValue()), p.getLastVerifiedAt() == null ? "the project started" : p.getLastVerifiedAt().atZone(ZoneOffset.UTC).toLocalDate().toString()), vm, false);
             }
             // Reported vs observed discrepancy from the latest non-rejected inspection within 60 days
             Map<String, Object> obs = jdbc.queryForMap("""
@@ -118,8 +119,8 @@ public class AlertRuleEngine {
             if (o >= 0 && r >= 0 && r - o >= 10) {
                 Map<String, Object> pm = new LinkedHashMap<>(); pm.put("reportedPct", r); pm.put("observedPct", o); pm.put("gapPp", r - o); pm.put("visitedOn", String.valueOf(obs.get("visited")));
                 created += upsert(stillFiring, AlertRule.PROGRESS_DISCREPANCY, r - o >= 20 ? AlertSeverity.CRITICAL : AlertSeverity.HIGH, p,
-                    String.format("Reported %.0f%% vs observed %.0f%% on site", r, o),
-                    String.format("A field inspection on %s observed %.0f%% physical progress while the site reported %.0f%%. Reported progress should not be accepted until confirmed.", obs.get("visited"), o, r), pm, true);
+                    String.format("Site report says %.0f%% done, but the visit found %.0f%%", r, o),
+                    String.format("On %s a field visit found %.0f%% of the work done, while the site reported %.0f%%. Do not accept the reported figure until it is confirmed.", obs.get("visited"), o, r), pm, true);
             }
         }
 
@@ -128,7 +129,7 @@ public class AlertRuleEngine {
             long overdue = ChronoUnit.DAYS.between(ms.getPlannedDate(), today);
             Map<String, Object> mm = new LinkedHashMap<>(); mm.put("milestone", ms.getName()); mm.put("plannedDate", ms.getPlannedDate().toString()); mm.put("overdueDays", overdue);
             created += upsert(stillFiring, AlertRule.MILESTONE_OVERDUE, overdue > 90 ? AlertSeverity.CRITICAL : AlertSeverity.HIGH, p,
-                "Milestone overdue: " + ms.getName(), String.format("Planned %s, now %d days overdue.", ms.getPlannedDate(), overdue), mm, overdue > 60);
+                "Step overdue: " + ms.getName(), String.format("This step was planned for %s and is now %d days late.", ms.getPlannedDate(), overdue), mm, overdue > 60);
         }
 
         for (Disbursement d : disbursements.findLagging(today.minusDays(a.getDisbursementLagDays()))) {
@@ -136,8 +137,9 @@ public class AlertRuleEngine {
             long lag = ChronoUnit.DAYS.between(d.getPlannedDate(), today);
             Map<String, Object> dm = new LinkedHashMap<>(); dm.put("tranche", d.getTrancheNo()); dm.put("amountEtb", d.getAmountEtb()); dm.put("plannedDate", d.getPlannedDate().toString()); dm.put("lagDays", lag); dm.put("fundingSource", d.getFundingSource().name());
             created += upsert(stillFiring, AlertRule.DISBURSEMENT_LAG, lag > 90 ? AlertSeverity.HIGH : AlertSeverity.MEDIUM, p,
-                String.format("Tranche %d (ETB %,.0f) unreleased %d days", d.getTrancheNo(), d.getAmountEtb(), lag),
-                String.format("Planned release %s from %s is still %s. Works may slow for lack of cash flow.", d.getPlannedDate(), d.getFundingSource(), d.getStatus()), dm, true);
+                String.format("Payment %d (ETB %,.0f) is %d days late", d.getTrancheNo(), d.getAmountEtb(), lag),
+                String.format("It was due on %s (%s) and has not been released yet (%s). Work may slow down without the money.",
+                    d.getPlannedDate(), words(d.getFundingSource().name()), words(d.getStatus().name())), dm, true);
         }
 
         // Severe / destroyed facilities with no reconstruction project at all
@@ -150,14 +152,13 @@ public class AlertRuleEngine {
                 if (existing == null) {
                     Alert al = new Alert();
                     al.setRule(AlertRule.SEVERE_DAMAGE_UNADDRESSED); al.setSeverity(f.getLatestSeverity() == DamageSeverity.DESTROYED ? AlertSeverity.HIGH : AlertSeverity.MEDIUM);
-                    al.setTitle("No reconstruction project: " + f.getName());
-                    al.setDetail(String.format("Facility assessed as %s with no project assigned. Estimated replacement cost ETB %,.0f; %s beneficiaries affected.",
-                        f.getLatestSeverity(), f.getReplacementEstimateEtb() == null ? 0d : f.getReplacementEstimateEtb(), f.getBeneficiaries() == null ? "unknown" : String.format("%,d", f.getBeneficiaries())));
+                    al.setTitle(facilityTitle(f));
+                    al.setDetail(facilityDetail(f));
                     al.setEntityType(EntityType.FACILITY); al.setEntityId(f.getId()); al.setSector(f.getSector()); al.setWeredaId(f.getWereda().getId());
                     al.setDecisionRequired(true); al.setMetrics(fm);
                     alerts.save(al); created++;
                     publish(al);
-                } else { existing.setLastEvaluatedAt(Instant.now()); existing.setMetrics(fm); alerts.save(existing); }
+                } else { existing.setTitle(facilityTitle(f)); existing.setDetail(facilityDetail(f)); existing.setLastEvaluatedAt(Instant.now()); existing.setMetrics(fm); alerts.save(existing); }
             }
         }
 
@@ -167,7 +168,7 @@ public class AlertRuleEngine {
             String key = open.getRule() + ":" + open.getEntityType() + ":" + open.getEntityId();
             if (!stillFiring.contains(key)) {
                 open.setStatus(AlertStatus.RESOLVED); open.setResolvedAt(Instant.now());
-                open.setDetail((open.getDetail() == null ? "" : open.getDetail() + " ") + "[Auto-resolved: condition no longer met]");
+                open.setDetail((open.getDetail() == null ? "" : open.getDetail() + " ") + "(Closed automatically: the problem is no longer there.)");
                 alerts.save(open); autoResolved++;
             }
         }
@@ -198,4 +199,17 @@ public class AlertRuleEngine {
     }
 
     private static String fmt(double v) { return String.format("%.0f", v); }
+
+    /** DONOR_GRANT → "donor grant": codes read as words in alert text. */
+    private static String words(String code) { return code.replace('_', ' ').toLowerCase(java.util.Locale.ROOT); }
+
+    private static String facilityTitle(Facility f) {
+        return (f.getLatestSeverity() == DamageSeverity.DESTROYED ? "Destroyed, no project yet: " : "Heavily damaged, no project yet: ") + f.getName();
+    }
+
+    private static String facilityDetail(Facility f) {
+        return String.format("This facility was found %s and no project covers it. Rebuilding is estimated at ETB %,.0f; %s.",
+            f.getLatestSeverity() == DamageSeverity.DESTROYED ? "destroyed" : "heavily damaged", f.getReplacementEstimateEtb() == null ? 0d : f.getReplacementEstimateEtb(),
+            f.getBeneficiaries() == null ? "the number of people affected is not known" : String.format("about %,d people are affected", f.getBeneficiaries()));
+    }
 }

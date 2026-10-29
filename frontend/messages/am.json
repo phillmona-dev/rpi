@@ -12,7 +12,7 @@
     "facilities": "ተቋማት",
     "damage": "የጉዳት ግምገማ",
     "finance": "በጀት እና ወጪ",
-    "alerts": "የውሳኔ ወረፋ",
+    "alerts": "ችግሮች",
     "briefing": "ዕለታዊ ማጠቃለያ",
     "administration": "አስተዳደር",
     "users": "የተጠቃሚ መለያዎች",
@@ -386,18 +386,63 @@
     }
   },
   "alerts": {
-    "title": "የውሳኔ ወረፋ",
-    "subtitle": "ሲስተሙ ያገኛቸው እና አንድ ሰው ሊያያቸው የሚገቡ ችግሮች። ከ3 ቀን በላይ ሳይፈቱ የቆዩ ከባድ ችግሮች በቀይ ይታያሉ።",
+    "title": "ችግሮች",
+    "subtitle": "በፕሮጀክቶቹ መረጃ ውስጥ የተገኙ እና አንድ ሰው ሊያያቸው የሚገቡ ችግሮች። ከ3 ቀን በላይ ሳይፈቱ የቆዩ ከባድ ችግሮች በቀይ ይታያሉ።",
     "actions": {
-      "acknowledge": "እውቅና ስጥ",
-      "assign": "መድብ",
-      "resolve": "ፍታ",
-      "dismiss": "አሰናብት",
-      "comment": "አስተያየት",
+      "acknowledge": "አይቼዋለሁ",
+      "assign": "ለአንድ ሰው ስጥ",
+      "resolve": "እንደተፈታ ምልክት አድርግ",
+      "dismiss": "እውነተኛ ችግር አይደለም",
+      "comment": "አስተያየት ጨምር",
       "note": "ማስታወሻ",
-      "submit": "እርምጃ መዝግብ"
+      "submit": "አስቀምጥ",
+      "title": "ምን ማድረግ ይፈልጋሉ?",
+      "notePlaceholder": "ምን እንደተወሰነ ወይም ምን እንደተደረገ",
+      "assignee": "ለማን ይሰጥ",
+      "noteRequired": "እባክዎ አጭር ማስታወሻ ይጻፉ",
+      "readOnly": "ችግሮቹን ማየት ይችላሉ፤ ነገር ግን እርምጃ መውሰድ አይችሉም።",
+      "done": "ተቀምጧል"
     },
-    "decisionBadge": "ውሳኔ ያስፈልጋል"
+    "decisionBadge": "ውሳኔ ያስፈልጋል",
+    "count": "{count, plural, one {# ችግር} other {# ችግሮች}}",
+    "columns": {
+      "severity": "ምን ያህል ከባድ",
+      "title": "ችግር",
+      "entity": "የሚመለከተው",
+      "sector": "ዘርፍ",
+      "wereda": "ወረዳ",
+      "age": "የቆየበት ጊዜ",
+      "status": "ሁኔታ",
+      "assignee": "የያዘው ሰው",
+      "rule": "ዓይነት"
+    },
+    "filters": {
+      "status": "ሁኔታ",
+      "severity": "ምን ያህል ከባድ",
+      "decision": "ውሳኔ ያስፈልጋል",
+      "sector": "ዘርፍ",
+      "entityType": "የሚመለከተው"
+    },
+    "counts": {
+      "open": "ሁሉም ያልተፈቱ ችግሮች",
+      "critical": "በጣም ከባድ",
+      "high": "ከባድ",
+      "decision": "ውሳኔ የሚፈልጉ",
+      "resolved7": "በዚህ ሳምንት የተፈቱ"
+    },
+    "detail": {
+      "why": "ይህ ለምን ተነሳ",
+      "metrics": "ጥቅም ላይ የዋሉ አሃዞች",
+      "history": "እስካሁን የተደረገው",
+      "openSubject": "{type} ክፈት",
+      "triggered": "የተነሳበት",
+      "acknowledged": "የታየበት",
+      "resolved": "የተፈታበት",
+      "system": "ሲስተሙ"
+    },
+    "empty": "ከእነዚህ ማጣሪያዎች ጋር የሚስማማ ችግር የለም",
+    "overdue": "ከባድ ሆኖ ከ3 ቀን በላይ ሳይፈታ የቆየ",
+    "nobody": "እስካሁን ማንም የለም"
   },
   "finance": {
     "title": "በጀት እና ወጪ",
@@ -457,17 +502,17 @@
       "FUNCTIONAL": "የሚሰራ"
     },
     "alertSeverity": {
-      "CRITICAL": "ወሳኝ",
-      "HIGH": "ከፍተኛ",
+      "CRITICAL": "በጣም ከባድ",
+      "HIGH": "ከባድ",
       "MEDIUM": "መካከለኛ",
-      "LOW": "ዝቅተኛ"
+      "LOW": "ቀላል"
     },
     "alertStatus": {
-      "OPEN": "ክፍት",
-      "ACKNOWLEDGED": "እውቅና የተሰጠው",
-      "ASSIGNED": "የተመደበ",
+      "OPEN": "አዲስ",
+      "ACKNOWLEDGED": "የታየ",
+      "ASSIGNED": "ለሰው የተሰጠ",
       "RESOLVED": "የተፈታ",
-      "DISMISSED": "የተሰናበተ"
+      "DISMISSED": "ችግር ያልሆነ"
     },
     "funding": {
       "REGIONAL_TREASURY": "የክልል ግምጃ ቤት",
@@ -621,6 +666,33 @@
       "NO_VERIFIER": "ፈታሽ የለም",
       "NOT_STARTED": "ሥራው አልተጀመረም",
       "OK": "በቂ ሰው አለው"
+    },
+    "rule": {
+      "SCHEDULE_SLIPPAGE": "ከዕቅድ ወደኋላ የቀረ",
+      "COST_OVERRUN": "ከታቀደው በላይ ወጪ",
+      "STALLED_REPORTING": "የሥራ ሂደት ሪፖርት የለም",
+      "MILESTONE_OVERDUE": "ጊዜው ያለፈ ምዕራፍ",
+      "DISBURSEMENT_LAG": "የዘገየ ክፍያ",
+      "SEVERE_DAMAGE_UNADDRESSED": "ፕሮጀክት ያልተያዘለት ጉዳት",
+      "QUALITY_NONCONFORMANCE": "ጥራቱ ዝቅተኛ የሆነ ሥራ",
+      "FIELD_VERIFICATION_OVERDUE": "ቦታው አልተፈተሸም",
+      "PROGRESS_DISCREPANCY": "ሪፖርቱ ከቦታው ጋር አይዛመድም"
+    },
+    "ruleHint": {
+      "SCHEDULE_SLIPPAGE": "ዕቅዱ እስከ ዛሬ ከጠበቀው ያነሰ ሥራ ሲሠራ ይነሳል።",
+      "COST_OVERRUN": "ከተሠራው ሥራ አንጻር የወጣው ገንዘብ ከፍተኛ ሲሆን፣ ማለትም ፕሮጀክቱ ከታቀደው በላይ ሊያስወጣ እንደሚችል ሲታይ ይነሳል።",
+      "STALLED_REPORTING": "ከቦታው የሥራ ሂደት ሪፖርት ለረጅም ጊዜ ሳይመጣ ሲቀር ይነሳል።",
+      "MILESTONE_OVERDUE": "የታቀደ የሥራ ምዕራፍ ሳይጠናቀቅ ቀኑ ሲያልፍ ይነሳል።",
+      "DISBURSEMENT_LAG": "የታቀደ ክፍያ በጊዜው ሳይለቀቅ ሲቀር ይነሳል።",
+      "SEVERE_DAMAGE_UNADDRESSED": "ክፉኛ የተጎዳ ወይም የወደመ ተቋም መልሶ የሚገነባው ፕሮጀክት ሳይኖረው ሲቀር ይነሳል።",
+      "QUALITY_NONCONFORMANCE": "በቦታ ጉብኝት ጥራቱ ዝቅተኛ የሆነ ሥራ ሲገኝ ይነሳል።",
+      "FIELD_VERIFICATION_OVERDUE": "የተዘገበው የሥራ ሂደት ለረጅም ጊዜ በቦታው ላይ በማንም ሳይፈተሽ ሲቀር ይነሳል።",
+      "PROGRESS_DISCREPANCY": "በቦታ ጉብኝት የተሠራው ሥራ ቦታው ሪፖርት ካደረገው በግልጽ ያነሰ ሆኖ ሲገኝ ይነሳል።"
+    },
+    "entityType": {
+      "PROJECT": "ፕሮጀክት",
+      "FACILITY": "ተቋም",
+      "WEREDA": "ወረዳ"
     }
   },
   "intelligence": {

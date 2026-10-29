@@ -1184,60 +1184,62 @@
   },
   "alerts": {
     "title": "Alerts",
-    "subtitle": "Problems the system has spotted that need someone to look at them. Serious problems left open for more than 3 days are shown in red.",
-    "count": "{count, plural, one {# alert} other {# alerts}}",
+    "subtitle": "Problems found in the project data that need someone to look at them. Serious problems left open for more than 3 days are shown in red.",
+    "count": "{count, plural, one {# problem} other {# problems}}",
     "columns": {
-      "severity": "Severity",
-      "title": "Alert",
-      "entity": "Subject",
+      "severity": "How serious",
+      "title": "Problem",
+      "entity": "About",
       "sector": "Sector",
       "wereda": "Wereda",
-      "age": "Age",
+      "age": "Open since",
       "status": "Status",
-      "assignee": "Assignee",
-      "rule": "Rule"
+      "assignee": "Handled by",
+      "rule": "Type"
     },
     "filters": {
       "status": "Status",
-      "severity": "Severity",
-      "decision": "Decision required",
+      "severity": "How serious",
+      "decision": "Needs a decision",
       "sector": "Sector",
-      "entityType": "Subject type"
+      "entityType": "About"
     },
     "counts": {
-      "open": "Open",
-      "critical": "Critical",
-      "high": "High",
-      "decision": "Decision required",
-      "resolved7": "Resolved in 7 days"
+      "open": "All open problems",
+      "critical": "Very serious",
+      "high": "Serious",
+      "decision": "Need a decision",
+      "resolved7": "Fixed this week"
     },
     "detail": {
-      "why": "Why this fired",
-      "metrics": "Values at evaluation",
-      "history": "Action history",
-      "openSubject": "Open {type}",
-      "triggered": "Triggered",
-      "acknowledged": "Acknowledged",
-      "resolved": "Resolved"
+      "why": "Why this was raised",
+      "metrics": "Figures used",
+      "history": "What has been done",
+      "openSubject": "Open the {type}",
+      "triggered": "Raised",
+      "acknowledged": "Seen",
+      "resolved": "Fixed",
+      "system": "the system"
     },
     "actions": {
-      "title": "Take action",
-      "acknowledge": "Acknowledge",
-      "assign": "Assign",
-      "resolve": "Resolve",
-      "dismiss": "Dismiss",
-      "comment": "Comment",
+      "title": "What do you want to do?",
+      "acknowledge": "I have seen it",
+      "assign": "Give it to someone",
+      "resolve": "Mark as fixed",
+      "dismiss": "Not a real problem",
+      "comment": "Add a comment",
       "note": "Note",
-      "notePlaceholder": "Decision, instruction or context (recorded in the audit trail)",
-      "assignee": "Assign to",
-      "submit": "Record action",
-      "noteRequired": "A note is required for this action",
-      "readOnly": "Your role has read-only access to the decision queue",
-      "done": "Action recorded"
+      "notePlaceholder": "What was decided or done",
+      "assignee": "Give it to",
+      "submit": "Save",
+      "noteRequired": "Please write a short note",
+      "readOnly": "You can see problems but not act on them.",
+      "done": "Saved"
     },
-    "empty": "No alerts match these filters",
-    "decisionBadge": "Decision required",
-    "overdue": "Critical > 72 h"
+    "empty": "No problems match these filters",
+    "decisionBadge": "Needs a decision",
+    "overdue": "Serious and open for more than 3 days",
+    "nobody": "No one yet"
   },
   "finance": {
     "title": "Budget & spending",
@@ -1376,39 +1378,39 @@
       "FUNCTIONAL": "Functional"
     },
     "alertSeverity": {
-      "CRITICAL": "Critical",
-      "HIGH": "High",
-      "MEDIUM": "Medium",
-      "LOW": "Low"
+      "CRITICAL": "Very serious",
+      "HIGH": "Serious",
+      "MEDIUM": "Moderate",
+      "LOW": "Minor"
     },
     "alertStatus": {
-      "OPEN": "Open",
-      "ACKNOWLEDGED": "Acknowledged",
-      "ASSIGNED": "Assigned",
-      "RESOLVED": "Resolved",
-      "DISMISSED": "Dismissed"
+      "OPEN": "New",
+      "ACKNOWLEDGED": "Seen",
+      "ASSIGNED": "Given to someone",
+      "RESOLVED": "Fixed",
+      "DISMISSED": "Not a problem"
     },
     "rule": {
-      "SCHEDULE_SLIPPAGE": "Schedule slippage",
-      "COST_OVERRUN": "Cost overrun",
-      "STALLED_REPORTING": "Stalled reporting",
-      "MILESTONE_OVERDUE": "Milestone overdue",
-      "DISBURSEMENT_LAG": "Disbursement lag",
-      "SEVERE_DAMAGE_UNADDRESSED": "Severe damage unaddressed",
-      "QUALITY_NONCONFORMANCE": "Quality non-conformance",
-      "FIELD_VERIFICATION_OVERDUE": "Field verification overdue",
-      "PROGRESS_DISCREPANCY": "Reported vs observed discrepancy"
+      "SCHEDULE_SLIPPAGE": "Behind schedule",
+      "COST_OVERRUN": "Costing more than planned",
+      "STALLED_REPORTING": "No progress reports",
+      "MILESTONE_OVERDUE": "Step overdue",
+      "DISBURSEMENT_LAG": "Late payment",
+      "SEVERE_DAMAGE_UNADDRESSED": "Damage with no project",
+      "QUALITY_NONCONFORMANCE": "Poor quality work",
+      "FIELD_VERIFICATION_OVERDUE": "Site not checked",
+      "PROGRESS_DISCREPANCY": "Report does not match the site"
     },
     "ruleHint": {
-      "SCHEDULE_SLIPPAGE": "Physical progress is behind the milestone baseline by more than the configured threshold.",
-      "COST_OVERRUN": "Certified expenditure outpaces earned value (CPI below threshold), projecting a cost overrun at completion.",
-      "STALLED_REPORTING": "No progress report has been received from the site for longer than the configured number of days.",
-      "MILESTONE_OVERDUE": "A baseline milestone passed its planned date without being achieved.",
-      "DISBURSEMENT_LAG": "A planned funding tranche has not been released within the configured lag.",
-      "SEVERE_DAMAGE_UNADDRESSED": "A facility assessed as severely damaged or destroyed has no reconstruction project assigned.",
-      "QUALITY_NONCONFORMANCE": "An inspection recorded a quality non-conformance.",
-      "FIELD_VERIFICATION_OVERDUE": "Reported progress has not been independently verified by a field inspection for longer than twice the evidence-staleness threshold.",
-      "PROGRESS_DISCREPANCY": "A field inspection observed materially less physical progress than the site reported."
+      "SCHEDULE_SLIPPAGE": "Raised when less work is done than the plan expected by now.",
+      "COST_OVERRUN": "Raised when the money spent is high compared with the work done, so the project is likely to cost more than planned.",
+      "STALLED_REPORTING": "Raised when no progress report has come from the site for too long.",
+      "MILESTONE_OVERDUE": "Raised when a planned step of the work has passed its date without being finished.",
+      "DISBURSEMENT_LAG": "Raised when a planned payment has not been released on time.",
+      "SEVERE_DAMAGE_UNADDRESSED": "Raised when a heavily damaged or destroyed facility has no project to rebuild it.",
+      "QUALITY_NONCONFORMANCE": "Raised when a site visit found work of poor quality.",
+      "FIELD_VERIFICATION_OVERDUE": "Raised when no one has checked the reported progress on site for too long.",
+      "PROGRESS_DISCREPANCY": "Raised when a site visit found clearly less work done than the site reported."
     },
     "entityType": {
       "PROJECT": "Project",
