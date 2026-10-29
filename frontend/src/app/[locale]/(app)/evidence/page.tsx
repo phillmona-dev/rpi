@@ -51,10 +51,10 @@ export default function EvidencePage() {
       <PageHeader title={t('title')} subtitle={t('subtitle')} />
       <div className="flex flex-wrap items-center gap-2">
         {!user.sectorScope && sel('sector', t('filters.sector'), SECTORS, 'sector', 'w-[160px]')}
-        <Select value={zoneId ? String(zoneId) : 'ALL'} onValueChange={(v) => set({ zoneId: v === 'ALL' ? null : v })}><SelectTrigger className="w-[160px]" aria-label={ts('zone')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{ts('allZones')}</SelectItem>{zones?.map((z) => <SelectItem key={z.id} value={String(z.id)}>{localizedName(z.name, locale)}</SelectItem>)}</SelectContent></Select>
+        <Select value={zoneId ? String(zoneId) : 'ALL'} onValueChange={(v) => set({ zoneId: v === 'ALL' ? null : v })}><SelectTrigger className="w-[160px]" aria-label={ts('zone')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{ts('zone')}: {tc('all')}</SelectItem>{zones?.map((z) => <SelectItem key={z.id} value={String(z.id)}>{localizedName(z.name, locale)}</SelectItem>)}</SelectContent></Select>
         {tab === 'inspections' && sel('type', t('filters.type'), TYPES, 'inspectionType', 'w-[220px]')}
         {sel('status', t('filters.status'), STATUSES, 'verification')}
-        {tab === 'gallery' && sel('kind', t('filters.kind'), ['PHOTO', 'VIDEO', 'AUDIO', 'DOCUMENT'], 'facilityType' as never, 'w-[150px]')}
+        {tab === 'gallery' && <Select value={get('kind') ?? 'ALL'} onValueChange={(v) => set({ kind: v === 'ALL' ? null : v })}><SelectTrigger className="w-[170px]" aria-label={t('filters.kind')}><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">{t('filters.kind')}: {tc('all')}</SelectItem>{(['PHOTO', 'VIDEO', 'AUDIO', 'DOCUMENT'] as const).map((o) => <SelectItem key={o} value={o}>{t(`kind.${o}`)}</SelectItem>)}</SelectContent></Select>}
         {tab === 'gallery' && <label className="inline-flex items-center gap-2 text-sm"><Switch checked={get('geotagged') === 'true'} onCheckedChange={(v) => set({ geotagged: v ? 'true' : null })} />{t('filters.geotagged')}</label>}
         {hasAny && <Button variant="ghost" size="sm" onClick={() => set({ sector: null, zoneId: null, type: null, status: null, kind: null, geotagged: null })}><X />{tc('clearFilters')}</Button>}
       </div>
@@ -62,7 +62,7 @@ export default function EvidencePage() {
         <TabsList aria-label={t('title')}><TabsTrigger value="inspections">{t('inspections')}</TabsTrigger><TabsTrigger value="gallery">{t('gallery')}</TabsTrigger></TabsList>
         <TabsContent value="inspections">
           <div className="rounded-lg border bg-card shadow-card">
-            <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.content.length} emptyTitle={t('empty')} skeleton={<div className="p-4"><TableSkeleton cols={9} rows={10} /></div>} className="p-4">
+            <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={!data?.content.length} emptyTitle={t('empty')} skeleton={<div className="p-4"><TableSkeleton cols={6} rows={10} /></div>} className="p-4">
               <InspectionTable rows={data?.content ?? []} onOpen={(i) => setOpen(i.id)} sort={{ field: sortField, dir: sortDir }} onSort={(s) => set({ sort: s.field, dir: s.dir })} />
               {data && <Pagination page={data.page} totalPages={data.totalPages} totalElements={data.totalElements} size={data.size} onPage={(p) => set({ page: String(p) }, false)} onSize={(s) => set({ size: String(s) })} />}
             </DataState>

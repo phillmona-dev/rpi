@@ -159,7 +159,7 @@ export default function ProjectDetailPage() {
                       <EvidenceSummaryStrip s={d.evidence} />
                       <div className="mt-3"><EvidenceGallery items={media?.content.slice(0, 4)} isLoading={ml} error={me} onRetry={mr} compact /></div>
                     </Section>
-                    <Section title={tev('detail.location')}>
+                    <Section title={tev('siteMap')}>
                       <CommandMap projects={siteProjects} evidence={siteEvidence} layers={{ boundaries: false, weredas: false, projects: true, facilities: false, evidence: true }} height={240} fitTo="data" focus={p.location ? { lng: p.location.lng, lat: p.location.lat, zoom: 13 } : null} selected={{ kind: 'PROJECT', id: p.id, props: { kind: 'PROJECT' } as never }} interactive />
                     </Section>
                   </div>
@@ -174,7 +174,7 @@ export default function ProjectDetailPage() {
                   <Section title={tev('inspections')} hint={tev('inspectionsHint')}>
                     <DataState isLoading={il} error={ie} onRetry={ir} isEmpty={!inspections?.content.length} emptyTitle={tev('empty')} rows={4}><InspectionTable rows={inspections?.content ?? []} onOpen={(i) => setOpenInspection(i.id)} hideSubject /></DataState>
                   </Section>
-                  <Section title={tev('detail.location')}><CommandMap projects={siteProjects} evidence={siteEvidence} layers={{ boundaries: false, weredas: false, projects: true, facilities: false, evidence: true }} height={360} fitTo="data" focus={p.location ? { lng: p.location.lng, lat: p.location.lat, zoom: 14 } : null} interactive /></Section>
+                  <Section title={tev('siteMap')}><CommandMap projects={siteProjects} evidence={siteEvidence} layers={{ boundaries: false, weredas: false, projects: true, facilities: false, evidence: true }} height={360} fitTo="data" focus={p.location ? { lng: p.location.lng, lat: p.location.lat, zoom: 14 } : null} interactive /></Section>
                 </div>
               </TabsContent>
               <TabsContent value="risks" className="space-y-4">

@@ -146,8 +146,8 @@
     },
     "decisionQueue": "ውሳነ ዘድልዮም ጸገማት",
     "sectorSummary": "ነፍሲ ወከፍ ዘርፊ ከመይ ይኸይድ ኣሎ",
-    "map": "ኩነታት ኣብ ካርታ",
-    "heatTable": "ደረጃ ወረዳታት",
+    "map": "ኣብ ካርታ",
+    "heatTable": "ወረዳታት ክነጻጸሩ",
     "trend": "ዝተሰርሐ ስራሕ ምስ መደብ ክነጻጸር",
     "planned": "መደብ",
     "actual": "ዝተሰርሐ",
@@ -165,13 +165,13 @@
       "avgProgressPct": "ብማእከላይ ዝተሰርሐ ስራሕ",
       "openAlerts": "ዘይተፈትሑ ጸገማት",
       "budgetEtb": "ባጀት",
-      "avgImpactScore": "ነጥቢ ክብደት ጉድኣት"
+      "avgImpactScore": "ማእከላይ ነጥቢ ጉድኣት"
     },
     "attentionRow": "ኣቓልቦኹም ዘድልዮም ጉዳያት",
     "signals": "ምልክታት ቅድመ-መጠንቀቕታ",
     "actions": "ንመራሕቲ ዝቐርቡ ስጉምትታት",
     "openIntelligence": "ሓደጋታትን ቀዳምነታትን ርአ",
-    "openMap": "ካርታ ክፈት",
+    "openMap": "ምሉእ ካርታ ክፈት",
     "views": {
       "overview": "ሓፈሻዊ ኩነታት",
       "map": "ካርታን ወረዳታትን",
@@ -181,8 +181,8 @@
     "decisionQueueHint": "ኣብ ሓበሬታ ፕሮጀክትታት ዝተረኽቡ ከቢድ ጸገማት። እንታይ ከም ዘጋጠመ ንምርኣይ ሓደ ጠውቑ።",
     "noDecisions": "ሕጂ ከቢድ ጸገም የለን።",
     "sectorHint": "ፕሮጀክትታትን ትካላትን ናይ ሓደ ዘርፊ ንምርኣይ ነቲ ዘርፊ ጠውቑ።",
-    "mapHint": "ኣብ ካርታ ዘለዉ ክቢታት ናይ ነፍሲ ወከፍ ወረዳ መጠን የርእዩ። ደረጃ ንምቕያር ካልእ መለክዒ ምረጹ።",
-    "heatHint": "ወረዳታት ብዝተመረጸ መለክዒ ተሰሪዖም",
+    "mapHint": "ነፍሲ ወከፍ ክቢ ሓደ ወረዳ እዩ። ዝዓበየን ዝጸልመተን ክቢ ዝበዝሐ ማለት እዩ።",
+    "heatHint": "ዝበዝሐ ዘለዎም ወረዳታት ቀዳሞት",
     "trendHint": "ነፍሲ ወከፍ ወርሒ ብማእከላይ ዝተሰርሐ ስራሕ፣ ምስቲ መደብ ዝጸበዮ ክነጻጸር",
     "budgetHint": "ኣብ ነፍሲ ወከፍ ዘርፊ ባጀት፣ ዝተለቐቐን ዝወጸን ገንዘብ",
     "streamHint": "ናይ ቀረባ ገምጋማት ጉድኣት፣ ጸብጻባት ቦታን ጸገማትን",
@@ -221,6 +221,43 @@
     "lastNews": "መወዳእታ ጸብጻብ {when}",
     "noNews": "ክሳብ ሕጂ ጸብጻብ የለን",
     "updated": "ሓበሬታ ዓውዲ {time} ተሓዲሱ"
+  },
+  "sector": {
+    "title": "ዘርፊ {sector}",
+    "subtitle": "ኣብ ዘርፊ {sector} ዘለዉ ትካላት፣ ፕሮጀክትታትን ጸገማትን",
+    "facilitiesByType": "ትካላት ብዓይነትን ብጉድኣትን",
+    "projectsByHealth": "ፕሮጀክትታት ከም ኣካይዳኦም",
+    "weredaBreakdown": "ብወረዳታት",
+    "projects": "ካብ መደብ ዝበዝሐ ድሕሪት ዝተረፉ ፕሮጀክትታት",
+    "assessments": "ናይ ቀረባ ገምጋማት ጉድኣት",
+    "facilitiesByTypeHint": "ነፍሲ ወከፍ ዓንዲ ካብቲ ዓይነት ትካላት ክንደይ ኣብ ነፍሲ ወከፍ ደረጃ ጉድኣት ከም ዘለዉ የርኢ። ንምርኣዮም ነቲ ዓይነት ጠውቑ።",
+    "projectsHint": "ኣብ ስራሕ ዘለዉ ወይ ክጅመሩ ዝቐረቡ ፕሮጀክትታት፤ ካብ መደብ ዝበዝሐ ድሕሪት ዝተረፉ ቀዳሞት።"
+  },
+  "geo": {
+    "title": "ዞባታትን ወረዳታትን",
+    "subtitle": "ነፍሲ ወከፍ ዞባን ወረዳን ትግራይ ከመይ ይኸይድ ኣሎ",
+    "zones": "ዞባታት",
+    "weredas": "ወረዳታት",
+    "weredaTitle": "ወረዳ {name}",
+    "inZone": "ዞባ {zone}",
+    "urban": "ከተማ",
+    "rural": "ገጠር",
+    "facilitiesInWereda": "ትካላት",
+    "projectsInWereda": "ፕሮጀክትታት",
+    "sectorMix": "ብዘርፊ",
+    "noBoundary": "ወግዓዊ ዶባት ወረዳታት ገና ኣይተጻዕኑን፤ ስለዚ ነፍሲ ወከፍ ወረዳ ብክቢ ይረአ።",
+    "selectZone": "ዞባ",
+    "mapFocus": "ዝርከበሉ ቦታ",
+    "weredasHint": "ትካላትን ፕሮጀክትታትን ናይ ሓደ ወረዳ ንምርኣይ ነቲ ወረዳ ጠውቑ።",
+    "facilitiesSub": "{count, plural, =0 {ብኸቢድ ዝተጎድአ የለን} other {# ብኸቢድ ዝተጎድኡ}}",
+    "projectsSub": "{active} ኣብ ስራሕ · {done} ተዛዚሞም",
+    "releasedSub": "{value} ተለቒቑ",
+    "alertsSub": "{count} ከቢድ",
+    "showOnMap": "ኣብ ካርታ ኣርኢ",
+    "sectorMixHint": "ኣብዚ ወረዳ ዘለዉ ፕሮጀክትታት ናይ ሓደ ዘርፊ ንምርኣይ ነቲ ዘርፊ ጠውቑ።",
+    "sectorFacilities": "{count, plural, =0 {ትካል የለን} one {# ትካል · {severe} ብኸቢድ ዝተጎድኡ} other {# ትካላት · {severe} ብኸቢድ ዝተጎድኡ}}",
+    "sectorProjects": "{count, plural, =0 {ፕሮጀክት የለን} one {# ፕሮጀክት · {late} ዝደንጎዩ} other {# ፕሮጀክትታት · {late} ዝደንጎዩ}}",
+    "sectorMoney": "{done} ስራሕ ተሰሪሑ · ባጀት {budget}"
   },
   "projects": {
     "title": "ፕሮጀክትታት",
@@ -379,10 +416,68 @@
   },
   "facilities": {
     "title": "ትካላት",
-    "subtitle": "ኣብያተ ትምህርቲ፣ ትካላት ጥዕና፣ ፋብሪካታትን ሕርሻታትን፣ ነፍሲ ወከፎም ክንደይ ከም ዝተጐድኡን",
+    "subtitle": "ኣብያተ ትምህርቲ፣ ትካላት ጥዕና፣ ፋብሪካታትን ሕርሻታትን፦ ነፍሲ ወከፎም ክንደይ ከም ዝተጎድኡን ሎሚ ይሰርሑ ድዮም ኣይሰርሑንን",
+    "count": "{count, plural, one {# ትካል} other {# ትካላት}}",
+    "columns": {
+      "code": "ኮድ",
+      "name": "ትካል",
+      "type": "ዓይነት",
+      "sector": "ዘርፊ",
+      "wereda": "ወረዳ",
+      "severity": "ጉድኣት",
+      "impact": "ነጥቢ ጉድኣት",
+      "status": "ሎሚ ይሰርሕ ድዩ?",
+      "assessed": "መወዳእታ ገምጋም",
+      "replacement": "ወጻኢ ዳግማይ ምህናጽ",
+      "projects": "ዳግመ-ህንጸት",
+      "capacity": "ቅድሚ ኲናት ዝነበሮ ዓቕሚ",
+      "projectCount": "{count, plural, one {# ፕሮጀክት} other {# ፕሮጀክትታት}}",
+      "noProject": "ገና ፕሮጀክት የለን"
+    },
     "detail": {
-      "review": "ገምግም",
-      "recordAssessment": "ገምጋም መዝግብ"
+      "profile": "ሓበሬታ ትካል",
+      "latest": "ናይ ቀረባ ገምጋም ጉድኣት",
+      "history": "ኩሎም ገምጋማት ጉድኣት",
+      "projects": "ፕሮጀክትታት ዳግመ-ህንጸት",
+      "noProjects": "ገና ፕሮጀክት ዳግመ-ህንጸት የለን",
+      "noAssessment": "እዚ ትካል ገና ኣይተገምገመን።",
+      "assessor": "ዝገምገሞ",
+      "structural": "ነጥቢ ጉድኣት",
+      "inventory": "ዝጠፍኡ መሳርሒታትን ክምችትን",
+      "functional": "ሕጂ ከገልግል ዝኽእሎ",
+      "repair": "ግምት ጽገና",
+      "replacementCost": "ወጻኢ ዳግማይ ምህናጽ",
+      "photos": "{count, plural, =0 {ስእሊ የለን} one {# ስእሊ} other {# ስእልታት}}",
+      "notes": "ገምጋሚ ዝጸሓፎ",
+      "synced": "ዝተለኣኸሉ፦ {time}",
+      "kebele": "ጣብያ",
+      "evidence": "ካብቲ ቦታ ዝተወስዱ ስእልታት",
+      "siteMap": "ዝርከበሉ ቦታ",
+      "review": "ኩነታት",
+      "recordAssessment": "ሓድሽ ገምጋም መዝግብ",
+      "latestHint": "{date} ብ{name}",
+      "functionalHint": "ሎሚ ካብ ልሙድ ኣገልግሎቱ ክንደይ ክህብ ከም ዝኽእል",
+      "repairHint": "ጽገና ጥራይ፦ {value}",
+      "capacityHint": "ቅድሚ ኲናት፦ {value}",
+      "summary": "ንመወዳእታ ግዜ ኣብ {date} ብ{name} ተገምጊሙ።",
+      "summaryProjects": "{count, plural, one {# ፕሮጀክት ዳግመ-ህንጸት ምስኡ ተተሓሒዙ ኣሎ።} other {# ፕሮጀክትታት ዳግመ-ህንጸት ምስኡ ተተሓሒዞም ኣለዉ።}}",
+      "summaryNoProject": "ገና ንዕኡ ዝኸውን ፕሮጀክት ዳግመ-ህንጸት ኣይተጀመረን።",
+      "openAssessment": "ምሉእ ገምጋም ክፈት",
+      "moreFigures": "ተወሰኽቲ ኣሃዛት"
+    },
+    "filters": {
+      "search": "ብሽም ትካል ድለዩ",
+      "type": "ዓይነት ትካል",
+      "severity": "ጉድኣት",
+      "status": "ሎሚ ይሰርሕ ድዩ?",
+      "show": "ኣርኢ",
+      "more": "ተወሰኽቲ መጻረዪታት",
+      "quick": {
+        "all": "ኩሎም ትካላት",
+        "destroyed": "ዝዓነዉ",
+        "heavy": "ብኸቢድ ዝተጎድኡ",
+        "notWorking": "ዘይሰርሑ"
+      }
     }
   },
   "alerts": {
@@ -552,6 +647,109 @@
       "DIASPORA_FUND": "ፈንድ ዲያስፖራ",
       "PRIVATE_INVESTMENT": "ብሕታዊ ወፍሪ"
     },
+    "milestone": {
+      "PENDING": "ዘይተጀመረ",
+      "IN_PROGRESS": "ኣብ መስርሕ",
+      "ACHIEVED": "ዝተዓወተ",
+      "OVERDUE": "ግዜኡ ዝሓለፈ"
+    },
+    "disbursement": {
+      "PLANNED": "ብመደብ",
+      "REQUESTED": "ዝተሓተተ",
+      "APPROVED": "ዝጸደቐ",
+      "RELEASED": "ዝተለቐቐ"
+    },
+    "budgetCategory": {
+      "WORKS": "ስራሕ ህንጻ",
+      "GOODS": "ኣቑሑት",
+      "SERVICES": "ኣገልግሎታት",
+      "CONTINGENCY": "ንሃንደበታዊ ወጻኢ",
+      "SUPERVISION": "ምቁጽጻር"
+    },
+    "level": {
+      "LOW": "ትሑት",
+      "MEDIUM": "ማእከላይ",
+      "HIGH": "ልዑል"
+    },
+    "riskStatus": {
+      "OPEN": "ዘይተፈትሐ",
+      "MITIGATING": "ይንክይ ኣሎ",
+      "CLOSED": "ዝተዓጽወ"
+    },
+    "issueStatus": {
+      "OPEN": "ዘይተፈትሐ",
+      "IN_PROGRESS": "ኣብ መስርሕ",
+      "RESOLVED": "ዝተፈትሐ"
+    },
+    "docType": {
+      "CONTRACT": "ውዕል",
+      "DESIGN": "ዲዛይን",
+      "PROGRESS_PHOTO": "ስእልታት ምዕባለ ስራሕ",
+      "SITE_VIDEO": "ቪድዮ ቦታ",
+      "COMPLIANCE_CERTIFICATE": "ምስክር ወረቐት ምትግባር",
+      "INSPECTION_REPORT": "ጸብጻብ ምፍታሽ",
+      "INVOICE": "ቅብሊት",
+      "OTHER": "ካልእ"
+    },
+    "source": {
+      "WEB": "መርበብ",
+      "FIELD_APP": "መተግበሪ ዓውዲ",
+      "SITE_APP": "መተግበሪ ቦታ",
+      "IMPORT": "ካብ ፋይል ዝኣተወ",
+      "SIMULATED": "ናይ ፈተነ ሓበሬታ",
+      "RULE": "ኣውቶማቲክ ምቁጽጻር"
+    },
+    "streamKind": {
+      "ASSESSMENT": "ገምጋም ጉድኣት",
+      "PROGRESS": "ጸብጻብ ምዕባለ",
+      "ALERT": "ጸገም",
+      "INSPECTION": "ምብጻሕ ቦታ",
+      "STAGE": "ለውጢ ደረጃ"
+    },
+    "facilityType": {
+      "PRIMARY_SCHOOL": "ቤት ትምህርቲ ቀዳማይ ደረጃ",
+      "SECONDARY_SCHOOL": "ቤት ትምህርቲ ካልኣይ ደረጃ",
+      "TVET_COLLEGE": "ኮሌጅ ቴክኒክን ሞያን",
+      "UNIVERSITY": "ዩኒቨርሲቲ",
+      "HEALTH_POST": "ኬላ ጥዕና",
+      "HEALTH_CENTER": "ጣቢያ ጥዕና",
+      "PRIMARY_HOSPITAL": "ቀዳማይ ሆስፒታል",
+      "GENERAL_HOSPITAL": "ሓፈሻዊ ሆስፒታል",
+      "REFERRAL_HOSPITAL": "ሪፈራል ሆስፒታል",
+      "FACTORY": "ፋብሪካ",
+      "INDUSTRIAL_PARK": "ፓርክ ኢንዱስትሪ",
+      "AGRO_PROCESSING_PLANT": "መዳለዊ ፍርያት ሕርሻ",
+      "WAREHOUSE": "መኽዘን",
+      "IRRIGATION_SCHEME": "ልምዓት መስኖ",
+      "VETERINARY_CLINIC": "ክሊኒክ እንስሳ",
+      "SEED_MULTIPLICATION_CENTER": "ማእከል ምርባሕ ዘርኢ",
+      "FARMERS_TRAINING_CENTER": "ማእከል ስልጠና ሓረስቶት",
+      "AGRICULTURAL_RESEARCH_CENTER": "ማእከል ምርምር ሕርሻ"
+    },
+    "inspectionType": {
+      "SITE_VISIT": "ምብጻሕ ቦታ",
+      "PROGRESS_VERIFICATION": "ምፍታሽ ምዕባለ ስራሕ",
+      "QUALITY_INSPECTION": "ምፍታሽ ጽሬት",
+      "DAMAGE_VERIFICATION": "ምፍታሽ ጉድኣት",
+      "HANDOVER_INSPECTION": "ምፍታሽ ርክክብ",
+      "SAFETY_AUDIT": "ምፍታሽ ድሕንነት"
+    },
+    "verification": {
+      "UNVERIFIED": "ገና ኣይተፈተሸን",
+      "VERIFIED": "ዝተረጋገጸ",
+      "DISPUTED": "ሕቶ ዝተልዓለሉ",
+      "REJECTED": "ዝተነጸገ"
+    },
+    "orgType": {
+      "GOVERNMENT_BUREAU": "ቤት ጽሕፈት መንግስቲ",
+      "CONTRACTOR": "ተቛራጺ",
+      "CONSULTANT": "ኣማኻሪ",
+      "DONOR": "ለጋሲ / ለቃሒ",
+      "FEDERAL_AGENCY": "ፌደራላዊ ትካል",
+      "NGO": "ዘይመንግስታዊ ውድብ",
+      "COMMUNITY": "ሕብረተሰብ",
+      "PRIVATE": "ብሕታዊ"
+    },
     "campaignStatus": {
       "PLANNING": "ኣብ መደብ",
       "ACTIVE": "ምብጻሕ ቦታታት ይካየድ ኣሎ",
@@ -688,6 +886,29 @@
       "ACTIVE": "ቀጻሊ",
       "COMPLETED": "ዝተዛዘመ",
       "RELEASED": "ካብ ፕሮጀክት ዝወጸ"
+    },
+    "priority": {
+      "NORMAL": "ልሙድ",
+      "HIGH": "ልዑል",
+      "URGENT": "ህጹጽ"
+    },
+    "gender": {
+      "FEMALE": "ጓል ኣንስተይቲ",
+      "MALE": "ወዲ ተባዕታይ"
+    },
+    "education": {
+      "CERTIFICATE": "ሰርቲፊኬት",
+      "DIPLOMA": "ዲፕሎማ",
+      "BACHELOR": "ቀዳማይ ዲግሪ",
+      "MASTER": "ካልኣይ ዲግሪ",
+      "DOCTORATE": "ሳልሳይ ዲግሪ (ዶክትሬት)"
+    },
+    "language": {
+      "ti": "ትግርኛ",
+      "am": "ኣምሓርኛ",
+      "en": "እንግሊዝኛ",
+      "om": "ኣፋን ኦሮሞ",
+      "ar": "ዓረብ"
     },
     "coverageGap": {
       "NO_TEAM": "ዝተመደበ ሰብ የለን",
@@ -887,7 +1108,109 @@
   },
   "evidence": {
     "title": "ስእልታትን ምርመራታትን ቦታ",
-    "subtitle": "ሰራሕተኛታት ዓውዲ ኣብ ቦታ ዝረኣይዎ ምስ ስእልታት፣ ከምኡውን ተረጋጊጹ ድዩ ኣይተረጋገጸን"
+    "subtitle": "ሰራሕተኛታት ዓውዲ ኣብ ቦታ ዝረኣይዎ ምስ ስእልታት፣ ከምኡውን ሓደ ሰብ ኣረጋጊጽዎ እንተኾይኑ",
+    "gallery": "ስእልታት",
+    "galleryHint": "ሓደስቲ ቀዳሞት። ምልክታት ቦታን ሰዓትን ተሌፎን ነቲ ቦታን ግዜን መዝጊቡ እንተኾይኑ የርእዩ።",
+    "inspections": "ምብጻሕ ቦታታት",
+    "inspectionsHint": "ሰራሕተኛታት ዓውዲ ነቲ ስራሕ ወይ ጉድኣት ንምፍታሽ ዝገበርዎ ምብጻሓት",
+    "count": "{count, plural, one {# ምብጻሕ ቦታ} other {# ምብጻሕ ቦታታት}}",
+    "mediaCount": "{count, plural, one {# ፋይል} other {# ፋይላት}}",
+    "empty": "ክሳብ ሕጂ ምብጻሕ ቦታ የለን። ጉጅለታት ዓውዲ ካብ ተሌፎኖም ምስ ለኣኽዎም ኣብዚ ይርኣዩ።",
+    "emptyMedia": "ኣብዚ ገና ስእሊ ወይ ቪድዮ የለን።",
+    "coverage": {
+      "NONE": "ክሳብ ሕጂ ምብጻሕ ቦታ የለን",
+      "STALE": "ልዕሊ {days} መዓልታት ኣይተረጋገጸን",
+      "RECENT": "ብቐረባ ተረጋጊጹ"
+    },
+    "summary": {
+      "inspections": "ምብጻሕ ቦታታት",
+      "verified": "ዝተረጋገጹ",
+      "disputed": "ሕቶ ዝተልዓለሎም",
+      "unverified": "ገና ዘይተፈተሹ",
+      "media": "ስእልታትን ቪድዮታትን",
+      "lastInspection": "መወዳእታ ምብጻሕ {time}",
+      "lastVerified": "መወዳእታ ምርግጋጽ",
+      "unverifiedCount": "{count, plural, =0 {ኩሎም ተፈቲሾም} other {# ገና ኣይተፈተሹን}}",
+      "disputedCount": "{count} ሕቶ ተላዒሉሎም",
+      "mediaHint": "{photos, plural, one {# ስእሊ} other {# ስእልታት}} · {videos, plural, one {# ቪድዮ} other {# ቪድዮታት}}"
+    },
+    "columns": {
+      "visited": "ዕለት",
+      "type": "ዓይነት",
+      "subject": "ፕሮጀክት ወይ ትካል",
+      "inspector": "ዝበጽሖ",
+      "observed": "ኣብ ቦታ ዝተራእየ ስራሕ",
+      "reported": "ዝተጸብጸበ",
+      "gap": "ፍልልይ",
+      "quality": "ጽሬት",
+      "safety": "ድሕንነት",
+      "distance": "ካብ ቦታ ዘሎ ርሕቀት",
+      "media": "ስእልታት",
+      "status": "ተረጋጊጹ ድዩ?",
+      "wereda": "ወረዳ",
+      "reportedSaid": "ጸብጻብ {value} ይብል",
+      "far": "ካብቲ ቦታ ርሒቑ ዝተወስደ"
+    },
+    "filters": {
+      "type": "ዓይነት ምብጻሕ",
+      "status": "ተረጋጊጹ ድዩ?",
+      "kind": "ዓይነት",
+      "geotagged": "ቦታኦም ዝተመዝገበ ጥራይ",
+      "sector": "ዘርፊ"
+    },
+    "detail": {
+      "findings": "ዝረኸብዎ",
+      "recommended": "ዝመኽርዎ",
+      "location": "ዝተመዝገበሉ ቦታ",
+      "distance": "ካብቲ ቦታ {m} m ርሒቑ",
+      "farWarning": "ካብቲ ቦታ ልዕሊ {m} m ርሒቑ ተመዝጊቡ",
+      "ratings": "ጽሬትን ድሕንነትን",
+      "quality": "ጽሬት",
+      "safety": "ድሕንነት",
+      "workforce": "ዝተራእዩ ሰራሕተኛታት",
+      "duration": "ኣብ ቦታ {minutes} ደቒቕ",
+      "synced": "ዝተለኣኸሉ፦ {time}",
+      "verification": "ተረጋጊጹ ድዩ?",
+      "verificationNote": "መዘኻኸሪ ምርግጋጽ",
+      "verifiedBy": "ዝመለሶ፦ {name}",
+      "media": "{count, plural, =0 {ስእሊ የለን} one {# ስእሊ} other {# ስእልታት}}",
+      "captured": "ዝተወስደሉ ዕለት",
+      "noGps": "ቦታ ኣይተመዝገበን",
+      "noTime": "ግዜ ኣይተመዝገበን",
+      "ratingValue": "ጽሬት {quality} · ድሕንነት {safety}",
+      "ratingHint": "ካብ 5፣ 5 ዝበለጸ እዩ",
+      "takenBy": "ዝወሰዶ",
+      "place": "ቦታ",
+      "placeRecorded": "ተሌፎን ዝመዝገቦ ቦታ",
+      "timeRecorded": "ተሌፎን ዝመዝገቦ ግዜ",
+      "openProject": "ፕሮጀክት ክፈት",
+      "openFacility": "ትካል ክፈት",
+      "openVisit": "ምብጻሕ ቦታ ክፈት"
+    },
+    "verify": {
+      "title": "እዚ ጸብጻብ ቅኑዕ ድዩ?",
+      "hint": "መልስኹም ምስ ሽምኩም ይዕቀብ፤ ምዕባለ ስራሕ ናይቲ ፕሮጀክት ተረጋጊጹ እንተኾይኑ ድማ የሐድስ።",
+      "verified": "እወ፣ ኣረጋግጽ",
+      "disputed": "ሕቶ ኣልዕል",
+      "rejected": "ንጸግ",
+      "note": "መዘኻኸሪኹም",
+      "noteRequired": "ስለምንታይ ሕቶ ከም ዘልዓልኩም ወይ ከም ዝነጸግኩም ዘብርህ መዘኻኸሪ ጽሓፉ",
+      "done": "መልስኹም ተዓቂቡ",
+      "readOnly": "ነዚ ክምልሱ ዝኽእሉ ጸብጻባት ዓውዲ ዝፍትሹ ሰራሕተኛታት ጥራይ እዮም።"
+    },
+    "kind": {
+      "PHOTO": "ስእሊ",
+      "VIDEO": "ቪድዮ",
+      "AUDIO": "ድምጺ",
+      "DOCUMENT": "ሰነድ"
+    },
+    "origin": {
+      "INSPECTION": "ምብጻሕ ቦታ",
+      "ASSESSMENT": "ገምጋም ጉድኣት",
+      "PROGRESS": "ጸብጻብ ምዕባለ"
+    },
+    "demoNote": "እዚኦም ናይ ኣብነት ስእልታት እዮም። ጉጅለታት ዓውዲ ካብ መተግበሪ ዓውዲ ምስ ለኣኽዎም ሓቀኛ ስእልታት ክርኣዩ እዮም።",
+    "siteMap": "ዝርከበሉ ቦታ"
   },
   "map": {
     "title": "ካርታ",

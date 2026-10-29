@@ -7,8 +7,6 @@ import { useBreadcrumbs } from '@/components/layout/breadcrumbs';
 import { PageHeader, Section } from '@/components/common/page-header';
 import { KpiStrip } from '@/components/dashboard/kpi-strip';
 import { DecisionQueue } from '@/components/dashboard/decision-queue';
-import { WeredaHeatTable } from '@/components/dashboard/wereda-heat-table';
-import { WeredaMap } from '@/components/map/wereda-map';
 import { ChartCard } from '@/components/charts/chart-card';
 import { ProgressCurve } from '@/components/charts/progress-curve';
 import { Donut } from '@/components/charts/donut';
@@ -17,9 +15,8 @@ import { DataState, TableSkeleton, ChartSkeleton } from '@/components/common/dat
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/navigation';
 import { slugSector, toneVar, severityTone } from '@/lib/domain';
-import { Skeleton } from '@/components/ui/skeleton';
 import { SeverityBadge, SectorDot } from '@/components/common/badges';
-import { fmtDate, localizedName, num } from '@/lib/format';
+import { fmtDate, localizedName } from '@/lib/format';
 import type { DamageSeverity } from '@/lib/api/types';
 import { useUser } from '@/providers/session';
 
@@ -55,7 +52,7 @@ export default function SectorPage() {
       <div className="grid gap-5 desktop:grid-cols-12">
         <div className="desktop:col-span-5"><DecisionQueue alerts={data?.decisionQueue} isLoading={isLoading} error={error} refetch={refetch} /></div>
         <div className="desktop:col-span-7">
-          <Section title={t('facilitiesByType')}>
+          <Section title={t('facilitiesByType')} hint={t('facilitiesByTypeHint')}>
             <DataState isLoading={!facilities} error={undefined} isEmpty={typeRows.length === 0} rows={5}>
               <ul className="space-y-2">
                 {typeRows.map(([type, counts]) => { const total = Object.values(counts).reduce((a, b) => a + b, 0); return (
@@ -74,15 +71,7 @@ export default function SectorPage() {
       </div>
       <div className="grid gap-5 desktop:grid-cols-12">
         <div className="desktop:col-span-7">
-          <Section title={td('map')} hint={td('mapHint')}>{isLoading || !data ? <Skeleton className="h-[360px]" /> : <WeredaMap weredas={data.weredas} metric="projectsDelayed" height={360} />}</Section>
-        </div>
-        <div className="desktop:col-span-5">
-          <Section title={t('weredaBreakdown')} hint={td('heatHint')}><WeredaHeatTable weredas={data?.weredas} metric="projectsDelayed" isLoading={isLoading} limit={10} /></Section>
-        </div>
-      </div>
-      <div className="grid gap-5 desktop:grid-cols-12">
-        <div className="desktop:col-span-7">
-          <ChartCard title={td('trend')} hint={td('trendHint')} table={{ columns: ['Month', td('planned'), td('actual')], rows: trend.map((p) => [p.date.slice(0, 7), p.planned, p.actual]) }}>
+          <ChartCard title={td('trend')} hint={td('trendHint')} table={{ columns: [td('month'), td('planned'), td('actual')], rows: trend.map((p) => [p.date.slice(0, 7), p.planned, p.actual]) }}>
             <DataState isLoading={isLoading} error={error} onRetry={refetch} isEmpty={trend.every((p) => p.actual === null)} skeleton={<ChartSkeleton />}><ProgressCurve data={trend} /></DataState>
           </ChartCard>
         </div>
@@ -100,7 +89,7 @@ export default function SectorPage() {
           </Section>
         </div>
       </div>
-      <Section title={t('projects')} hint={td('attentionHint')} actions={<Button asChild variant="ghost" size="sm"><Link href={`/projects?sector=${sector}`}>{tc('viewAll')}<ArrowRight /></Link></Button>}>
+      <Section title={t('projects')} hint={t('projectsHint')} actions={<Button asChild variant="ghost" size="sm"><Link href={`/projects?sector=${sector}`}>{tc('viewAll')}<ArrowRight /></Link></Button>}>
         <DataState isLoading={pl} isEmpty={!projects?.content.length} skeleton={<TableSkeleton cols={8} />}><ProjectTable rows={projects?.content ?? []} hideSector /></DataState>
       </Section>
       <Section title={t('assessments')} actions={<Button asChild variant="ghost" size="sm"><Link href={`/damage?sector=${sector}`}>{tc('viewAll')}<ArrowRight /></Link></Button>}>
@@ -108,7 +97,7 @@ export default function SectorPage() {
           <ul className="divide-y">{assessments?.content.map((a) => (
             <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
               <Link href={`/facilities/${a.facility.id}`} className="font-medium hover:underline">{a.facility.name}</Link>
-              <span className="flex items-center gap-3 text-xs text-muted-foreground"><span>{localizedName(a.facility.wereda.name, locale)}</span><span>{fmtDate(a.assessedOn, locale, 'short')}</span><span className="tabular">{num(a.structuralImpactScore)}/100</span><SeverityBadge value={a.severity} /></span>
+              <span className="flex items-center gap-3 text-xs text-muted-foreground"><span>{localizedName(a.facility.wereda.name, locale)}</span><span>{fmtDate(a.assessedOn, locale, 'short')}</span><SeverityBadge value={a.severity} /></span>
             </li>
           ))}</ul>
         </DataState>

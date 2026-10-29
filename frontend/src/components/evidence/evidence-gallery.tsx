@@ -1,14 +1,14 @@
 'use client';
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Camera, Clock, FileText, MapPin, Mic, Play, ShieldCheck, Video } from 'lucide-react';
+import { Camera, Clock, FileText, MapPin, Mic, Play, Video } from 'lucide-react';
 import type { MediaDto } from '@/lib/api/types';
 import { DataState } from '@/components/common/data-state';
 import { ToneBadge } from '@/components/common/badges';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/i18n/navigation';
-import { bytes, fmtDateTime, relTime } from '@/lib/format';
+import { fmtDateTime, relTime } from '@/lib/format';
 import { mediaSrc, verificationTone } from '@/lib/domain';
 import { cn } from '@/lib/utils';
 
@@ -47,8 +47,8 @@ function MediaCard({ m, onOpen, showSubject }: { m: MediaDto; onOpen: () => void
         {m.kind === 'VIDEO' && <span className="absolute inset-0 flex items-center justify-center"><span className="rounded-full bg-black/55 p-2 text-white"><Play className="h-4 w-4" /></span></span>}
         <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded bg-black/55 px-1.5 py-0.5 text-2xs font-medium text-white"><Icon className="h-3 w-3" />{m.durationSeconds ? `${m.durationSeconds}s` : t(`kind.${m.kind}`)}</span>
         <span className="absolute right-1.5 top-1.5 flex gap-1">
-          <span title={m.geotagged ? 'GPS' : t('detail.noGps')} className={cn('rounded bg-black/55 p-0.5 text-white', !m.geotagged && 'opacity-40')}><MapPin className="h-3 w-3" /></span>
-          <span title={m.timestamped ? 'Timestamp' : t('detail.noTime')} className={cn('rounded bg-black/55 p-0.5 text-white', !m.timestamped && 'opacity-40')}><Clock className="h-3 w-3" /></span>
+          <span title={m.geotagged ? t('detail.placeRecorded') : t('detail.noGps')} className={cn('rounded bg-black/55 p-0.5 text-white', !m.geotagged && 'opacity-40')}><MapPin className="h-3 w-3" /></span>
+          <span title={m.timestamped ? t('detail.timeRecorded') : t('detail.noTime')} className={cn('rounded bg-black/55 p-0.5 text-white', !m.timestamped && 'opacity-40')}><Clock className="h-3 w-3" /></span>
         </span>
         {m.verificationStatus !== 'UNVERIFIED' && <span className="absolute bottom-1.5 left-1.5"><ToneBadge tone={verificationTone[m.verificationStatus]} label={te(m.verificationStatus)} compact /></span>}
       </div>
@@ -83,14 +83,10 @@ function MediaLightbox({ m, onClose }: { m: MediaDto | null; onClose: () => void
             <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
               <div className="col-span-2"><dt className="text-muted-foreground">{t('detail.verification')}</dt><dd className="mt-0.5"><ToneBadge tone={verificationTone[m.verificationStatus]} label={te(m.verificationStatus)} /></dd></div>
               <div><dt className="text-muted-foreground">{t('detail.captured')}</dt><dd>{m.capturedAt ? fmtDateTime(m.capturedAt, locale) : t('detail.noTime')}</dd></div>
-              <div><dt className="text-muted-foreground">GPS</dt><dd>{m.location ? `${m.location.lat.toFixed(5)}, ${m.location.lng.toFixed(5)}${m.gpsAccuracyM ? ` (±${m.gpsAccuracyM} m)` : ''}` : t('detail.noGps')}</dd></div>
-              <div><dt className="text-muted-foreground">{t('kind.PHOTO')}/{t('kind.VIDEO')}</dt><dd>{t(`kind.${m.kind}`)}{m.width && m.height ? ` · ${m.width}×${m.height}` : ''}{m.durationSeconds ? ` · ${m.durationSeconds}s` : ''}</dd></div>
-              <div><dt className="text-muted-foreground">{t('columns.inspector')}</dt><dd>{m.capturedBy ?? '—'}</dd></div>
-              <div><dt className="text-muted-foreground">Size</dt><dd>{bytes(m.sizeBytes)}</dd></div>
-              <div><dt className="text-muted-foreground">Type</dt><dd className="font-mono text-2xs">{m.mediaType ?? '—'}</dd></div>
+              <div><dt className="text-muted-foreground">{t('detail.takenBy')}</dt><dd>{m.capturedBy ?? '—'}</dd></div>
+              <div className="col-span-2"><dt className="text-muted-foreground">{t('detail.place')}</dt><dd>{m.location ? t('detail.placeRecorded') : t('detail.noGps')}</dd></div>
             </dl>
-            {m.verificationStatus === 'VERIFIED' && <p className="inline-flex items-center gap-1 text-xs text-muted-foreground"><ShieldCheck className="h-3.5 w-3.5" style={{ color: 'var(--status-good)' }} />{te('VERIFIED')}</p>}
-            {href && <Link href={href as '/'} className="text-xs text-primary underline" onClick={onClose}>{t('detail.openSubject', { type: m.inspectionId ? t('inspections') : m.projectId ? 'project' : 'facility' })}</Link>}
+                        {href && <Link href={href as '/'} className="text-xs text-primary underline" onClick={onClose}>{m.inspectionId ? t('detail.openVisit') : m.projectId ? t('detail.openProject') : t('detail.openFacility')}</Link>}
           </div>
         </div>
       </DialogContent>

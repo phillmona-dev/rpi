@@ -1,7 +1,7 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { Camera, MapPin, Mic } from 'lucide-react';
+import { Camera, ChevronDown, MapPin } from 'lucide-react';
 import { useEvidenceGeo, useEvidenceSummary, useFacilitiesGeo, useFacility, useInspections, useMedia } from '@/lib/api/hooks';
 import { EvidenceGallery } from '@/components/evidence/evidence-gallery';
 import { EvidenceSummaryStrip } from '@/components/evidence/evidence-summary';
@@ -18,8 +18,9 @@ import { Button } from '@/components/ui/button';
 import { useUser } from '@/providers/session';
 import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fmtDate, fmtDateTime, localizedName, money, num, pct } from '@/lib/format';
+import { fmtDate, localizedName, money, num, pct } from '@/lib/format';
 import { canManageCampaigns, sectorSlug, toneVar, severityTone } from '@/lib/domain';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DataState as DS } from '@/components/common/data-state';
 
@@ -47,29 +48,26 @@ export default function FacilityPage() {
     <DataState isLoading={isLoading} error={error} onRetry={refetch} skeleton={<div className="space-y-4"><Skeleton className="h-16" /><Skeleton className="h-28" /><Skeleton className="h-96" /></div>}>
       {data && f && (() => { const a = data.latestAssessment; return (
         <>
-          <PageHeader title={f.name} subtitle={<span className="flex flex-wrap items-center gap-x-3 gap-y-1"><span className="font-mono text-xs">{f.code}</span><SectorLabel sector={f.sector} /><span>{te(`facilityType.${f.facilityType}` as 'facilityType.FACTORY')}</span><Link href={`/weredas/${f.wereda.id}`} className="inline-flex items-center gap-1 hover:underline"><MapPin className="h-3 w-3" />{localizedName(f.wereda.name, locale)}{f.kebele && <> · {t('detail.kebele')} {f.kebele}</>}</Link></span>}
+          <PageHeader title={f.name} subtitle={<span className="flex flex-wrap items-center gap-x-3 gap-y-1"><SectorLabel sector={f.sector} /><span>{te(`facilityType.${f.facilityType}` as 'facilityType.FACTORY')}</span><Link href={`/weredas/${f.wereda.id}`} className="inline-flex items-center gap-1 hover:underline"><MapPin className="h-3 w-3" />{localizedName(f.wereda.name, locale)}{f.kebele && <> · {t('detail.kebele')} {f.kebele}</>}</Link></span>}
             meta={<><SeverityBadge value={f.latestSeverity} /><OperationalBadge value={f.operationalStatus} /></>} />
-          <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:grid-cols-6">
-            <Stat label={t('detail.structural')} value={a ? <>{a.structuralImpactScore}<span className="text-sm text-muted-foreground font-normal">/100</span></> : '—'} hint={a && <Progress value={a.structuralImpactScore} tone={toneVar[severityTone[a.severity]]} className="mt-1.5" label={t('detail.structural')} />} />
-            <Stat label={t('detail.inventory')} value={pct(a?.inventoryLossPct)} />
-            <Stat label={t('detail.functional')} value={pct(a?.functionalCapacityPct)} />
-            <Stat label={t('detail.repair')} value={money(a?.estimatedRepairCostEtb, locale)} />
-            <Stat label={t('detail.replacementCost')} value={money(f.replacementEstimateEtb, locale)} />
-            <Stat label={tc('beneficiaries')} value={num(f.beneficiaries, locale)} hint={f.preCrisisCapacity ? `${t('columns.capacity')}: ${num(f.preCrisisCapacity, locale)} ${f.capacityUnit ?? ''}` : undefined} />
+          <p className="rounded-lg border bg-card px-5 py-4 text-base leading-relaxed shadow-card">
+            {a ? t('detail.summary', { date: fmtDate(a.assessedOn, locale), name: a.assessorName }) : t('detail.noAssessment')}{' '}
+            {data.projects.length > 0 ? t('detail.summaryProjects', { count: data.projects.length }) : (f.latestSeverity === 'SEVERE' || f.latestSeverity === 'DESTROYED') ? <b>{t('detail.summaryNoProject')}</b> : null}
+          </p>
+          <div className="grid grid-cols-2 gap-3 desktop:grid-cols-4">
+            <Stat label={t('detail.structural')} value={a ? <>{a.structuralImpactScore}<span className="text-sm text-muted-foreground font-normal"> / 100</span></> : '—'} hint={a && <Progress value={a.structuralImpactScore} tone={toneVar[severityTone[a.severity]]} className="mt-1.5" label={t('detail.structural')} />} />
+            <Stat label={t('detail.functional')} value={pct(a?.functionalCapacityPct)} hint={t('detail.functionalHint')} />
+            <Stat label={t('detail.replacementCost')} value={money(f.replacementEstimateEtb, locale)} hint={a?.estimatedRepairCostEtb ? t('detail.repairHint', { value: money(a.estimatedRepairCostEtb, locale) }) : undefined} />
+            <Stat label={tc('beneficiaries')} value={num(f.beneficiaries, locale)} hint={f.preCrisisCapacity ? t('detail.capacityHint', { value: `${num(f.preCrisisCapacity, locale)} ${f.capacityUnit ?? ''}`.trim() }) : undefined} />
           </div>
           <div className="grid gap-5 desktop:grid-cols-12">
             <div className="desktop:col-span-7 space-y-5">
-              <Section title={t('detail.latest')} hint={a ? `${t('detail.assessor')}: ${a.assessorName} · ${fmtDate(a.assessedOn, locale)} · ${te(`source.${a.source}`)}${a.syncedAt ? ` · ${t('detail.synced', { time: fmtDateTime(a.syncedAt, locale) })}` : ''}` : undefined}>
-                {!a ? <p className="text-sm text-muted-foreground">{t('detail.noAssessment')}</p> : (
-                  <div className="space-y-3 text-sm">
-                    <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Camera className="h-3.5 w-3.5" />{t('detail.photos', { count: a.photoCount })}</span><span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><Mic className="h-3.5 w-3.5" />{tc('none')}</span></div>
-                    <AssessmentNotes id={a.id} />
-                  </div>
-                )}
+              <Section title={t('detail.latest')} hint={a ? t('detail.latestHint', { name: a.assessorName, date: fmtDate(a.assessedOn, locale) }) : undefined}>
+                {!a ? <p className="text-sm text-muted-foreground">{t('detail.noAssessment')}</p> : <LatestAssessment id={a.id} photos={a.photoCount} inventory={a.inventoryLossPct} />}
               </Section>
               <Section title={t('detail.history')} actions={canManageCampaigns(user.roles) && <Button size="sm" variant="outline" asChild><Link href={`/damage/assessments/new?facilityId=${f.id}`}>{t('detail.recordAssessment')}</Link></Button>}>
-                <Table><TableHeader><TableRow><TableHead>{t('columns.assessed')}</TableHead><TableHead>{t('columns.severity')}</TableHead><TableHead className="text-right">{t('columns.impact')}</TableHead><TableHead className="text-right">{t('detail.functional')}</TableHead><TableHead className="text-right">{t('detail.replacementCost')}</TableHead><TableHead>{t('detail.assessor')}</TableHead><TableHead>{t('detail.review')}</TableHead></TableRow></TableHeader>
-                  <TableBody>{data.assessmentHistory.map((h) => <TableRow key={h.id} className="cursor-pointer" onClick={() => router.push(`/damage/assessments/${h.id}`)}><TableCell className="tabular"><Link href={`/damage/assessments/${h.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{fmtDate(h.assessedOn, locale, 'short')}</Link></TableCell><TableCell><SeverityBadge value={h.severity} /></TableCell><TableCell className="text-right tabular">{h.structuralImpactScore}</TableCell><TableCell className="text-right tabular">{pct(h.functionalCapacityPct)}</TableCell><TableCell className="text-right tabular">{money(h.estimatedReplacementCostEtb, locale)}</TableCell><TableCell className="text-xs">{h.assessorName} <span className="text-muted-foreground">· {te(`source.${h.source}`)}</span></TableCell><TableCell><AssessmentStatusBadge value={h.status} /></TableCell></TableRow>)}</TableBody></Table>
+                <Table><TableHeader><TableRow><TableHead>{t('columns.assessed')}</TableHead><TableHead>{t('columns.severity')}</TableHead><TableHead className="text-right">{t('detail.functional')}</TableHead><TableHead>{t('detail.assessor')}</TableHead><TableHead>{t('detail.review')}</TableHead></TableRow></TableHeader>
+                  <TableBody>{data.assessmentHistory.map((h) => <TableRow key={h.id} className="cursor-pointer" onClick={() => router.push(`/damage/assessments/${h.id}`)}><TableCell className="tabular"><Link href={`/damage/assessments/${h.id}`} className="hover:underline" onClick={(e) => e.stopPropagation()}>{fmtDate(h.assessedOn, locale, 'short')}</Link></TableCell><TableCell><SeverityBadge value={h.severity} /></TableCell><TableCell className="text-right tabular">{pct(h.functionalCapacityPct)}</TableCell><TableCell className="text-xs">{h.assessorName}</TableCell><TableCell><AssessmentStatusBadge value={h.status} /></TableCell></TableRow>)}</TableBody></Table>
               </Section>
             </div>
             <div className="desktop:col-span-5 space-y-5">
@@ -78,7 +76,7 @@ export default function FacilityPage() {
                   <ul className="divide-y">{data.projects.map((p) => (
                     <li key={p.id} className="py-2.5">
                       <Link href={`/projects/${p.id}`} className="text-sm font-medium hover:underline">{p.name}</Link>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs"><span className="font-mono text-muted-foreground">{p.code}</span><StatusBadge value={p.status} /><HealthBadge value={p.health} /><span className="tabular">{pct(p.physicalProgressPct)}</span><span className="text-muted-foreground">{tp('plannedEnd')} {fmtDate(p.plannedEnd, locale, 'short')}</span></div>
+                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs"><StatusBadge value={p.status} /><HealthBadge value={p.health} /><span className="tabular">{pct(p.physicalProgressPct)}</span><span className="text-muted-foreground">{tp('plannedEnd')} {fmtDate(p.plannedEnd, locale, 'short')}</span></div>
                       <Progress value={p.physicalProgressPct} className="mt-1.5" label={p.name} />
                     </li>
                   ))}</ul>
@@ -101,11 +99,22 @@ export default function FacilityPage() {
   );
 }
 
-function AssessmentNotes({ id }: { id: number }) {
+function LatestAssessment({ id, photos, inventory }: { id: number; photos: number; inventory: number | null }) {
   const t = useTranslations('facilities.detail');
   const { data } = useAssessmentDetail(id);
+  const [more, setMore] = React.useState(false);
   if (!data) return <Skeleton className="h-10" />;
-  return <p className="rounded-md bg-muted/40 p-3 text-sm"><span className="text-xs text-muted-foreground">{t('notes')}: </span>{data.notes ?? '—'}</p>;
+  return (
+    <div className="space-y-3 text-sm">
+      <p className="rounded-md bg-muted/40 p-3"><span className="block text-xs text-muted-foreground">{t('notes')}</span>{data.notes ?? '—'}</p>
+      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5"><Camera className="h-4 w-4" />{t('photos', { count: photos })}</span>
+        <Link href={`/damage/assessments/${id}`} className="text-primary hover:underline">{t('openAssessment')}</Link>
+        <button type="button" onClick={() => setMore((m) => !m)} aria-expanded={more} className="inline-flex items-center gap-1 hover:text-foreground"><ChevronDown className={cn('h-4 w-4 transition-transform', more && 'rotate-180')} />{t('moreFigures')}</button>
+      </div>
+      {more && <dl className="grid grid-cols-2 gap-2 rounded-md border border-dashed p-3 text-sm"><dt className="text-muted-foreground">{t('inventory')}</dt><dd className="tabular">{pct(inventory)}</dd></dl>}
+    </div>
+  );
 }
 
 import { useQuery } from '@tanstack/react-query';

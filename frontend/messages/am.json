@@ -146,8 +146,8 @@
     },
     "decisionQueue": "ውሳኔ የሚፈልጉ ችግሮች",
     "sectorSummary": "እያንዳንዱ ዘርፍ እንዴት እየሄደ ነው",
-    "map": "ሁኔታው በካርታ ላይ",
-    "heatTable": "የወረዳዎች ደረጃ",
+    "map": "በካርታ ላይ",
+    "heatTable": "ወረዳዎች ሲነጻጸሩ",
     "trend": "የተሠራው ሥራ ከዕቅዱ ጋር ሲነጻጸር",
     "planned": "ዕቅድ",
     "actual": "የተሠራ",
@@ -165,13 +165,13 @@
       "avgProgressPct": "በአማካይ የተሠራው ሥራ",
       "openAlerts": "ያልተፈቱ ችግሮች",
       "budgetEtb": "በጀት",
-      "avgImpactScore": "የጉዳት ክብደት ነጥብ"
+      "avgImpactScore": "አማካይ የጉዳት ነጥብ"
     },
     "attentionRow": "ትኩረትዎን የሚሹ ጉዳዮች",
     "signals": "የቅድመ ማስጠንቀቂያ ምልክቶች",
     "actions": "ለአመራሩ የሚቀርቡ እርምጃዎች",
     "openIntelligence": "ስጋቶችን እና ቅድሚያዎችን ተመልከት",
-    "openMap": "ካርታውን ክፈት",
+    "openMap": "ሙሉውን ካርታ ክፈት",
     "views": {
       "overview": "አጠቃላይ እይታ",
       "map": "ካርታ እና ወረዳዎች",
@@ -181,8 +181,8 @@
     "decisionQueueHint": "በፕሮጀክቶቹ መረጃ ውስጥ የተገኙ ከባድ ችግሮች። ምን እንደተፈጠረ ለማየት አንዱን ይጫኑ።",
     "noDecisions": "በአሁኑ ጊዜ ከባድ ችግር የለም።",
     "sectorHint": "የአንድን ዘርፍ ፕሮጀክቶች እና ተቋማት ለማየት ዘርፉን ይጫኑ።",
-    "mapHint": "በካርታው ላይ ያሉት ክቦች የእያንዳንዱን ወረዳ መጠን ያሳያሉ። ደረጃውን ለመቀየር ሌላ መለኪያ ይምረጡ።",
-    "heatHint": "ወረዳዎች በተመረጠው መለኪያ ተደርድረዋል",
+    "mapHint": "እያንዳንዱ ክብ አንድ ወረዳ ነው። ትልቅ እና ጠቆር ያለ ክብ ብዙ ማለት ነው።",
+    "heatHint": "ብዙ ያላቸው ወረዳዎች መጀመሪያ",
     "trendHint": "በየወሩ በአማካይ የተሠራው ሥራ፣ ዕቅዱ ከጠበቀው ጋር ሲነጻጸር",
     "budgetHint": "በእያንዳንዱ ዘርፍ ያለው በጀት፣ የተለቀቀ ገንዘብ እና የወጣ ገንዘብ",
     "streamHint": "የቅርብ ጊዜ የጉዳት ግምገማዎች፣ የቦታ ሪፖርቶች እና ችግሮች",
@@ -221,6 +221,43 @@
     "lastNews": "የመጨረሻ ሪፖርት {when}",
     "noNews": "እስካሁን ሪፖርት የለም",
     "updated": "የመስክ መረጃ {time} ተዘምኗል"
+  },
+  "sector": {
+    "title": "የ{sector} ዘርፍ",
+    "subtitle": "በ{sector} ዘርፍ ያሉ ተቋማት፣ ፕሮጀክቶች እና ችግሮች",
+    "facilitiesByType": "ተቋማት በዓይነት እና በጉዳት",
+    "projectsByHealth": "ፕሮጀክቶች እንደ ሂደታቸው",
+    "weredaBreakdown": "በየወረዳው",
+    "projects": "ከዕቅድ በጣም ወደኋላ የቀሩ ፕሮጀክቶች",
+    "assessments": "የቅርብ ጊዜ የጉዳት ግምገማዎች",
+    "facilitiesByTypeHint": "እያንዳንዱ አሞሌ የዚያ ዓይነት ተቋማት በእያንዳንዱ የጉዳት ደረጃ ስንት እንደሆኑ ያሳያል። ተቋማቱን ለማየት ዓይነቱን ይጫኑ።",
+    "projectsHint": "በሥራ ላይ ያሉ ወይም ሊጀመሩ የተቃረቡ ፕሮጀክቶች፤ ከዕቅድ በጣም ወደኋላ የቀሩት መጀመሪያ።"
+  },
+  "geo": {
+    "title": "ዞኖች እና ወረዳዎች",
+    "subtitle": "የትግራይ እያንዳንዱ ዞን እና ወረዳ እንዴት እየሄደ ነው",
+    "zones": "ዞኖች",
+    "weredas": "ወረዳዎች",
+    "weredaTitle": "{name} ወረዳ",
+    "inZone": "{zone} ዞን",
+    "urban": "ከተማ",
+    "rural": "ገጠር",
+    "facilitiesInWereda": "ተቋማት",
+    "projectsInWereda": "ፕሮጀክቶች",
+    "sectorMix": "በዘርፍ",
+    "noBoundary": "ይፋዊ የወረዳ ወሰኖች ገና አልተጫኑም፤ ስለዚህ እያንዳንዱ ወረዳ በክብ ይታያል።",
+    "selectZone": "ዞን",
+    "mapFocus": "የሚገኝበት ቦታ",
+    "weredasHint": "የአንድን ወረዳ ተቋማት እና ፕሮጀክቶች ለማየት ወረዳውን ይጫኑ።",
+    "facilitiesSub": "{count, plural, =0 {ክፉኛ የተጎዳ የለም} other {# ክፉኛ የተጎዱ}}",
+    "projectsSub": "{active} በሥራ ላይ · {done} ተጠናቅቀዋል",
+    "releasedSub": "{value} ተለቋል",
+    "alertsSub": "{count} ከባድ",
+    "showOnMap": "በካርታ ላይ አሳይ",
+    "sectorMixHint": "በዚህ ወረዳ ያሉትን የአንድን ዘርፍ ፕሮጀክቶች ለማየት ዘርፉን ይጫኑ።",
+    "sectorFacilities": "{count, plural, =0 {ተቋም የለም} one {# ተቋም · {severe} ክፉኛ የተጎዱ} other {# ተቋማት · {severe} ክፉኛ የተጎዱ}}",
+    "sectorProjects": "{count, plural, =0 {ፕሮጀክት የለም} one {# ፕሮጀክት · {late} የዘገዩ} other {# ፕሮጀክቶች · {late} የዘገዩ}}",
+    "sectorMoney": "{done} ሥራ ተሠርቷል · በጀት {budget}"
   },
   "projects": {
     "title": "ፕሮጀክቶች",
@@ -379,10 +416,68 @@
   },
   "facilities": {
     "title": "ተቋማት",
-    "subtitle": "ትምህርት ቤቶች፣ የጤና ተቋማት፣ ፋብሪካዎች እና እርሻዎች፣ እና እያንዳንዳቸው ምን ያህል እንደተጎዱ",
+    "subtitle": "ትምህርት ቤቶች፣ የጤና ተቋማት፣ ፋብሪካዎች እና እርሻዎች፦ እያንዳንዳቸው ምን ያህል እንደተጎዱ እና ዛሬ እየሠሩ መሆናቸውን",
+    "count": "{count, plural, one {# ተቋም} other {# ተቋማት}}",
+    "columns": {
+      "code": "ኮድ",
+      "name": "ተቋም",
+      "type": "ዓይነት",
+      "sector": "ዘርፍ",
+      "wereda": "ወረዳ",
+      "severity": "ጉዳት",
+      "impact": "የጉዳት ነጥብ",
+      "status": "ዛሬ ይሠራል?",
+      "assessed": "የመጨረሻ ግምገማ",
+      "replacement": "እንደገና የመገንባት ወጪ",
+      "projects": "መልሶ ግንባታ",
+      "capacity": "ከጦርነቱ በፊት የነበረው አቅም",
+      "projectCount": "{count, plural, one {# ፕሮጀክት} other {# ፕሮጀክቶች}}",
+      "noProject": "ገና ፕሮጀክት የለም"
+    },
     "detail": {
-      "review": "ገምግም",
-      "recordAssessment": "ግምገማ መዝግብ"
+      "profile": "የተቋሙ መረጃ",
+      "latest": "የቅርብ ጊዜው የጉዳት ግምገማ",
+      "history": "ሁሉም የጉዳት ግምገማዎች",
+      "projects": "የመልሶ ግንባታ ፕሮጀክቶች",
+      "noProjects": "ገና የመልሶ ግንባታ ፕሮጀክት የለም",
+      "noAssessment": "ይህ ተቋም ገና አልተገመገመም።",
+      "assessor": "የገመገመው",
+      "structural": "የጉዳት ነጥብ",
+      "inventory": "የጠፉ መሣሪያዎች እና ክምችት",
+      "functional": "አሁንም ማገልገል የሚችለው",
+      "repair": "የጥገና ግምት",
+      "replacementCost": "እንደገና የመገንባት ወጪ",
+      "photos": "{count, plural, =0 {ፎቶ የለም} one {# ፎቶ} other {# ፎቶዎች}}",
+      "notes": "ገምጋሚው የጻፈው",
+      "synced": "የተላከበት፦ {time}",
+      "kebele": "ቀበሌ",
+      "evidence": "ከቦታው የተነሱ ፎቶዎች",
+      "siteMap": "የሚገኝበት ቦታ",
+      "review": "ሁኔታ",
+      "recordAssessment": "አዲስ ግምገማ መዝግብ",
+      "latestHint": "{date} በ{name}",
+      "functionalHint": "ዛሬ ከመደበኛ አገልግሎቱ ምን ያህሉን መስጠት እንደሚችል",
+      "repairHint": "ጥገና ብቻ፦ {value}",
+      "capacityHint": "ከጦርነቱ በፊት፦ {value}",
+      "summary": "ለመጨረሻ ጊዜ {date} ላይ በ{name} ተገምግሟል።",
+      "summaryProjects": "{count, plural, one {# የመልሶ ግንባታ ፕሮጀክት ከእሱ ጋር ተያይዟል።} other {# የመልሶ ግንባታ ፕሮጀክቶች ከእሱ ጋር ተያይዘዋል።}}",
+      "summaryNoProject": "ለእሱ ገና የመልሶ ግንባታ ፕሮጀክት አልተጀመረም።",
+      "openAssessment": "ሙሉውን ግምገማ ክፈት",
+      "moreFigures": "ተጨማሪ አሃዞች"
+    },
+    "filters": {
+      "search": "በተቋሙ ስም ይፈልጉ",
+      "type": "የተቋም ዓይነት",
+      "severity": "ጉዳት",
+      "status": "ዛሬ ይሠራል?",
+      "show": "አሳይ",
+      "more": "ተጨማሪ ማጣሪያዎች",
+      "quick": {
+        "all": "ሁሉም ተቋማት",
+        "destroyed": "የወደሙ",
+        "heavy": "ክፉኛ የተጎዱ",
+        "notWorking": "የማይሠሩ"
+      }
     }
   },
   "alerts": {
@@ -552,6 +647,109 @@
       "DIASPORA_FUND": "የዲያስፖራ ፈንድ",
       "PRIVATE_INVESTMENT": "የግል ኢንቨስትመንት"
     },
+    "milestone": {
+      "PENDING": "ያልተጀመረ",
+      "IN_PROGRESS": "በሂደት ላይ",
+      "ACHIEVED": "የተሳካ",
+      "OVERDUE": "ጊዜው ያለፈ"
+    },
+    "disbursement": {
+      "PLANNED": "የታቀደ",
+      "REQUESTED": "የተጠየቀ",
+      "APPROVED": "የጸደቀ",
+      "RELEASED": "የተለቀቀ"
+    },
+    "budgetCategory": {
+      "WORKS": "የግንባታ ሥራ",
+      "GOODS": "ዕቃዎች",
+      "SERVICES": "አገልግሎቶች",
+      "CONTINGENCY": "ለድንገተኛ ወጪ",
+      "SUPERVISION": "ቁጥጥር"
+    },
+    "level": {
+      "LOW": "ዝቅተኛ",
+      "MEDIUM": "መካከለኛ",
+      "HIGH": "ከፍተኛ"
+    },
+    "riskStatus": {
+      "OPEN": "ያልተፈታ",
+      "MITIGATING": "እየተቀነሰ",
+      "CLOSED": "የተዘጋ"
+    },
+    "issueStatus": {
+      "OPEN": "ያልተፈታ",
+      "IN_PROGRESS": "በሂደት ላይ",
+      "RESOLVED": "የተፈታ"
+    },
+    "docType": {
+      "CONTRACT": "ውል",
+      "DESIGN": "ዲዛይን",
+      "PROGRESS_PHOTO": "የሥራ ሂደት ፎቶዎች",
+      "SITE_VIDEO": "የቦታ ቪዲዮ",
+      "COMPLIANCE_CERTIFICATE": "የተገዢነት ምስክር ወረቀት",
+      "INSPECTION_REPORT": "የፍተሻ ሪፖርት",
+      "INVOICE": "ደረሰኝ",
+      "OTHER": "ሌላ"
+    },
+    "source": {
+      "WEB": "ድረ ገጽ",
+      "FIELD_APP": "የመስክ መተግበሪያ",
+      "SITE_APP": "የቦታ መተግበሪያ",
+      "IMPORT": "ከፋይል የገባ",
+      "SIMULATED": "የሙከራ መረጃ",
+      "RULE": "ራስ-ሰር ቁጥጥር"
+    },
+    "streamKind": {
+      "ASSESSMENT": "የጉዳት ግምገማ",
+      "PROGRESS": "የሥራ ሂደት ሪፖርት",
+      "ALERT": "ችግር",
+      "INSPECTION": "የቦታ ጉብኝት",
+      "STAGE": "የደረጃ ለውጥ"
+    },
+    "facilityType": {
+      "PRIMARY_SCHOOL": "የመጀመሪያ ደረጃ ትምህርት ቤት",
+      "SECONDARY_SCHOOL": "የሁለተኛ ደረጃ ትምህርት ቤት",
+      "TVET_COLLEGE": "የቴክኒክና ሙያ ኮሌጅ",
+      "UNIVERSITY": "ዩኒቨርሲቲ",
+      "HEALTH_POST": "ጤና ኬላ",
+      "HEALTH_CENTER": "ጤና ጣቢያ",
+      "PRIMARY_HOSPITAL": "የመጀመሪያ ደረጃ ሆስፒታል",
+      "GENERAL_HOSPITAL": "ጠቅላላ ሆስፒታል",
+      "REFERRAL_HOSPITAL": "ሪፈራል ሆስፒታል",
+      "FACTORY": "ፋብሪካ",
+      "INDUSTRIAL_PARK": "የኢንዱስትሪ ፓርክ",
+      "AGRO_PROCESSING_PLANT": "የግብርና ምርት ማቀነባበሪያ",
+      "WAREHOUSE": "መጋዘን",
+      "IRRIGATION_SCHEME": "የመስኖ ልማት",
+      "VETERINARY_CLINIC": "የእንስሳት ክሊኒክ",
+      "SEED_MULTIPLICATION_CENTER": "የዘር ማባዣ ማዕከል",
+      "FARMERS_TRAINING_CENTER": "የአርሶ አደሮች ማሰልጠኛ ማዕከል",
+      "AGRICULTURAL_RESEARCH_CENTER": "የግብርና ምርምር ማዕከል"
+    },
+    "inspectionType": {
+      "SITE_VISIT": "የቦታ ጉብኝት",
+      "PROGRESS_VERIFICATION": "የሥራ ሂደት ፍተሻ",
+      "QUALITY_INSPECTION": "የጥራት ፍተሻ",
+      "DAMAGE_VERIFICATION": "የጉዳት ፍተሻ",
+      "HANDOVER_INSPECTION": "የርክክብ ፍተሻ",
+      "SAFETY_AUDIT": "የደህንነት ፍተሻ"
+    },
+    "verification": {
+      "UNVERIFIED": "ገና አልተፈተሸም",
+      "VERIFIED": "የተረጋገጠ",
+      "DISPUTED": "ጥያቄ የቀረበበት",
+      "REJECTED": "ውድቅ የተደረገ"
+    },
+    "orgType": {
+      "GOVERNMENT_BUREAU": "የመንግሥት ቢሮ",
+      "CONTRACTOR": "ተቋራጭ",
+      "CONSULTANT": "አማካሪ",
+      "DONOR": "ለጋሽ / አበዳሪ",
+      "FEDERAL_AGENCY": "የፌዴራል ተቋም",
+      "NGO": "መንግሥታዊ ያልሆነ ድርጅት",
+      "COMMUNITY": "ማኅበረሰብ",
+      "PRIVATE": "የግል"
+    },
     "campaignStatus": {
       "PLANNING": "በዕቅድ ላይ",
       "ACTIVE": "ጉብኝቶች በሂደት ላይ",
@@ -688,6 +886,29 @@
       "ACTIVE": "በሂደት ላይ",
       "COMPLETED": "የተጠናቀቀ",
       "RELEASED": "ከፕሮጀክቱ የተነሳ"
+    },
+    "priority": {
+      "NORMAL": "መደበኛ",
+      "HIGH": "ከፍተኛ",
+      "URGENT": "አስቸኳይ"
+    },
+    "gender": {
+      "FEMALE": "ሴት",
+      "MALE": "ወንድ"
+    },
+    "education": {
+      "CERTIFICATE": "ሰርተፊኬት",
+      "DIPLOMA": "ዲፕሎማ",
+      "BACHELOR": "የመጀመሪያ ዲግሪ",
+      "MASTER": "ሁለተኛ ዲግሪ",
+      "DOCTORATE": "ሦስተኛ ዲግሪ (ዶክትሬት)"
+    },
+    "language": {
+      "ti": "ትግርኛ",
+      "am": "አማርኛ",
+      "en": "እንግሊዝኛ",
+      "om": "አፋን ኦሮሞ",
+      "ar": "ዓረብኛ"
     },
     "coverageGap": {
       "NO_TEAM": "ማንም አልተመደበም",
@@ -887,7 +1108,109 @@
   },
   "evidence": {
     "title": "የቦታ ፎቶዎች እና ፍተሻዎች",
-    "subtitle": "የመስክ ሠራተኞች በቦታው ያዩት ነገር ከፎቶዎች ጋር፣ እና መረጋገጡ ወይም አለመረጋገጡ"
+    "subtitle": "የመስክ ሠራተኞች በቦታው ያዩት ነገር ከፎቶዎች ጋር፣ እና አንድ ሰው አረጋግጦት እንደሆነ",
+    "gallery": "ፎቶዎች",
+    "galleryHint": "አዲሶቹ መጀመሪያ። የቦታ እና የሰዓት ምልክቶቹ ስልኩ ቦታውን እና ሰዓቱን መዝግቦ እንደሆነ ያሳያሉ።",
+    "inspections": "የቦታ ጉብኝቶች",
+    "inspectionsHint": "የመስክ ሠራተኞች ሥራውን ወይም ጉዳቱን ለመፈተሽ ያደረጓቸው ጉብኝቶች",
+    "count": "{count, plural, one {# የቦታ ጉብኝት} other {# የቦታ ጉብኝቶች}}",
+    "mediaCount": "{count, plural, one {# ፋይል} other {# ፋይሎች}}",
+    "empty": "እስካሁን የቦታ ጉብኝት የለም። የመስክ ቡድኖች ከስልካቸው ሲልኳቸው እዚህ ይታያሉ።",
+    "emptyMedia": "እዚህ ገና ፎቶ ወይም ቪዲዮ የለም።",
+    "coverage": {
+      "NONE": "እስካሁን የቦታ ጉብኝት የለም",
+      "STALE": "ከ{days} ቀናት በላይ አልተረጋገጠም",
+      "RECENT": "በቅርቡ ተረጋግጧል"
+    },
+    "summary": {
+      "inspections": "የቦታ ጉብኝቶች",
+      "verified": "የተረጋገጡ",
+      "disputed": "ጥያቄ የቀረበባቸው",
+      "unverified": "ገና ያልተፈተሹ",
+      "media": "ፎቶዎች እና ቪዲዮዎች",
+      "lastInspection": "የመጨረሻ ጉብኝት {time}",
+      "lastVerified": "የመጨረሻ ማረጋገጫ",
+      "unverifiedCount": "{count, plural, =0 {ሁሉም ተፈትሸዋል} other {# ገና አልተፈተሹም}}",
+      "disputedCount": "{count} ጥያቄ ቀርቦባቸዋል",
+      "mediaHint": "{photos, plural, one {# ፎቶ} other {# ፎቶዎች}} · {videos, plural, one {# ቪዲዮ} other {# ቪዲዮዎች}}"
+    },
+    "columns": {
+      "visited": "ቀን",
+      "type": "ዓይነት",
+      "subject": "ፕሮጀክት ወይም ተቋም",
+      "inspector": "የጎበኘው",
+      "observed": "በቦታው የታየ ሥራ",
+      "reported": "ሪፖርት የተደረገው",
+      "gap": "ልዩነት",
+      "quality": "ጥራት",
+      "safety": "ደህንነት",
+      "distance": "ከቦታው ያለው ርቀት",
+      "media": "ፎቶዎች",
+      "status": "ተረጋግጧል?",
+      "wereda": "ወረዳ",
+      "reportedSaid": "ሪፖርቱ {value} ይላል",
+      "far": "ከቦታው ርቆ የተነሳ"
+    },
+    "filters": {
+      "type": "የጉብኝት ዓይነት",
+      "status": "ተረጋግጧል?",
+      "kind": "ዓይነት",
+      "geotagged": "ቦታቸው የተመዘገበ ብቻ",
+      "sector": "ዘርፍ"
+    },
+    "detail": {
+      "findings": "ያገኙት ነገር",
+      "recommended": "የሚመክሩት",
+      "location": "የተመዘገበበት ቦታ",
+      "distance": "ከቦታው {m} m ርቀት ላይ",
+      "farWarning": "ከቦታው ከ{m} m በላይ ርቆ ተመዝግቧል",
+      "ratings": "ጥራት እና ደህንነት",
+      "quality": "ጥራት",
+      "safety": "ደህንነት",
+      "workforce": "የታዩ ሠራተኞች",
+      "duration": "በቦታው {minutes} ደቂቃ",
+      "synced": "የተላከበት፦ {time}",
+      "verification": "ተረጋግጧል?",
+      "verificationNote": "የማረጋገጫ ማስታወሻ",
+      "verifiedBy": "የመለሰው፦ {name}",
+      "media": "{count, plural, =0 {ፎቶ የለም} one {# ፎቶ} other {# ፎቶዎች}}",
+      "captured": "የተነሳበት ቀን",
+      "noGps": "ቦታው አልተመዘገበም",
+      "noTime": "ሰዓቱ አልተመዘገበም",
+      "ratingValue": "ጥራት {quality} · ደህንነት {safety}",
+      "ratingHint": "ከ5፣ 5 ምርጥ ነው",
+      "takenBy": "ያነሳው",
+      "place": "ቦታ",
+      "placeRecorded": "ስልኩ የመዘገበው ቦታ",
+      "timeRecorded": "ስልኩ የመዘገበው ሰዓት",
+      "openProject": "ፕሮጀክቱን ክፈት",
+      "openFacility": "ተቋሙን ክፈት",
+      "openVisit": "የቦታ ጉብኝቱን ክፈት"
+    },
+    "verify": {
+      "title": "ይህ ሪፖርት ትክክል ነው?",
+      "hint": "መልስዎ ከስምዎ ጋር ይቀመጣል፤ የፕሮጀክቱ የሥራ ሂደት መረጋገጡንም ያዘምናል።",
+      "verified": "አዎ፣ አረጋግጥ",
+      "disputed": "ጥያቄ አቅርብ",
+      "rejected": "ውድቅ አድርግ",
+      "note": "ማስታወሻዎ",
+      "noteRequired": "ለምን ጥያቄ እንዳቀረቡ ወይም ውድቅ እንዳደረጉ የሚያብራራ ማስታወሻ ይጻፉ",
+      "done": "መልስዎ ተቀምጧል",
+      "readOnly": "ይህን መመለስ የሚችሉት የመስክ ሪፖርቶችን የሚፈትሹ ሠራተኞች ብቻ ናቸው።"
+    },
+    "kind": {
+      "PHOTO": "ፎቶ",
+      "VIDEO": "ቪዲዮ",
+      "AUDIO": "ድምፅ",
+      "DOCUMENT": "ሰነድ"
+    },
+    "origin": {
+      "INSPECTION": "የቦታ ጉብኝት",
+      "ASSESSMENT": "የጉዳት ግምገማ",
+      "PROGRESS": "የሥራ ሂደት ሪፖርት"
+    },
+    "demoNote": "እነዚህ የናሙና ሥዕሎች ናቸው። የመስክ ቡድኖች ከመስክ መተግበሪያው ሲልኳቸው እውነተኛ ፎቶዎች ይታያሉ።",
+    "siteMap": "የሚገኝበት ቦታ"
   },
   "map": {
     "title": "ካርታ",
