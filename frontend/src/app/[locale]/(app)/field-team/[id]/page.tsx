@@ -70,12 +70,10 @@ function Profile({ a }: { a: AgentDetail }) {
 
       {a.statusReason && s.status !== 'ACTIVE' && <Callout tone={s.status === 'SUSPENDED' ? 'error' : 'warning'}>{a.statusReason}</Callout>}
 
-      <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 tablet:grid-cols-3">
         <Stat label={t('columns.workload')} value={t('workload', { active: s.activeAssignments, max: s.maxActiveAssignments })} />
         <Stat label={t('columns.overdue')} value={<span style={{ color: s.overdueVisits ? toneVar.critical : undefined }}>{s.overdueVisits}</span>} />
-        <Stat label={t('columns.inspections')} value={s.inspections30d} hint={s.lastInspectionOn ? fmtDate(s.lastInspectionOn, locale, 'short') : undefined} />
-        <Stat label={t('profile.acceptance')} value={p.acceptanceRate90d === null ? '—' : `${Math.round(p.acceptanceRate90d)}%`} hint={t('profile.disputed', { disputed: p.disputed90d, rejected: p.rejected90d })} />
-        <Stat label={t('profile.onSchedule')} value={p.onScheduleRate === null ? '—' : `${Math.round(p.onScheduleRate)}%`} hint={t('profile.onScheduleHint')} />
+        <Stat label={t('columns.lastActivity')} value={s.lastInspectionOn ? fmtDate(s.lastInspectionOn, locale, 'short') : t('noVisitYet')} />
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>

@@ -91,7 +91,7 @@ function Roster({ sector }: { sector: Sector | null }) {
   const cols: Column<AgentSummary>[] = [
     { key: 'member', header: t('columns.member'), cell: (a) => (
       <div className="min-w-[210px]"><div className="font-semibold">{a.fullName}</div>
-        <div className="text-sm text-muted-foreground">{te(`agentType.${a.agentType}`)} · {a.code}</div>
+        <div className="text-sm text-muted-foreground">{te(`agentType.${a.agentType}`)}</div>
         {a.supervisorName && <div className="text-xs text-muted-foreground">↳ {a.supervisorName}</div>}</div>) },
     { key: 'status', header: t('columns.status'), cell: (a) => <AgentStatusBadge value={a.status} /> },
     { key: 'area', header: t('columns.area'), cell: (a) => (
@@ -103,11 +103,8 @@ function Roster({ sector }: { sector: Sector | null }) {
         <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${Math.min(100, (a.activeAssignments / a.maxActiveAssignments) * 100)}%`, background: full ? toneVar.serious : 'var(--seq-450)' }} /></div></div>;
     } },
     { key: 'overdue', header: t('columns.overdue'), align: 'right', cell: (a) => <span className="font-semibold tabular" style={{ color: a.overdueVisits ? toneVar.critical : undefined }}>{a.overdueVisits || '—'}</span> },
-    { key: 'insp', header: t('columns.inspections'), align: 'right', cell: (a) => <span className="tabular">{a.inspections30d}</span> },
-    { key: 'quality', header: t('columns.quality'), align: 'right', cell: (a) => a.acceptanceRate90d === null ? <span className="text-muted-foreground">—</span>
-      : <span className="font-medium tabular" style={{ color: a.acceptanceRate90d < 70 ? toneVar.serious : a.acceptanceRate90d >= 85 ? toneVar.good : undefined }}>{Math.round(a.acceptanceRate90d)}%</span> },
-    { key: 'last', header: t('columns.lastActivity'), cell: (a) => <div className="whitespace-nowrap text-sm">{a.lastInspectionOn ? fmtDate(a.lastInspectionOn, locale, 'short') : '—'}<div className="text-xs text-muted-foreground">{a.lastSyncAt ? relTime(a.lastSyncAt) : t('neverSynced')}</div></div> },
-    { key: 'access', header: t('columns.access'), cell: (a) => a.hasAccount ? <span className="font-mono text-sm">{a.username}</span> : <span className="text-sm" style={{ color: toneVar.warning }}>{t('noAccount')}</span> },
+    { key: 'last', header: t('columns.lastActivity'), cell: (a) => <div className="whitespace-nowrap text-sm">{a.lastInspectionOn ? fmtDate(a.lastInspectionOn, locale, 'short') : t('noVisitYet')}
+      {!a.hasAccount && <div className="text-sm" style={{ color: toneVar.warning }}>{t('noAccount')}</div>}</div> },
   ];
 
   return (
